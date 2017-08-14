@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //我们可以通过给Function.prototype增加方法来使得该方法对所有函数可用
+    (function(){
+        Function.prototype.method = function(name,func){
+            this.prototype[name] = func;
+            return this;
+        };
+        //提取数字中的整数部分
+        Number.method('integer',function(){
+            return Math[this<0 ? 'ceil':'floor'](this);
+        });
+        var a = (-10/3).integer();
+        console.log(a);
+
+        //移除字符串首尾空白的方法
+        String.method('trim',function(){
+            return this.replace(/^\s+|\s+$/g,'');
+        });
+        console.log('"' + "  near  ".trim() + '"');
+
+    })();
+</script>
+</body>
+</html>
