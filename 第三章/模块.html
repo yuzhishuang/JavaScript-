@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    (function(){
+        Function.prototype.method = function(name,func){
+            this.prototype[name] = func;
+            return this;
+        };
+        String.method('deentityify',function(){
+            //字符实体表。它映射字符实体的名字到对应的字符。
+            var entify = {
+                quot: '"',
+                lt: '<',
+                gt: '>'
+            };
+            //返回deentityify方法
+            return function(){
+                return this.replace(/&([^&;]+);/g,function(a,b){
+                    var r = entify[b];
+                    return typeof r === 'string' ? r :a;
+                });
+            };
+        }());
+        document.writeln('&lt;&quot;&gt;'.deentityify());
+    })()
+</script>
+</body>
+</html>

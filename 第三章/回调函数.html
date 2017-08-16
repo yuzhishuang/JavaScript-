@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //回调函数
+    (function(){
+        var fn = Function("a","b","return a*b");
+        console.log(fn(2,3));
+        function sum(a,b,callback){
+            var sum = a + b;
+            callback(sum);
+        }
+        sum(4,5,function(sum){
+            console.log(sum);
+        })
+    })();
+</script>
+</body>
+</html>

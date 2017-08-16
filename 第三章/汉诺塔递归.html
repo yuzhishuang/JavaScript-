@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    (function(){
+        //src:为盘子当前所在柱子 dst：为目标柱子  aux：为备用柱子
+        var hanoi = function(disc,src,aux,dst){
+            if(disc > 0){
+                hanoi(disc-1,src,dst,aux);
+                document.writeln('Move disc ' + disc + ' from ' + src + ' to ' + dst + '<br>');
+                hanoi(disc-1,aux,src,dst);
+            }
+        };
+        hanoi(4,'Src','Aux','Dst');
+    })();
+</script>
+</body>
+</html>
