@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //记忆：函数可以将先前操作的结果记录在某个对象，从而避免无谓的重复运算。
+    //递归函数计算Fibonacci数列，一个Fibonacci数字是之前两个Fibonacci数字之和。最前面的两个数字是0和1.
+    (function(){
+        var fibonacci = function(n){
+            return n < 2 ? n : fibonacci(n -1) + fibonacci(n - 2);
+        }
+        for(var i = 0;i <= 10;i += 1){
+            document.writeln('//' + i + ':' + fibonacci(i));
+        }
+    })();
+
+    //在一个memo的数组里保存我们的存储结果，存储结果可以隐藏在闭包中，当函数被调用时，这个函数首先检查结果是否已经存在，如果已经存在，就立即返回这个结果
+    var fibonacci1 = function(){
+        var memo = [0,1];
+        var fib = function(n){
+            var result = memo[n];
+            if(typeof  result !== 'number'){
+                result = fib(n-1) + fib(n-2);
+                memo[n] = result;
+            }
+            return result;
+        };
+        return fib;
+    }();
+    for(var i=0;i<=10;i++){
+        console.log(fibonacci1(i));
+    }
+
+    //编写一个函数来帮助我们构造带记忆功能的函数。memoizer函数取得一个初始的memo数组和formula函数。它返回一个管理memo存储和在需要时调用
+    //formula函数的recur函数。我们把这个recur函数和它的参数传递给formula函数
+    (function(){
+        var memoizer = function(memo,formula){
+            var recur = function(n){
+                var result = memo[n];
+                if(typeof  result !== 'number'){
+                    result = formula(recur,n);
+                    memo[n] = result;
+                }
+            };
+            return recur;
+        };
+        var fibonacci2 = memoizer([0,1],function(recur,n){
+            return recur(n-1) + recur(n-2);
+        })
+        for(var i = 0;i < 20; i++ ){
+            document.writeln(fibonacci2(i));
+        }
+    })();
+
+</script>
+</body>
+</html>

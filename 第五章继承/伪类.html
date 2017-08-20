@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //定义一个构造器并扩充它的原型
+    var Mammal = function(name){
+        this.name = name;
+    };
+    Mammal.prototype.get_name = function(){
+        return this.name;
+    };
+    Mammal.prototype.says = function(){
+        return this.saying || '';
+    }
+
+    //现在我们可以构造一个实例
+    var myMammal = new Mammal('Herb the Mammal');
+    var name = myMammal.get_name();  //Herb the Mammal
+
+    //我们可以构造另一个伪类来继承Mammal,这是通过定义它的constructor函数并替换它的prototype为一个Mammal的实例来实现的
+    var Cat = function(name){
+        this.name = name;
+        this.saying = 'meow';
+    }
+    //替换Cat.prototype为一个新的Mammal实例
+    Cat.prototype = new Mammal();
+    //扩充新原型对象，增加purr和get_name方法
+    Cat.prototype.purr = function(n){
+        var i,s = '';
+        for(i=0;i<n;i++){
+            if(s){
+                s += '-';
+            }
+            s += 'r';
+        }
+        return s;
+    };
+    Cat.prototype.get_name = function(){
+        return this.says() + '' + this.name + '' + this.says();
+    };
+    var myCat = new Cat('Henerietta');
+    var says = myCat.says();  //meow
+    var purr = myCat.purr(5);  //r-r-r-r-r
+    var name = myCat.get_name();  //meow Henrietta meow4
+
+    (function(){
+        Function.prototype.method = function(name,func){
+            this.prototype[name] = func;
+            return this;
+        };
+        Function.method('inherits',function(Parent){
+            this.prototype = new Parent();
+            return this;
+        });
+        //我们的inherits和method方法都返回this，这样允许我们可以采用级联的形式编程。
+        var Cat = function(name){
+            this.name = name;
+            this.saying = 'meow';
+        }
+                .inherits(Mammal)
+                .method('purr',function(n){
+                    var i,s = '';
+                    for(i=0;i<n;i++){
+                        if(s){
+                            s += '-';
+                        }
+                        s += 'r';
+                    }
+                    return s;
+                })
+                .method('get_name',function(){
+                    return this.says() + '' +this.name + '' + this.says();
+                });
+    })();
+</script>
+</body>
+</html>
