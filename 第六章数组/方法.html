@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    Function.prototype.method = function(name,func){
+        this.prototype[name] = func;
+        return this;
+    };
+    (function(){
+        //给array增加一个方法，它允许我们对数组进行计算
+        //它接受一个函数和一个初始值作为参数。它遍历这个数组，以当前元素和该初始值为参数调用这个函数，并且计算出一个新值
+        Array.method('reduce',function(f,value){
+            var i;
+            for(i = 0; i < this.length; i += 1){
+                value = f(this[i],value);
+            }
+            return value;
+        })
+
+        var data = [4,8,15,16,23,42];  //创建一个数字数组
+
+        //定义两个简单的函数。一个是把两个数字相加，另一个是把两个数字相乘。
+        var add = function(a,b){
+            return a + b;
+        };
+
+        var mult = function(a,b){
+            return a * b;
+        };
+
+        //调用data的reduce方法，传入add函数
+        var sum = data.reduce(add,0); // sum is 108
+        var product = data.reduce(mult,1); //prodect is 7418880
+
+        //因为数组其实就是对象，所以我们可以直接给一个单独的数组添加方法
+        //给data数组添加一个total方法
+        data.total = function(){
+            return this.reduce(add,0);
+        };
+        total = data.total();  //total是108
+
+        //因为字符串‘total’不是整数，所以给数组增加一个total属性不会改变它的length。当属性名是整数时，数组才是最有用的，但它们依旧是对象，并且对象可以接受任何字符串作为属性名
+    })();
+</script>
+</body>
+</html>

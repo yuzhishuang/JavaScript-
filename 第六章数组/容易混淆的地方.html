@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //typeof运算符报告数组的类型是‘object’，这没有任何意义
+    //JavaScript没有一个好的机制来区别数组和对象，自己定义一个is_array函数来弥补这个缺陷
+    (function(){
+        var is_array = function(value){
+            return Object.prototype.toString.apply(value) === '[object Array]';
+        };
+        var a = [1,2,2,3];
+        var b = {name:'yzs',age:'18'};
+        console.log(is_array(a));
+        console.log(is_array(b));
+    })();
+</script>
+</body>
+</html>
