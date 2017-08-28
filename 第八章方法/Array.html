@@ -6,7 +6,52 @@
 </head>
 <body>
 <script type="text/javascript">
-    
+//(function(){
+//    //array.concat
+//    //concat方法产生一个新数组，它包含一份array的浅复制并把一个或多个参数item附加在其后。
+//    var a = ['a','b','c'];
+//    var b = ['x','y','z'];
+//    var c = a.concat(b,true);
+//    console.log(c);   //c变成['a','b','c','x','y','z',true]
+//
+//    //array.join
+//    //join方法把一个array构造成一个字符串。它先把array中的每个元素构造成一个字符串，接着用一个separator分隔符把它们连接在一起。
+//    //把片段放在一个数组中用join方法连接起来通常比用+元素运算符连接这些片段要快
+//    var a = ['a','b','c'];
+//    a.push('d');
+//    var c = a.join('');
+//    console.log(c);  //c是‘abcd’
+//
+//    //array.pop()
+//    //pop和push方法使得数组array可以像堆栈一样工作。pop方法移除array中的最后一个元素并返回该元素。如果该array是empty，它会返回underfined
+//    var a = ['a','b','c'];
+//    var c = a.pop();  //a是【‘a’,'b'】  & c是‘c’
+//    console.log(c);
+//
+//    //array.push(item''')
+//    //push方法把一个或多个
+//
+//
+//})();
+
+var my={
+    val:0,
+    add:function(s){
+        this.val +=typeof s === 'number'? s:1;
+    }
+};
+my.add();
+console.log(my.val);
+my.double=function(){
+    var that = this;
+    var helper = function(){
+        that.val = add(that.val);
+    };
+    helper();
+}
+my.double();
+console.log(my.val);
+
 </script>
 </body>
 </html>
