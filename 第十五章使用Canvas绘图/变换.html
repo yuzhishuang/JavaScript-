@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas变换</title>
+</head>
+<body>
+    <canvas id='drawing' width='1000' height='1000' style="boder: 1px solid #000;"></canvas>
+<script type="text/javascript">
+    (function(){
+       //  2D绘制上下文支持各种基本的绘制变换。创建绘制上下文时，会以默认值初始化变换矩阵，在默认的变换矩阵下，所有处理都按描述直接绘制。
+       //  translate(x, y)：将坐标原点移动到（x， y）。执行这个变换之后，坐标(0, 0)会变成之前由(x, y)表示的点
+       //  绘制表针
+       var drawing = document.getElementById('drawing');
+       if (drawing.getContext) {
+            var context = drawing.getContext('2d');
+            //  开始路径
+            context.beginPath();
+            context.strokeStyle = '#000';
+            //  绘制外圆
+            context.arc(100, 100, 99, 0, 2*Math.PI, false);
+            //  绘制内圆
+            context.moveTo(194, 100);
+            context.arc(100, 100, 94, 0, 2*Math.PI, false);
+            //  变换原点
+            context.translate(100, 100);
+            //  绘制分针
+            context.moveTo(0, 0);
+            context.lineTo(0, -85);
+            //  绘制时针
+            context.moveTo(0, 0);
+            context.lineTo(-65, 0);
+            //  描边路径
+            context.stroke();
+       }
+       //  使用rotate()方法旋转时钟的表针
+       if (drawing.getContext) {
+            var context = drawing.getContext('2d');
+            //  开始路径
+            context.beginPath();
+            //  绘制外圆
+            context.arc(300, 300, 99, 0, 2*Math.PI, false);
+            //  绘制内圆
+            context.moveTo(394, 300);
+            context.arc(300, 300, 94, 0, 2*Math.PI, false);
+            //  变换原点
+            context.translate(300, 300);
+            //  旋转表针
+            context.rotate(1);
+            //  绘制分针
+            context.moveTo(0, 0);
+            context.lineTo(0, -85);
+            //  绘制时针
+            context.moveTo(0, 0);
+            context.lineTo(-65, 0);
+            //  描边路径
+            context.stroke();
+       }
+       //  save()方法，将当时的所有设置都保存进一个栈结构，得以妥善保管。返回之前的保存设置，调用restore()方法
+       if (drawing.getContext) {
+            var context = drawing.getContext('2d');
+            context.fillStyle = '#f00';
+            context.save();
+            context.fillStyle = '#0f0';
+            context.translate(500, 500);
+            context.save();
+            context.fillStyle = '#00f';
+            context.fillRect(0, 0, 100, 200);  //从点（500， 500）开始绘制蓝色矩形
+            context.restore();
+            context.fillRect(200, 200, 100, 200);
+            context.restore();
+            context.fillRect(0, 0, 100, 300);
+       }
+    })();
+</script>
+</body>
+</html>

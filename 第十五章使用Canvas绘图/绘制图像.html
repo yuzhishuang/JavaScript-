@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绘制图像</title>
+</head>
+<body>
+	<img src='./a.jpg' width='50' height='50' />
+	<canvas id='drawing' width='500' height='500' style="border: 1px solid #000;"></canvas>
+<script type="text/javascript">
+    (function(){
+       //  2D绘图上下文内置了对图像的支持。如果你想把一幅图像绘制到画布上，可以使用drawImage()方法
+       var drawing = document.getElementById('drawing');
+       if (drawing.getContext) {
+       		var context = drawing.getContext("2d");
+       		var image = document.images[0];
+       		image.onload = function () {
+       			context.drawImage(image, 100, 100, 20, 20);  	
+       		}
+       }
+    })();
+</script>
+</body>
+</html>

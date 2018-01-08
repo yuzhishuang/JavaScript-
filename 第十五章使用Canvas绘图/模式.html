@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模式</title>
+</head>
+<body>
+	<img src='./a.jpg' width='50' height='50' />
+	<canvas id='drawing' width='1000' height='1000' style="border: 1px solid #000;"></canvas>
+<script type="text/javascript">
+    (function(){
+       //  模式骑士就是重复的图像，可以用来填充或描边图形。要创建一个新模式，可以调用createPattern()方法并传入两个参数：一个HTML<img>元素和一个表示如何重复图像的字符串
+       var drawing = document.getElementById('drawing');
+       if (drawing.getContext) {
+       		var context = drawing.getContext("2d");
+       		var image = document.images[0];
+       		var	pattern = context.createPattern(image, "repeat");
+   			//  绘制矩形
+   			context.fillStyle = pattern;
+   			context.fillRect(10, 10, 500, 500);
+       }
+    })();
+</script>
+</body>
+</html>
