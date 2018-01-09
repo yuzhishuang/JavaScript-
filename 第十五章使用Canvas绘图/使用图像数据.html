@@ -5,7 +5,7 @@
     <title>使用图像数据</title>
 </head>
 <body>
-	<img src='./a.jpg' width='50' height='50' />
+	<img src='./b.jpg' />
 	<canvas id='drawing' width='1000' height='1000' style="border: 1px solid #000;"></canvas>
 <script type="text/javascript">
     (function(){
@@ -13,11 +13,42 @@
        var drawing = document.getElementById('drawing');
        if (drawing.getContext) {
        		var context = drawing.getContext("2d");
-       		var image = document.images[0];
-       		var	pattern = context.createPattern(image, "repeat");
-   			//  绘制矩形
-   			context.fillStyle = pattern;
-   			context.fillRect(10, 10, 500, 500);
+       		//  要取得左上角坐标为(10, 5)、大小为50*50像素的区域的图像数据
+          var imageData = context.getImageData(10, 5, 50, 50);
+
+       }
+       //  通过修改图像数据，可以像下面这样创建一个简单的灰阶过滤器
+       if (drawing.getContext) {
+          var context = drawing.getContext('2d'),
+              image = document.images[0],
+              imageData, data,
+              i, len, average,
+              red, green, blue, alpha,
+              width, height;
+          //  绘制原始图像
+          image.onload = function () {
+              context.drawImage(image, 0, 0);
+              width = image.width;
+              height = image.height;
+               //  取得图像数据
+              imageData = context.getImageData(0, 0, width, height);
+              data = imageData.data;
+              for (i = 0; i < data.length; i+=4) {
+                red = data[i];
+                green = data[i+1];
+                blue = data[i+2];
+                alpha = data[i+3];
+                //  求得rgb平均值
+                average = Math.floor((red + green + blue) / 3);
+                //  设置颜色值，透明度不变
+                data[i] = average;
+                data[i+1] = average;
+                data[i+2] = average;
+              }
+              //  回写图像数据并显示结果
+              imageData.data = data;
+              context.putImageData(imageData, 0, 0);
+          }
        }
     })();
 </script>
