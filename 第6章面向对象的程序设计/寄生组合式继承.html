@@ -14,9 +14,9 @@
     }
     //  寄生组合式继承的基本模式如下所示
     function inheritPrototype(subType, superType) {
-        var prototype = object(superType.prototype);  //  创建对象
-        prototype.constructor = subType;  //  增强对象
-        subType.prototype = prototype;
+        var prototype = object(superType.prototype);  //  创建对象  创建超类型原型的一个副本
+        prototype.constructor = subType;  //  增强对象  为创建的副本添加constructor属性，从而弥补因重写原型而失去的默认的construction属性
+        subType.prototype = prototype;  //  将新创建的对象（即副本）赋值给予类型的原型
     }
     function SuperType (name) {
         this.name = name;

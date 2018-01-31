@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+    (function(){
+      //  递归函数是在一个函数通过名字调用自身的情况下构成的
+      //  arguments.callee是一个指向正在执行的函数的指针，因此可以用它来实现对函数的递归调用
+      function factorial (num) {
+      	if (num <= 1) {
+      		return 1;
+      	}
+      	return num * arguments.callee(num - 1);
+      }
+    })();
+</script>
+</body>
+</html>
