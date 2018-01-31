@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  原型式继承：借助原型可以基于已有的对象创建新对象，同事还不必因此创建自定义类型
+    //  本质上讲，object()对传入其中的对象执行了一次浅复制
+    function object (o) {
+        function F () {}
+        F.prototype = o;
+        return new F();
+    }
+    var person = {
+        name: 'yzs',
+        friends: ['fsn', 'yangyong']
+    }
+    var anotherPerson = object(person);
+    anotherPerson.name = 'Greg';
+    anotherPerson.friends.push('lln');
+
+    var yetAnotherPerson = object(person);
+    yetAnotherPerson.name = 'Linda';
+    yetAnotherPerson.friends.push('Barbie');
+    alert(person.friends);
+    //  ES5通过新增Object.create()方法规范化了原型式继承。这个方法接收了两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象
+    var anotherPerson1 = Object.create(person, {
+        name: {
+            value: 'lalala'
+        }
+    })
+    alert(person.friends);
+    alert(anotherPerson1.name);
+</script>
+</body>
+</html>

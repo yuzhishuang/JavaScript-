@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  组合继承有时候也叫作伪经典继承，指的是将原型链和借用构造函数的技术组合到一块，从而发挥二者之长的一种继承模式。其背后的思路是使用原型链实现对原型属性和方法的继承，而通过借用构造函数来实现对实例属性的继承
+    //  缺点：第一次调用SuperType构造函数时，SubType.prototype会得到两个属性：name和colors；它们都是SuperType的实例属性，只不过现在位于SubType的原型中。当调用SubType构造函数时，又会调用一次SuperType构造函数，这有一次在新对象上创建了实例属性name和colors。于是，这两个属性就屏蔽了原型中的两个同名属性
+    function SuperType (name) {
+        this.name = name;
+        this.colors = ['red', 'blue', 'green'];
+    }
+    SuperType.prototype.sayName = function () {
+        alert(this.name);
+    };
+    function SubType (name, age) {
+        //  继承属性
+        SuperType.call(this, name);  //  第二次调用SuperType()
+
+        this.age = age;
+    }
+    //  继承方法
+    SubType.prototype = new SuperType();  //第一次调用SuperType()
+    SubType.prototype.constructor = SubType;
+    SubType.prototype.sayAge = function () {
+        alert(this.age);
+    };
+    var instance1 = new SubType('yzs', 18);
+    instance1.colors.push('black');
+    console.log(instance1.colors);
+    instance1.sayName();
+    instance1.sayAge();
+
+    var instance2 = new SubType('fsn', 18);
+    console.log(instance2.colors);
+    instance2.sayName();
+    instance2.sayName();
+</script>
+</body>
+</html>
