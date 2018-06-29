@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  函数生成随机数
+    (function(){
+       function selectForm(lowerValue, upperValue) {
+       	  var choices = upperValue - lowerValue + 1;
+       	  return Math.floor(Math.random() * choices + lowerValue);
+       }
+
+       var num = selectForm(3, 100);
+       alert(num);
+
+    })();
+</script>
+</body>
+</html>  

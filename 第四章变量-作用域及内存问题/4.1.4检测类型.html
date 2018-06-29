@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+	//  类型检测
+    //  typeof操作符是确定一个变量是字符串、数值、布尔值，还是undefined的最佳工具
+    //  如果变量的值是一个对象或者null，则typeof操作符会像下面例子中所示的那样返回“object”
+    var s = 'Nicholas';
+    var b = true;
+    var i = 22;
+    var u;
+    var n = null;
+    var o = new Object();
+    var a = new Array();
+    console.log('s=' + typeof(s));
+    console.log('b=' + typeof(b));
+    console.log('i=' + typeof(i));
+    console.log('u=' + typeof(u));
+    console.log('n=' + typeof(n));
+    console.log('o=' + typeof(o));
+    console.log('a=' + typeof(a));
+    //  想知道它是什么类型的对象instanceof操作符
+    console.log(n instanceof Object );
+    console.log(o instanceof Object);
+    console.log(a instanceof Array);
+</script>
+</body>
+</html>
