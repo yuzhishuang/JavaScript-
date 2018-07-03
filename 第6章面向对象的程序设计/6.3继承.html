@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  原型链继承
+    //  基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法
+    function SuperType() {
+    	this.property = true;
+    }
+    SuperType.prototype.getSuperValue = function () {
+    	return this.property;
+    }
+
+    function SubType() {
+    	this.subproperty = false;
+    }
+    //  继承SuperType
+    SubType.prototype = new SuperType();
+    SubType.prototype.getSubValue = function () {
+    	return this.subproperty;
+    };
+    var instance = new SubType();
+    alert(instance.getSuperValue());
+</script>
+</body>
+</html>

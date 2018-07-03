@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  构造函数模式用来定义实例属性，而原型模式用于定义方法和共享的属性,还支持向构造函数传递参数
+    //  实例属性都是在构造函数中定义的，而由所有实例共享的属性constructor和方法sayName()则是在原型中定义的
+    function Person (name, age, job) {
+    	this.name = name;
+    	this.age = age;
+    	this.job = job;
+    	this.friends = ['Shelby', 'Court'];
+    }
+    Person.prototype = {
+    	constructor: Person,
+    	sayName: function () {
+    		alert(this.name);
+    	}
+    }
+    var person1 = new Person('Nicholas', 29, 'Software English');
+    var person2 = new Person('Greg', 27, 'Doctor');
+
+    person1.friends.push('yzs');
+    console.log(person1.friends);
+    console.log(person2.friends);
+    console.log(person1.friends === person2.friends);
+    console.log(person1.sayName === person2.sayName);
+</script>
+</body>
+</html>

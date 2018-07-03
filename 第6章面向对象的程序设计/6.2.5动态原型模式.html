@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  动态原型模式，它把所有信息都封装在了构造函数中，而通过在构造函数中初始化原型（仅在必要的情况下），又保持了同时使用构造函数和原型的特点。可以通过检查某个应该存在的方法是否有效，来决定是否需要初始化原型。
+    function Person (name, age, job) {
+    	//  属性
+    	this.name = name;
+    	this.age = age;
+    	this.job = job;
+    	//  方法
+    	if (typeof this.sayName != "function") {
+    		Person.prototype.sayName = function () {
+    			alert(this.name);
+    		};
+    	}
+    }
+    var friend = new Person('Nicholas', 29, 'Software Engineer');
+    friend.sayName();
+
+    //  寄生构造函数模式
+    //  这种模式的基本思想是创建一个函数，该函数的作用仅仅是封装创建对象的代码，然后在返回新创建的对象
+    //  构造函数在不返回值的情况下，默认会返回新对象实例。而通过在构造函数的末尾添加一个return语句，可以重写调用构造函数时返回的值
+    function Person1(name, age, job) {
+    	var o = new Object();
+    	o.name = name;
+    	o.age = age;
+    	o.job = job;
+    	o.sayName = function () {
+    		alert(this.name);
+    	};
+    	return o;
+    }
+    var friend1 = new Person1('yzs', 18, 'Software Engineer');
+    friend1.sayName();
+
+    //  稳妥构造函数模式
+    //  稳妥对象，指的是没有公共属性，而且其方法也不引用this的对象。稳妥对象最适合在一些安全的环境中，或者在防止数据被其他应用程序改动时使用。
+    //  稳妥构造函数遵循与寄生构造函数类似的模式，但有两点不同：一是新创建对象的实例方法不引用this；二是不使用new操作符调用构造函数
+    function Person2 (name, age, job) {
+    	//  创建要返回的对象
+    	var o = new Object();
+    	//  可以在这定义私有变量和函数
+
+    	//  添加方法
+    	o.sayName = function () {
+    		alert(name);
+    	};
+    	//  返回对象
+    	return o;
+    }
+    var friend2 = Person2('fsn', 18, 'kuaiji');
+    friend2.sayName();
+
+</script>
+</body>
+</html>
