@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  JavaScript中没有块级作用域的概念
+    //  JavaScript中，变量i是定义在ouputNumbers()的活动对象中的，因此从它有定义开始，就可以在函数内部随处访问它。
+    //  即使像下面这样错误地重新声明同一个变量，也不会改变它的值
+    //  JavaScript从来不会告诉你是否多次声明了同一个变量；遇到这种情况，它只会对后续的声明视而不见（不过，它会执行后续声明中变量初始化）
+    outputNumbers(5);
+    function outputNumbers(count) {
+    	for (var i=0; i < count; i++) {
+    		console.log(i);
+    	}
+    	alert(i);
+    }
+
+    function outputNumbersHank(count) {
+    	for (var i=0; i < count; i++) {
+    		console.log(i);
+    	}
+    	var i;
+    	alert(i);
+    }
+    outputNumbersHank(7);
+
+
+</script>
+</body>
+</html>
