@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  BOM的核心对象是window
+    //  由于window对象同时扮演着ECMAScript中Global对象的角色，因此所有在全局作用域中声明的变量、函数都会变成window对象的属性和方法
+    // var age = 29;
+    // function sayAge () {
+    // 	alert(this.age);
+    // }
+    // alert(window.age);
+    // sayAge();
+    // window.sayAge();
+
+
+    //  全局变量不能通过delete操作符删除，而直接在window对象上的定义的属性可以
+    //  使用var语句添加的window属性有一个名为[[Configurable]]的特性，这个特性的值被设置为false，因此这样定义的属性不可以通过delete操作符删除
+    var age = 29;
+    window.color = 'red';
+    //  在IE < 9 时抛出错误，在其他所有浏览器中都返回false
+    delete window.age;
+
+    //  在IE < 9 时抛出错误，在其他浏览器中都返回true
+    delete window.color;
+
+    alert(window.age);
+    alert(window.color);
+
+    //  尝试访问未声明的变量会抛出错误，但是通过查询window对象，可以知道某个可能未声明的变量是否存在
+    
+
+
+</script>
+</body>
+</html>

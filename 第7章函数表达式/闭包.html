@@ -9,6 +9,8 @@
   <div id="someElementHank">someElementHank</div>
 <script type="text/javascript">
       //  闭包是指有权访问另一个函数作用域中的变量的函数
+      //  当在函数内部定义了其他函数时，就创建了闭包
+      //  闭包的作用域链包含着它自己的作用域、包含函数的作用域和全局作用域
       function createComparisonFunction (propertyName) {
       	return function (object1, object2) {
       		var value1 = object1[propertyName];
@@ -123,6 +125,20 @@
         element = null;
       }
       assignHandlerHank();
+
+      console.log('闭包测试');
+      var demo1 =  function() {
+        var a = 1;
+        return {
+          add: function () {
+            a++;
+            console.log(a);
+          }
+        }
+      }();
+      demo1.add();
+      demo1.add();
+      demo1.add();
 
 
 
