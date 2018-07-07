@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //  间歇调用和超时调用
+    //  JavaScript是单线程语言，但它允许通过设置超时值和间歇时间值来调度代码在特定的时刻执行
+    //  前者是在指定的时间过后执行代码，而后者则是每隔指定的时间就执行一次代码
+    //  超时调用需要使用window对象的setTimeout()方法
+    //  不建议传递字符串
+    //setTimeout("alert('Hello world!')", 1000);
+
+    //  推荐的调用方式
+    // setTimeout(function(){
+    // 	alert('Hello world');
+    // }, 1000);
+
+    //  经过该时间后指定的代码不一定执行。JavaScript是一个单线程的解释器，因此一定时间内只能执行一段代码。
+    //  为了控制要执行的代码，就有一个JavaScript任务队列。这些任务会按照将它们添加到队列的顺序执行。setTimeout()的第二个参数告诉JavaScript再过多长时间把当前任务添加到队列中。
+    //  如果队列是空的，那么添加的代码会立即执行；如果队列不是空的，那么它就要等前面的代码执行完了以后再执行。
+
+
+    //  调用clearTimeout()方法并将相应的超时调用ID作为参数传递给它
+
+    //  设置超时调用
+    var timeoutId = setTimeout(function () {
+    	alert('hello world');
+    }, 1000);
+
+    //  注意：把它取消
+    clearTimeout(timeoutId);
+
+
+
+    //  间歇调用与超时调用类似，设置间歇调用的方法是setInterval(),它接受的参数与setTimeout()相同：要执行的代码（字符串和函数）和每次执行之前需要等待的毫秒数
+    //  调用setInterval()方法同样也会返回一个间歇调用ID，该ID可用于在将来某个时刻取消间歇调用。
+    //  不加干涉的情况下，间歇调用将会一直执行到页面卸载
+    // var num = 0;
+    // var max = 10;
+    // var intervalId = null;
+
+    // function incrementNumber() {
+    // 	num++;
+    // 	//  如果执行次数达到了max设定的值，则取消后续尚未执行的调用
+    // 	if (num == max) {
+    // 		clearInterval(intervalId);
+    // 		alert('Done');
+    // 	}
+    // }
+    // intervalId = setInterval(incrementNumber, 500);
+
+
+    //  一般认为，使用超时调用来模拟间歇调用的是一种最佳模式。在开发环境下，很少使用真正的间歇调用，原因是后一个间歇调用可能会在前一个间歇调用结束之前启动。
+    //  所以最好不要使用间歇调用
+    var numHank = 0;
+    var maxHank = 10;
+    function incrementNumberHank () {
+    	numHank++;
+    	//  如果执行次数未达到max设定的值，则设置另一种超时调用
+    	if (numHank < maxHank) {
+    		setTimeout(incrementNumberHank, 500);
+    	} else {
+    		alert('Done');
+    	}
+    }
+    setTimeout(incrementNumberHank, 500);
+
+
+    
+
+
+</script>
+</body>
+</html>
