@@ -64,7 +64,14 @@ var returnedNode = node.appendChild(node.firstChild);
 console.log(returnedNode == node.firstChild);
 console.log(returnedNode == node.lastChild);
 
+//  hasChildNodes()也是一个非常有用的方法，这个方法在节点包含一或多个子节点的情况下返回true
+var isHasChild = node.hasChildNodes();
+console.log('是否有子节点=' + isHasChild);
 
+//  如果需要把节点放在childNodes列表中某个特定的位置上，而不是放在末尾，那么可以使用insertBefore()方法。
+//  这个方法接受两个参数：要插入的节点和作为参照的节点。
+//  插入节点后，被插入的节点会变成参照节点的前一个同胞节点，同时被方法返回
+//  插入后
 
 
 
