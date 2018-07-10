@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="demo"><div>123</div><h4>456</h4><span>789</span></div>
+<script type="text/javascript">
+//  Node接口，该接口将由DOM中的所有节点类型实现
+//  JavaScript中的所有节点类型都继承自Node类型，因此所有节点类型都共享着相同的基本属性和方法
+
+//  判断是否为dom，dom的nodeType属性值为1，这里用！！强转为boolean值
+function isElement (obj) {
+	return !!(obj && obj.nodeType === 1);
+}
+
+var node = document.getElementById('demo');
+console.log('节点类型=' + isElement(node));
+
+//  对于元素节点，nodeName中保存的始终都是元素的标签名，而nodeValue的值始终未null
+console.log('nodeName=' + node.nodeName);
+console.log('nodeValue=' + node.nodeValue);
+
+
+//  节点关系
+//  每个节点都有一个childNodes属性，其中保存着一个NodeList对象。
+//  NodeList是一种类数组对象，用于保存一组有序的节点，可以通过位置来访问这些节点。
+//  虽然可以通过方括号语法来访问NodeList的值，而且这个对象也有length属性，但它并不是Array的实例。
+var firstChild = node.childNodes[0];
+var secondChild = node.childNodes.item(1);
+var count = node.childNodes.length;
+console.log('firstChild=' + firstChild.nodeName);
+console.log('secondChild=' + secondChild.nodeName);
+console.log('count=' + count);
+
+
+//  将NodeList对象转换为数组
+//  要想在IE中将NodeList转换为数组，必须手动枚举所有成员
+function convertToArray(nodes) {
+	var array = null;
+	try {
+		array = Array.prototype.slice.call(nodes, 0);  //  针对非IE浏览器
+	} catch (ex) {
+		array = new Array();
+		for (var i = 0, len = nodes.length; i < len; i++) {
+			array.push(nodes[i]);
+		}
+	}
+	return array;
+}
+console.log('node=' + convertToArray(node.childNodes));
+
+
+//  操作节点
+//  appendChild()用于向childNodes列表的末尾添加一个节点。添加节点后，childNodes的新增节点、父节点及以前的最后一个子节点的关系指针都会相应地更新。
+//  更新完成后，appendChild()返回新增的节点
+var createNode = document.createElement('h1');
+var textnode = document.createTextNode('yzs');
+createNode.appendChild(textnode);
+node.firstChild.appendChild(createNode);
+//  如果传入到appendChild()中的节点已经是文档的一部分了，那结果就是将该节点从原来的位置转移到新位置
+var returnedNode = node.appendChild(node.firstChild);
+console.log(returnedNode == node.firstChild);
+console.log(returnedNode == node.lastChild);
+
+
+
+
+
+</script>
+</body>
+</html>
