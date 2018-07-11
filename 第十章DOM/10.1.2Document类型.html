@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<input type="text" name="demo" />
+	<div id="demo" name="demo"><div name="123">123</div><h4>456</h4><span>789</span></div>
+	<div id="demo1"><h3>测试</h3></div>
+<script type="text/javascript">
+//  JavaScript通过Document类型表示文档。在浏览器中，document对象是HTMLDocument（继承自Document类型）的一个实例，表示整个HTML页面。
+//  而且document对象是window对象的一个属性，因此可以将其作为全局对象来访问。
+var html = document.documentElement;
+var html1 = document.childNodes[0];
+var html2 = document.firstChild;
+console.log(html);
+console.log(html1);
+console.log(html2);
+console.log(html === html1);
+console.log(html2 === html1);
+
+
+//  document对象还有一个body属性，直接指向<body>元素
+//  所有浏览器都支持document.documentElement和document.body属性
+var body = document.body;  //  取得对<body>的引用
+
+//  Document另一个可能的子节点是DocumentType。通常将<!DOCTYPE>标签看成一个与文档其他部分不同的实体，可以通过doctype属性
+var doctype = document.doctype;  //  取得对<!DOCTYPE>的引用
+
+
+//  文档信息
+//  第一个属性就是title，包含着<title>元素中的文本。修改title属性的值会改变<title>元素
+//  取得文档标题
+var originalTitle = document.title;
+//  设置文档标题
+document.title = 'yzs';
+
+//  url属性包含页面完整的URL，domain属性中只包含页面的域名，而referrer属性中则保存着链接到当前页面的那个页面的URL
+//  取得完整URL
+var url = document.URL;
+//  取得域名
+var domain = document.domain;
+//  取得来源页面的URL
+var referrer = document.referrer;
+console.log('url=' + url);
+console.log('domain=' + domain);
+console.log('referrer=' + referrer);
+
+
+
+//  查找元素
+//  Document类型为此提供了两个方法：getElementById()和getElementsByTagName()
+//  第一个方法：getElementById(),接收一个参数：要取得的元素ID。如果找到相应的元素则返回该元素，如果不存在带有相应ID的元素，则返回null
+//  如果页面中多个元素的ID值相同，getElementById()只返回文档中第一次出现的元素
+//  IE7及较低版本还为此方法添加了一个有意思的“怪癖”：name特性与给定ID匹配的表单元素（<input>、<textarea>、<button>及<select>）也会被该方法返回。
+//  如果有哪个表单元素的name特性等于指定的ID，而且该元素在文档中位于带有给定ID的元素前面，那么IE就会返回那个表单元素
+var div = document.getElementById('demo');
+
+
+//  另一个取得元素的方法是getElementsByTagName()。这个方法接受一个参数，即要取得元素的标签名，而返回的是包含零或多个元素的NodeList。
+//  在HTML文档中，这个方法会返回一个HTMLCollection对象，作为一个“动态”集合，该对象与NodeList非常相似
+var divs = document.getElementsByTagName('div');
+console.log('divs=' + divs[0].innerHTML);
+
+//  HTMLCollection对象还有一个方法，叫做namedItem()，使用这个方法可以通过元素的name特性取得集合中的项
+var mydivs = divs.namedItem('123');
+console.log('mydivs=' + mydivs.innerHTML);
+
+//  在提供按索引访问项的基础上，HTMLCollection还支持按名称访问项
+var mydivs1 = divs['demo'];
+console.log('mydivs1=' + mydivs1.innerHTML);
+
+//  要想取得文档中的所有元素，可以向getElementsByTagName()中传入“*”。在JavaScript及CSS中，星号通常表示全部。
+var allElements = document.getElementsByTagName("*");
+console.log(allElements);
+
+//  第三个方法，也是只有HTMLDocument类型才有的方法，是getElementsByName().
+
+
+</script>
+</body>
+</html>

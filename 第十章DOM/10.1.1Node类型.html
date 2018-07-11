@@ -6,6 +6,7 @@
 </head>
 <body>
 	<div id="demo"><div>123</div><h4>456</h4><span>789</span></div>
+	<div id="demo1"><h3>测试</h3></div>
 <script type="text/javascript">
 //  Node接口，该接口将由DOM中的所有节点类型实现
 //  JavaScript中的所有节点类型都继承自Node类型，因此所有节点类型都共享着相同的基本属性和方法
@@ -71,7 +72,43 @@ console.log('是否有子节点=' + isHasChild);
 //  如果需要把节点放在childNodes列表中某个特定的位置上，而不是放在末尾，那么可以使用insertBefore()方法。
 //  这个方法接受两个参数：要插入的节点和作为参照的节点。
 //  插入节点后，被插入的节点会变成参照节点的前一个同胞节点，同时被方法返回
-//  插入后
+//  插入后成为最后一个子节点
+var createNode1 = document.createElement('h1');
+var textnode = document.createTextNode('fsn');
+createNode1.appendChild(textnode);
+var insert1 = node.insertBefore(createNode1, null);
+console.log('insert1=' + insert1);
+//  插入后成为第一个子节点
+var insert2 = node.insertBefore(createNode, node.firstChild);
+//  插入到最后一个子节点前面
+var insert3 = node.insertBefore(createNode, node.lastChild);
+
+
+//  replaceChild()方法接受的两个参数是：要插入的节点和要替换的节点。要替换的节点将由这个方法返回并从文档树中被移除，同时由要插入的节点占据其位置
+//  替换第一个子节点
+var createNode2 = document.createElement('h1');
+var textnode = document.createTextNode('abc');
+createNode2.appendChild(textnode);
+var replace1 = node.replaceChild(createNode2, node.firstChild);
+//  替换最后一个子节点
+var replace2 = node.replaceChild(createNode2, node.lastChild);
+
+
+//  如果只想移除而非替换节点，可以使用removeChild()方法。这个方法接受一个参数，既要移除的节点。被移除的节点将成为方法的返回值
+//  移除第一个子节点
+var remove1 = node.removeChild(node.firstChild);
+//  移除最后一个子节点
+var remove2 = node.removeChild(node.lastChild);
+
+
+//  有两个方法是所有类型都有的节点
+//  第一个就是cloneNode()，用于创建调用这个方法的节点的一个完全相同的副本。cloneNode()方法接受一个布尔值参数，表示是否执行深复制
+var myList = document.getElementById('demo1');
+// var deepLIst = myList.cloneNode(true);
+var deepLIst = myList.cloneNode(false);
+node.insertBefore(deepLIst, node.firstChild);
+
+
 
 
 
