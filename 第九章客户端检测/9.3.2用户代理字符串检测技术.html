@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+//  我们编写的脚本将主要检测五大呈现引擎：IE、Gecko、WebKit、KHTML和Opera
+//  为了不在全局作用域中添加多余的变量，我们将使用模块增强模式来封装检测脚本
+var client = function () {
+	var engine = {
+		//  呈现引擎
+		ie: 0,
+		gecko: 0,
+		webkit: 0,
+		khtml: 0,
+		opera: 0,
+		//  具体版本号
+		ver: null
+	};
+	//  在此检测呈现引擎、平台和设备
+	return {
+		engine: engine
+	}
+}();
+
+
+
+</script>
+</body>
+</html>

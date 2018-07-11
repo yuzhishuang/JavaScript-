@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+    //  浏览器通过alert()、confirm()和prompt()方法可以调用系统对话框向用户显示消息。
+    //  系统对话框与在浏览器中显示的网页没有关系，也不包含HTML。
+    //  它们的外观由操作系统及（或）浏览器设置决定，而不是由css决定。
+    //  通过这几个方法打开的对话框都是同步和模态的。也就是说，显示这些对话框的时候代码会停止执行，而关掉
+    //  这些对话框后代码又会恢复执行。
+    if (confirm('Are you sure')) {
+    	alert("I'm so glad you're sure!")
+    } else {
+    	alert("T'm sorry to hear you're not sure.")
+    }
+
+    //  prompt()方法生成的，接受两个参数：要显示给用户的文本提示和文本输入域的默认值（可以是一个空字符串）
+    var result = prompt("What is your name?", "yzs");
+    if (result !== null) {
+    	alert("Welcome," + result);
+    }
+
+    //  两个可以通过JavaScript打开对话框，即“查找”和“打印”。这两个对话框都是异步显示的，能够将控制权立即交还给脚本
+    //  显示“打印”对话框
+    window.print();
+    //  显示“查找”对话框
+    window.find();
+</script>
+</body>
+</html>

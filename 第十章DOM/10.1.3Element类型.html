@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<input type="text" name="demo" />
+	<div id="demo" class="bd" title="Body text" lang="en" dir="ltr" name="demo"><div name="123">123</div><h4>456</h4><span>789</span></div>
+	<div id="demo1"><h3>测试</h3></div>
+	<ul>
+		<li><input type="radio" value="red" name="color" id="colorRed" /><label for="colorRed">Red</label></li>
+		<li><input type="radio" value="green" name="color" id="colorGreen" /><label for="colorGreen">Green</label></li>
+		<li><input type="radio" value="blue" name="color" id="colorBlue" /><label for="colorBlue">Blue</label></li>
+	</ul>
+<script type="text/javascript">
+//  要访问元素的标签名，可以使用nodeName属性，也可以使用tagName属性；这两个属性会返回相同的值
+//  div.tagName实际上输出的是DIV而不是div。在HTML中，标签名始终都以全部大写表示
+//  假如你不确定自己的脚本将会在HTML还是XML文档中执行，最好是在比较之前将标签名转换为相同的大小写形式。
+var div = document.getElementById('demo');
+console.log('div=' + div.tagName);
+console.log('div=' + div.nodeName);
+if (div.tagName.toLowerCase() == "div") {
+	//  在此执行某些操作
+}
+
+
+//  HTML元素
+//  HTMLElement类型直接继承自Element并添加了一些属性
+console.log('id=' + div.id);
+console.log('className=' + div.className);
+console.log('title=' + div.title);
+console.log('lang=' + div.lang);
+console.log('dir=' + div.dir);
+//  像下面这样通过为每个属性赋予新的值，也可以修改对应的每个特性
+
+
+
+</script>
+</body>
+</html>

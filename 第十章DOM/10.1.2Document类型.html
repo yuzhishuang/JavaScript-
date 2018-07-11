@@ -8,6 +8,11 @@
 	<input type="text" name="demo" />
 	<div id="demo" name="demo"><div name="123">123</div><h4>456</h4><span>789</span></div>
 	<div id="demo1"><h3>测试</h3></div>
+	<ul>
+		<li><input type="radio" value="red" name="color" id="colorRed" /><label for="colorRed">Red</label></li>
+		<li><input type="radio" value="green" name="color" id="colorGreen" /><label for="colorGreen">Green</label></li>
+		<li><input type="radio" value="blue" name="color" id="colorBlue" /><label for="colorBlue">Blue</label></li>
+	</ul>
 <script type="text/javascript">
 //  JavaScript通过Document类型表示文档。在浏览器中，document对象是HTMLDocument（继承自Document类型）的一个实例，表示整个HTML页面。
 //  而且document对象是window对象的一个属性，因此可以将其作为全局对象来访问。
@@ -76,6 +81,20 @@ var allElements = document.getElementsByTagName("*");
 console.log(allElements);
 
 //  第三个方法，也是只有HTMLDocument类型才有的方法，是getElementsByName().
+var radios = document.getElementsByName("color");
+console.log(radios);
+
+//  文档写入
+//  write()、writeln()、open()和close()。其中，write()和writeln()方法都接受一个字符串参数，即要写入到输出流中的文本。write()和writeln()方法都接受一个字符串参数，即要写入到输出流中的文本
+//  如果在文档加载结束后再调用document.write()，那么输出的内容将会重写整个页面
+window.onload= function () {
+	document.write("<strong>" + (new Date()).toString() + "</strong>");
+}
+
+//  还可以使用write()和writeln()方法动态地包含外部资源，例如JavaScript文件等。在包含JavaScript文件时，必须
+//  注意不能像下面的例子那样直接包含字符串“<script>”，因为这会导致该字符串被解释为脚本块的结束，它后面的代码将无法执行
+//  为避免这个问题，只需加入转移字符\即可
+document.write("<script type=\"text/javascript\" src=\"file.js\">" + "<\/script>");
 
 
 </script>

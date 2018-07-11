@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+    //  locatian对象可以通过很多方式来改变浏览器的位置，使用assign()方法并为其传递一个URL
+    //  location.assign('http://www/wrox.com');
+    //  就可以立即打开新URL并在浏览器的历史记录中生成一条记录。如果是将location.href或
+    //  window.location设置为一个URL值，也会以该值调用assign()方法
+    //  window.location = 'http://www.wrox.com';
+    //  location.href = 'http://www.wrox.com';
+    //  修改location对象的其他属性也可以改变当前加载的页面
+    //  每次修改location的属性（hash除外），页面都会以新URL重新加载
+
+
+    //  假设初始URL为http://www.wrox.com/WileyCDA/
+    //  将URL修改为‘http://www.wrox.com/WileyCDA/#section1’
+    location.hash = '#section1';
+    //  将URL修改为‘http://www.wrox.com/WileyCDA/?q=javascript’
+    location.search = '?q=javascript';
+    //  将URL修改为‘http://www.yahoo.com/WileyCDA’
+    location.hostname = 'www.yahoo.com';
+    //  将URL修改为‘http://www.yahoo.com/mydir/’
+    location.pathname = 'mydir';
+    //  将URL修改为‘http://www.yahoo.com:8080/WileyCDA/’
+    location.port = 8080;
+</script>
+</body>
+</html>
