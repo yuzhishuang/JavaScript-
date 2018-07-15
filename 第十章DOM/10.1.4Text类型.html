@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<input type="text" name="demo" />
+	<div id="demo" class="bd" title="Body text" lang="en" dir="ltr" name="demo"><div name="123">123</div><h4>456</h4><span>789</span></div>
+	<div id="demo1"><h3>测试</h3></div>
+	<div id="demo2"> </div>
+	<ul>
+		<li><input type="radio" value="red" name="color" id="colorRed" /><label for="colorRed">Red</label></li>
+		<li><input type="radio" value="green" name="color" id="colorGreen" /><label for="colorGreen">Green</label></li>
+		<li><input type="radio" value="blue" name="color" id="colorBlue" /><label for="colorBlue">Blue</label></li>
+	</ul>
+<script type="text/javascript">
+//  纯文本中可以包含转义后的HTML字符，但不能包含HTML代码
+var div = document.getElementById('demo2');
+var textNode = div.firstChild;
+console.log(textNode);
+//  修改文本节点
+div.firstChild.nodeValue = "Some other message";
+//  在修改文本节点时还要注意，此时的字符串会经过HTML（或XML，取决于文档类型）编码。
+//  小于号、大于号或引号都会像下面的例子一样被转义
+div.firstChild.nodeValue = "Some<strong>other</strong>message";
+
+//  1、创建文本节点
+//  document.createTextNode()创建新文本节点，这个方法接受一个参数-要插入节点中的文本
+
+</script>
+</body>
+</html>
