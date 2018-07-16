@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="myDiv"><!-- A comment --></div>
+	<ul id="myList"></ul>
+<script type="text/javascript">
+//  注释在DOM中是通过Comment类型来表示
+//  注释节点可以通过其父节点来访问
+var div = document.getElementById("myDiv");
+var comment = div.firstChild;
+console.log(comment.data);
+
+
+//  DocumentFragment类型
+//  在所有的节点类型中，只有DocumentFragment在文档中没有对应的标记
+//  虽然不能把文档片段直接添加到文档中，但可以将它作为一个“仓库”来使用，即可以在里面保存将来可能会添加到文档中的节点
+//  添加到文档片段中的新节点同样也不属于文档树。
+//  可以通过appendChild()或insertBefore()将文档片段中内容添加到文档中。
+var fragment = document.createDocumentFragment();
+var ul = document.getElementById('myList');
+var li = null;
+
+for(var i = 0; i < 3; i++) {
+	li = document.createElement('li');
+	li.appendChild(document.createTextNode("Item" + (i + 1)));
+	fragment.appendChild(li);
+}
+ul.appendChild(fragment);
+
+</script>
+</body>
+</html>
