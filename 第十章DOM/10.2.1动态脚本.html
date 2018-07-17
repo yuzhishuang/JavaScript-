@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="myDiv"><!-- A comment --></div>
+	<ul id="myList"></ul>
+<script type="text/javascript">
+//  创建动态脚本也有两种方式：插入外部文件和直接插入JavaScript代码
+var script = document.createElement("script");
+script.type = "text/javascript";
+script.src = "client.js";
+document.body.appendChild(script);
+
+</script>
+</body>
+</html>
