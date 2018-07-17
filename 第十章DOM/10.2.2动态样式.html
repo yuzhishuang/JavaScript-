@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="myDiv"><!-- A comment --></div>
+	<ul id="myList"></ul>
+<script type="text/javascript">
+//  能够把CSS样式包含到HTML页面中的元素有两个。其中，<link>元素用于包含来自外部的文件，而<style>元素
+//  用于指定嵌入的样式
+//  <link rel="stylesheet" type="text/css" href="styles.css">
+//  要想在所有主流浏览器中都可以正常运行，必须将<link>元素添加到<head>而不是<body>元素，才能保证在所有浏览器中的行为一致
+//  加载外部样式文件的过程是异步的
+var link = document.createElement("link");
+link.rel = "stylesheet";
+link.type = "text/css";
+link.href = "style.css";
+var head = document.getElementsByTagName("head")[0];
+head.appendChild(link);
+
+//  封装成函数
+function loadStyles(url) {
+	var link = document.createElement("link");
+	link.rel = "stylesheet";
+	link.type = "text/css";
+	link.href = url;
+	var head = document.getElementsByTagName("head")[0];
+	head.appendChild(link);
+}
+//  调用函数
+loadStyles("styles.css");
+
+//  另一种定义样式的方式是使用<style>元素来包含嵌入式CSS
+//  IE将<script>视为一个特殊的、与<script>类似的节点，不允许访问其子节点。
+//  事实上IE此时抛出的错误与向<script>元素添加子节点时抛出的错误相同
+function loadStyleString(css) {
+	var style = document.createElement("style");
+	style.type = "text/css";
+	try {
+		style.appendChild(document.createTextNode(css));
+	} catch (ex) {
+		style.styleSheet.cssText = css;
+	}
+	var head = document.getElementsByTagName("head")[0];
+	head.appendChild(style);
+}
+//  调用这个函数如下
+loadStyleString("body{background-color: red}");
+
+</script>
+</body>
+</html>

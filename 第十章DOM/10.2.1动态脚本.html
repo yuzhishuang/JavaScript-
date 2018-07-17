@@ -14,6 +14,43 @@ script.type = "text/javascript";
 script.src = "client.js";
 document.body.appendChild(script);
 
+//  整个过程可以使用下面的函数来封装
+//  通过这个函数来加载外部的JavaScript文件了
+function loadScript(url) {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src = url;
+	document.body.appendChild(script);
+}
+
+
+//  另一种指定JavaScript代码的方式是行内方式
+//  兼容早期版本的Safari，可以使用下面代码
+var script = document.createElement("script");
+script.type = "text/javascript";
+var code = "function sayHi(){alert('hi');}";
+try {
+	script.appendChild(document.createTextNode(code));
+} catch (ex) {
+	script.text = code;
+}
+document.body.appendChild(script);
+
+//  封装成函数
+function loadScriptString(code) {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	try {
+		script.appendChild(document.createTextNode(code));
+	} catch (ex) {
+		script.text = code;
+	}
+	document.body.appendChild(script);
+}
+
+//  调用这个函数的实例
+loadScriptString("function sayHi(){alert('hi')}");
+
 </script>
 </body>
 </html>
