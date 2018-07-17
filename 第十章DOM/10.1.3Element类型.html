@@ -6,7 +6,7 @@
 </head>
 <body>
 	<input type="text" name="demo" />
-	<div id="demo" class="bd" title="Body text" lang="en" dir="ltr" name="demo"><div name="123">123</div><h4>456</h4><span>789</span></div>
+	<div id="demo" class="bd" title="Body text" lang="en" dir="ltr" name="demo" my_special_attribute="hello!"><div name="123">123</div><h4>456</h4><span>789</span></div>
 	<div id="demo1"><h3>测试</h3></div>
 	<ul>
 		<li><input type="radio" value="red" name="color" id="colorRed" /><label for="colorRed">Red</label></li>
@@ -33,6 +33,57 @@ console.log('title=' + div.title);
 console.log('lang=' + div.lang);
 console.log('dir=' + div.dir);
 //  像下面这样通过为每个属性赋予新的值，也可以修改对应的每个特性
+div.id = 'someOtherId';
+div.className = "ft1 ft2";
+div.title = "Some other text";
+div.lang = "fr";
+div.dir = "rtl";
+
+
+//  取得特性
+//  操作特性的DOM方法主要有三个，分别是：getAttribute()、setAttribute()和removeAttribute()
+//  这三个方法可以针对任何特性使用，包括那些以HTMLElement类型属性的形式定义的特性
+console.log(div.getAttribute("id"));
+console.log(div.getAttribute("class"));
+console.log(div.getAttribute("title"));
+console.log(div.getAttribute("lang"));
+console.log(div.getAttribute("dir"));
+//  通过getAttribute()方法也可以取得自定义特性
+//  特定的名称是不区分大小写的，即“ID”和“id”代表的都是同一个特性。另外也要注意，根据HTML5规范，自定义特性应该加上data-前缀以便验证。
+var value = div.getAttribute('my_special_attribute');
+console.log(value);
+
+
+
+//  3、设置特性
+//  与getAttribute()对应的方法是setAttribute()，这个方法接受两个参数：要设置的特姓名和值。如果特性已经存在，setAttribute()会以指定的值替换现在的值；如果特性不存在，
+//  setAttribute()则创建该属性并设置相应的值
+//  通过这个方法设置的特姓名会被统一转换为小写形式
+//  但是我们还是推荐通过属性来设置特性
+div.setAttribute("id", "someOtherId");
+div.setAttribute("class", "ft");
+div.setAttribute("title", "some other text");
+div.setAttribute("lang", "fr");
+div.setAttribute("dir", "rtl");
+div.id = '';
+//  removeAttribute()这个方法用于彻底删除元素的特性。调用这个方法不仅会清除特性的值，而且也会从元素中完全删除特性。
+div.removeAttribute('class');
+div.class = 'yzs';  //  失效
+
+
+//  4、attributes属性
+//  Element类型是使用attributes属性的唯一一个DOM节点类型。attributes属性中包含一个NamedNodeMap，与NodeList类似，也是一个“动态”的集合。元素的每一个特性都由一个Attr节点表示
+//  每个节点都保存在NameNodeMap对象中。
+//  getNamedItem(name): 返回nodeName属性等于name的节点
+//  removeNamedItem(name)：从列表中移除nodeName属性等于name的节点
+//  setNamedItem(node)：向列表中添加节点，以节点的nodeName属性为索引
+//  item(pos)：返回位于数字pos位置处的节点。
+//  attributes属性中包含一系列节点，每个节点的nodeName就是特性的名称，而节点的nodeValue就是特性的值
+var id = div.attributes.getNamedItem("id");
+console.log(id);
+//  展示如何迭代元素的每一个特性，然后将它们构成name="value" name="value"这样的字符串格式
+
+
 
 
 

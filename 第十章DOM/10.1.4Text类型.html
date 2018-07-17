@@ -27,6 +27,43 @@ div.firstChild.nodeValue = "Some<strong>other</strong>message";
 
 //  1、创建文本节点
 //  document.createTextNode()创建新文本节点，这个方法接受一个参数-要插入节点中的文本
+//  除非把新节点添加到文档树中已经存在的节点中，否则我们不会再浏览器窗口中看到新节点
+var element = document.createElement('div');
+element.className = 'message';
+var textNode = document.createTextNode('Hello world!');
+element.appendChild(textNode);
+document.body.appendChild(element);
+
+//  在某些情况下也可能包含多个文本子节点
+//  如果两个文本节点是相邻的同胞节点，那么这两个节点中的文本就会连起来显示，中间不会有空格
+var element1 = document.createElement('div');
+element1.className = 'yzs';
+var textNode1 = document.createTextNode("Hello world!");
+element1.appendChild(textNode1);
+var anotherTextNode = document.createTextNode("Yippee!");
+element1.appendChild(anotherTextNode);
+document.body.appendChild(element1);
+
+//  2、规范化文本节点
+//  能够将相邻文本节点合并的方法。这个方法是由Node类型定义的，名叫normalize()。如果在一个包含两个或多个文本节点的父元素上调用normalize()方法，则会将所有文本节点合并成一个节点，结果节点的nodeValue等于
+//  将合并前每个文本节点的nodeValue值拼接起来的值
+console.log('文本节点的个数=' + element1.childNodes.length);
+element1.normalize();
+console.log('合并后文本节点个数=' + element1.childNodes.length);
+console.log('合并后第一个文本节点=' + element1.firstChild.nodeValue);
+
+
+//  3、分割文本节点
+//  Text类型提供了一个作用与normalize()相反的方法：splitText().
+//  这个方法会将一个文本节点分成两个文本节点，即按照指定的位置分割nodeValue值
+//  原来的文本节点将包含从开始到指定位置之前的内容，新文本节点将包含剩下的文本
+//  分割文本节点是从文本节点中提取数据的一种常用DOM解析技术
+var newNode = element1.firstChild.splitText(5);
+console.log(element1.firstChild.nodeValue);
+console.log(newNode.nodeValue);
+console.log(element1.childNodes.length);
+
+
 
 </script>
 </body>
