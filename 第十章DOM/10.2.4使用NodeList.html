@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="myDiv"><!-- A comment --></div>
+	<ul id="myList"></ul>
+<script type="text/javascript">
+//  理解NodeList及其“近亲”NamedNodeMap和HTMLCollection，是从整体上透彻理解DOM的关键所在。
+//  这三个集合都是“动态的”；换句话说，每当文档结构发生变化时，它们都会得到更新
+//  下面代码会无限循环
+//  NodeList对象都是“动态的”，这就意味着每次访问NodeList对象，都会执行一次查询。有鉴于此，最好的办法就是尽量减少DOM操作
+
+// var divs = document.getElementsByTagName("div"),
+// 	i,
+// 	div;
+// for (i = 0; i < divs.length; i++) {
+// 	div = document.createElement("div");
+// 	div.appendChild(document.createTextNode('div'));
+// 	document.body.appendChild(div);
+// }
+
+//  如果想要迭代一个NodeList，最好是使用length属性初始化第二个变量，然后将迭代器与该变量进行比较
+var divs = document.getElementsByTagName("div"),
+	i,
+	len,
+	div;
+for (i = 0, len = divs.length; i < len; i++) {
+	div = document.createElement('div');
+	div.appendChild(document.createTextNode('divs'));
+	document.body.appendChild(div);
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="myDiv"><span class="selected">123</span></div>
+	<ul id="myList"></ul>
+<script type="text/javascript">
+//  querySelector()方法
+//  querySelector()方法接受一个CSS选择符，返回与该模式匹配的第一个元素，如果没有找到匹配的元素，返回一个null
+
+//  取得body元素
+var body = document.querySelector("body");
+
+//  取得ID为“myDiv”的元素
+var myDiv = document.querySelector("#myDiv");
+
+//  取得类为“selected”的第一个元素
+var selected = document.querySelector(".selected");
+
+//  取得类为“button”的第一个图像元素
+var img = document.body.querySelector("img.button");
+
+//  而通过Element类型调用querySelector()方法时，只会在该元素的范围内查找匹配的元素
+//  对于元素节点，nodeName中保存的始终都是元素的标签名，而nodeValue的值则始终为null
+var selectedValue = myDiv.querySelector('.selected').nodeValue;
+console.log(selectedValue);
+
+</script>
+</body>
+</html>
