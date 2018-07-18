@@ -28,6 +28,21 @@ var img = document.body.querySelector("img.button");
 var selectedValue = myDiv.querySelector('.selected').nodeValue;
 console.log(selectedValue);
 
+
+//  querySelectorAll()方法
+//  querySelectorAll()方法接收的参数与querySelector()方法一样，都是一个CSS选择符，但返回的是所有匹配的元素而不仅仅是一个元素。
+//  这个方法返回的是一个NodeList的实例
+//  与querySelector()类似，能够调用querySelectorAll()方法的类型包括Document、DocumentFragment、和Element
+
+//  取得某<div>中的所有<em>元素（类似于getElementsByTagName("em")）
+var ems = document.getElementById('#myDiv').querySelectorAll('em');
+
+//  取得类为“selected”的所有元素
+var selected = document.querySelectorAll(".selected");
+
+//  取得所有<p>元素中的所有<strong>元素
+var strongs = document.querySelectorAll("p strong");
+
 </script>
 </body>
 </html>
