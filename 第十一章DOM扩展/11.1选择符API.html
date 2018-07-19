@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-	<div id="myDiv"><span class="selected">123</span></div>
+	<div id="myDiv"><span class="selected">123</span><em></em></div>
 	<ul id="myList"></ul>
 <script type="text/javascript">
 //  querySelector()方法
@@ -35,13 +35,25 @@ console.log(selectedValue);
 //  与querySelector()类似，能够调用querySelectorAll()方法的类型包括Document、DocumentFragment、和Element
 
 //  取得某<div>中的所有<em>元素（类似于getElementsByTagName("em")）
-var ems = document.getElementById('#myDiv').querySelectorAll('em');
+// var ems = document.getElementById('#myDiv').querySelectorAll('em');
 
 //  取得类为“selected”的所有元素
-var selected = document.querySelectorAll(".selected");
+var selected = document.querySelectorAll('.selected');
 
 //  取得所有<p>元素中的所有<strong>元素
 var strongs = document.querySelectorAll("p strong");
+
+//  要取得返回的NodeList中的每一个元素，可以使用item()方法，也可以使用方括号语法
+var i, len, strong;
+for (i = 0, len = selected.length; i < len; i++) {
+	selected = selected[i];  //  或者strongs.item(i)
+	console.log(selected.className);
+	selected.className = "important";
+}
+
+//  matchesSelector()方法
+//  这个方法接收一个参数，即CSS选择符，如果调用元素与该选择符匹配，则返回true；否则，返回false
+
 
 </script>
 </body>
