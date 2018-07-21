@@ -6,7 +6,7 @@
 </head>
 <body id="test1">
 	<strong id="test"></strong>
-	<div id="myDiv" class="selected abc">
+	<div id="myDiv" class="selected abc a b c">
 		<span class="selected">123</span>
 		<em></em>
 		<i></i>
@@ -16,8 +16,55 @@
 //  1、getElementsByClassName()方法
 //  getElementsByClassName()方法接收一个参数，即一个包含一或多个类名的字符串，返回带有指定类的所有元素的NodeList
 //  传入多个类名后，类名的先后顺序不重要
+//  传入多个类名时，必须都匹配才会返回值
 var allCurrentUsernames = document.getElementsByClassName('selected abc');
 var selected = document.getElementById('myDiv').getElementsByClassName('selected');
+
+//  2、classList属性
+//  在操作类名时，需要通过className属性添加、删除和替换类名。因为className中是一个字符串，所以即使只修改字符串的一部分，也必须每次都设置整个字符串的值
+
+//  删除abc
+//  首先，取得类名字字符串并拆分成数组
+var div = document.getElementById('myDiv');
+var className = div.className.split(/\s+/);
+//  找到要删除的类
+var pos = -1,
+	i,
+	len;
+for (i = 0, len = className.length; i < len; i++) {
+	if (className[i] == 'abc') {
+		pos = i;
+		break;
+	}
+}
+//  删除类名
+className.splice(i, 1);
+//  把剩下的类名拼成字符串并重新设置
+div.className = className.join(' ');
+
+//  HTML5新增了一种操作类名的方式，那就是为所有元素添加classList属性。
+//  这个classList属性是新集合类型DOMTokenList的实例
+
+//  删除类
+div.classList.remove('a');
+
+//  添加类
+div.classList.add('yzs');
+
+//  切换类（如果列表中存在，则删除，不存在则添加）
+div.classList.toggle('selected');
+
+//  确定元素中是否包含既定的类名
+if (div.classList.contains('selected') && !div.classList.contains("a")) {
+	//  执行操作
+}
+
+//  迭代类名
+for (var i = div.classList.length - 1; i >= 0; i--) {
+	console.log(div.classList[i]);
+}
+
+
 
 </script>
 </body>

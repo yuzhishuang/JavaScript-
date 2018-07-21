@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<button id="myButton">测试按钮</button>
+
+<script type="text/javascript">
+//  1、readyState属性
+//  通过它来实现一个指示文档已经加载完成的指示器（loading：正在加载文档。complete：已经加载完文档）
+if (document.readyState == 'complete') {
+	//  执行某些操作
+}
+
+//  2、检测页面的兼容模式
+//  document.compatMode的值等于"CSS1Compat"为标准模式。“BackCompat”为混杂模式
+if (document.compatMode == 'CSS1Compat') {
+	alert("Standards mode");
+} else {
+	alert("Quirks mode");
+}
+
+//  3、head属性
+//  HTML5新增了document.head属性，引用文档的<head>元素。要引用文档的<head>元素，可以结合使用这个属性和另一种后备方法
+var head = document.head || document.getElementsByTagName('head')[0];
+
+
+
+</script>
+</body>
+</html>

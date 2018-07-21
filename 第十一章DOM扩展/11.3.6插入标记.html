@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<div id="content">
+		<p>This is a <strong>paragraph</strong>with a list following it.</p>
+		<ul>
+			<li>Item 1</li>
+			<li>Item 2</li>
+			<li>Item 3</li>
+		</ul>
+	</div>
+
+<script type="text/javascript">
+//  1、innerHTML属性
+//  在读模式下，innerHTML属性返回与调用元素的所有子节点（包括元素、注释和文本节点）对应的HTML标记
+//  在写模式下，innerHTML会根据指定的值创建新的DOM树，然后用这个DOM树完全替换调用元素原先的所有子节点
+var div = document.getElementById('content');
+console.log(div.innerHTML);
+
+//  使用innerHTML属性也有一些限制，大多数浏览器，通过innerHTML插入<script>元素并不会执行其中的脚本
+//  下面的代码是无效的
+div.innerHTML = "<script defer>alert('hi')<\/script>";
+
+//  innerHTML字符串一开始（而且整个）就是一个“无作用域的元素”，所以这个字符串会变成空字符串。
+//  如果想插入这段脚本，必须在前面添加一个“有作用域的元素”，可以是一个文本节点，也可以是一个没有结束标签的input
+//  前两种必须把创建的文本节点清除掉
+// div.innerHTML = "_<script defer>alert('hi');<\/script>";
+// div.innerHTML = "<div>&nbsp;<script defer>function demo(){alert('hi')()};<\/script>";
+// div.innerHTML = "<input type=\"hidden\"><script defer>function demo(){alert('hi')()};<\/script>";
+div.innerHTML = "<span style='display:none'>none</span><script defer=true>function demo(){alert('hi')()};<\/script>"
+
+
+</script>
+</body>
+</html>
