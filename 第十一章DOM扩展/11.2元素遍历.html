@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<strong id="test"></strong>
+	<div id="myDiv" class="selected">
+		<span class="selected">123</span>
+		<em></em>
+		<i></i>
+	</div>
+	<ul id="myList"></ul>
+<script type="text/javascript">
+//  对于元素间的空格，IE9及之前版本不会返回文本节点，而其他所有浏览器都会返回文本节点
+//  Element Traversal API 为DOM元素添加了5个属性，利用这些元素不必担心空白文本节点
+
+//  过去，要跨浏览器遍历某元素的所有子元素
+var i,
+	len,
+	element = document.getElementById('myDiv'),
+	arr = [],
+	child = element.firstChild;
+while(child != element.lastChild) {
+	if (child.nodeType == 1){  //  检查是不是元素
+		arr.push(child);
+	}
+	child = child.nextSibling;
+}
+console.log(arr);
+
+//  而使用Element Traversal新增的元素，代码会更简洁
+var i,
+	len,
+	arr1 = [],
+	element = document.getElementById("myDiv");
+	child = element.firstElementChild;
+while(child != element.lastElementChild) {
+	arr1.push(child);
+	child = child.nextElementSibling;
+}
+console.log(arr1);
+
+</script>
+</body>
+</html>

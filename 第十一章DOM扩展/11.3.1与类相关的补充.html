@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<strong id="test"></strong>
+	<div id="myDiv" class="selected abc">
+		<span class="selected">123</span>
+		<em></em>
+		<i></i>
+	</div>
+	<ul id="myList" class="abc">1256</ul>
+<script type="text/javascript">
+//  1、getElementsByClassName()方法
+//  getElementsByClassName()方法接收一个参数，即一个包含一或多个类名的字符串，返回带有指定类的所有元素的NodeList
+//  传入多个类名后，类名的先后顺序不重要
+var allCurrentUsernames = document.getElementsByClassName('selected abc');
+var selected = document.getElementById('myDiv').getElementsByClassName('selected');
+
+</script>
+</body>
+</html>

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
-	<div id="myDiv"><span class="selected">123</span><em></em></div>
+<body id="test1">
+	<strong id="test"></strong>
+	<div id="myDiv" class="selected"><span class="selected">123</span><em></em></div>
 	<ul id="myList"></ul>
 <script type="text/javascript">
 //  querySelector()方法
@@ -45,15 +46,34 @@ var strongs = document.querySelectorAll("p strong");
 
 //  要取得返回的NodeList中的每一个元素，可以使用item()方法，也可以使用方括号语法
 var i, len, strong;
-for (i = 0, len = selected.length; i < len; i++) {
-	selected = selected[i];  //  或者strongs.item(i)
-	console.log(selected.className);
-	selected.className = "important";
-}
+// for (i = 0, len = selected.length; i < len; i++) {
+// 	selected = selected[i];  //  或者strongs.item(i)
+// 	console.log(selected.className);
+// 	selected.className = "important";
+// }
 
 //  matchesSelector()方法
 //  这个方法接收一个参数，即CSS选择符，如果调用元素与该选择符匹配，则返回true；否则，返回false
+//  兼容性不好，包装成一个函数
+function marchesSelector(element, selector) {
+	if (element.matchesSelector) {
+		return element.marchesSelector(selector);
+	} else if (element.msMatchesSelector) {
+		return element.msMatchesSelector(selector);
+	} else if (element.mozMatchesSelector) {
+		return element.mozMatchesSelector(selector);
+	} else if (element.webkitMatchesSelector) {
+		return element.webkitMatchesSelector(selector);
+	} else {
+		throw new Error("Not supported");
+	}
+}
 
+// var div = document.querySelector('div');
+var div = document.getElementsByTagName('div')[0];
+if (marchesSelector(div, ".selected")) {
+	alert('页面含有此元素');
+}
 
 </script>
 </body>
