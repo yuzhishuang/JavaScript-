@@ -41,6 +41,11 @@ div.innerText = "Hello & welcome, <br>\"reader\"!</br>";
 var div1 = document.getElementById('content1');
 div1.innerText = div1.innerText;
 
+//  Firefox虽然不支持innerText设置为等于innerText，但是支持作用类似的textContent属性。
+//  为了确保跨浏览器兼容，有必要编写一个类似于下面的函数来检测可以使用哪个属性。
+function getInnerText(element) {
+	
+}
 
 
 </script>
