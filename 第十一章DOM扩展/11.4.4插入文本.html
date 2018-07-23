@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<div id="content">
+		<p>This is a <strong>paragraph</strong>width a list following it</p>
+		<ul>
+			<li>Item 1</li>
+			<li>Item 2</li>
+			<li>Item 3</li>
+		</ul>
+	</div>
+	<div id="content1">
+		<p>This is a <strong>paragraph</strong>width a list following it</p>
+		<ul>
+			<li>Item 1</li>
+			<li>Item 2</li>
+			<li>Item 3</li>
+		</ul>
+	</div>
+
+<script type="text/javascript">
+//  插入文本
+//  innerText和outerText没有被HTML5看中
+//  1、innerText属性
+//  innerText属性可以操作元素中包含的所有文本内容
+var div = document.getElementById("content");
+console.log(div.innerText);
+
+//  设置content
+//  设置innerText属性移除了先前存在的所有子节点，完全改变了DOM子树
+//  设置innerText属性的同时，也对文本中存在的HTML语法字符（小于号、大于号、引号及和号）进行了编码。
+div.innerText = "Hello world!";
+
+div.innerText = "Hello & welcome, <br>\"reader\"!</br>";
+
+//  可以通过innerText属性过滤掉HTML标签。方法是将innerText设置为等于innerText，这样就可以去掉所有HTML标签
+var div1 = document.getElementById('content1');
+div1.innerText = div1.innerText;
+
+
+
+</script>
+</body>
+</html>
