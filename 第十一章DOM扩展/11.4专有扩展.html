@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+<!-- <div id="test1"> -->
+	<div id="content">
+		<p>This is a <strong>paragraph</strong>with a list following it.</p>
+		<ul>
+			<li>Item 1</li>
+			<li>Item 2</li>
+			<li>Item 3</li>
+		</ul>
+	</div>
+<!-- </div> -->
+
+<script type="text/javascript">
+//  2、children属性
+//  children属性，只包含元素中同样还是元素的子节点
+var div = document.getElementById('content');
+console.log(div.children.length);
+console.log(div.children[0]);
+
+//  contains()方法
+//  检测某个节点是不是另一个节点的后代
+//  调用contains()方法的应该是祖先节点，也就是搜索开始的节点，这个方法接收一个参数，即要检测的后代节点。
+//  如果被检测的节点是后代节点，该方法返回true，否则，返回false
+console.log(document.documentElement.contains(document.body));
+
+//  使用DOM Level3 compareDocumentPosition()也能够确定节点间的关系。
+//  这个方法用于确定两个节点间的关系，返回一个表示该关系的位掩码
+// var result = document.documentElement.compareDocumentPosition(document.body);
+var p = document.querySelector('p');
+var result = div.compareDocumentPosition(document.body);
+console.log(result);
+
+
+</script>
+</body>
+</html>

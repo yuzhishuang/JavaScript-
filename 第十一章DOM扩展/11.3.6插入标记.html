@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body id="test1">
+<!-- <div id="test1"> -->
 	<div id="content">
 		<p>This is a <strong>paragraph</strong>with a list following it.</p>
 		<ul>
@@ -13,6 +14,7 @@
 			<li>Item 3</li>
 		</ul>
 	</div>
+<!-- </div> -->
 
 <script type="text/javascript">
 //  1、innerHTML属性
@@ -23,7 +25,7 @@ console.log(div.innerHTML);
 
 //  使用innerHTML属性也有一些限制，大多数浏览器，通过innerHTML插入<script>元素并不会执行其中的脚本
 //  下面的代码是无效的
-div.innerHTML = "<script defer>alert('hi')<\/script>";
+// div.innerHTML = "<script defer>alert('hi')<\/script>";
 
 //  innerHTML字符串一开始（而且整个）就是一个“无作用域的元素”，所以这个字符串会变成空字符串。
 //  如果想插入这段脚本，必须在前面添加一个“有作用域的元素”，可以是一个文本节点，也可以是一个没有结束标签的input
@@ -31,7 +33,43 @@ div.innerHTML = "<script defer>alert('hi')<\/script>";
 // div.innerHTML = "_<script defer>alert('hi');<\/script>";
 // div.innerHTML = "<div>&nbsp;<script defer>function demo(){alert('hi')()};<\/script>";
 // div.innerHTML = "<input type=\"hidden\"><script defer>function demo(){alert('hi')()};<\/script>";
-div.innerHTML = "<span style='display:none'>none</span><script defer=true>function demo(){alert('hi')()};<\/script>"
+// div.innerHTML = "<span style='display:none'>none</span><script defer=true>function demo(){alert('hi')()};<\/script>";
+
+//  在读模式下，outerHTML返回调用它的元素及所有子节点的HTML标签。在写模式下，outerHTML会根据指定的HTML字符串
+//  创建新的DOM子树，然后用这个DOM子树完全替换调用元素
+
+// div.outerHTML = "<p>This is a paragraph.</p>";
+
+
+//  与下面的这些DOM脚本代码一样
+// var p = document.createElement("p");
+// p.appendChild(document.createTextNode('This is a paragraph.'));
+// div.parentNode.replaceChild(p, div);
+
+
+
+//  3、insertAdjacentHTML()方法
+//  插入标记的最后一个新增方式是insertAdjacentHTML()方法。
+//  它接收两个参数：插入位置和要插入的HTML文本
+
+//  “beforebegin”在当前元素之前插入一个紧邻的同辈元素
+div.insertAdjacentHTML("beforebegin", "<p>Hello, world!</p>");
+
+//  afterbegin在当前元素之下插入一个新的子元素或在第一个子元素之前再插入新的子元素
+div.insertAdjacentHTML("afterbegin", "<p>Hello, world!1</p>");
+
+//  beforeend在当前元素之下插入一个新的子元素或在最后一个子元素之后再插入新的子元素
+div.insertAdjacentHTML("beforeend", "<p>Hello, world!2</p>");
+
+//  afterend在当前元素之后插入一个紧邻的同辈元素
+div.insertAdjacentHTML("afterend", "<p>Hello, world!3</p>");
+
+
+//  4、内存与性能问题
+//  使用本节介绍的方法替换子节点可能会导致浏览器的内存占用问题，尤其是在IE中，问题更加明显
+//  在使用innerHTML、outerHTML属性和insertAdjacentHTML()方法使，最好先手工删除要被替换的元素的
+//  所有事件处理程序和JavaScript对象属性
+//  不可避免地，创建和销毁HTML解析器也会带来性能损失，所以最好能够将设置innerHTML或outerHTML的次数控制在合理的范围内
 
 
 </script>
