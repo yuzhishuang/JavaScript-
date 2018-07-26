@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<div id="myDiv">哈哈哈</div>
+
+<script type="text/javascript">
+//  其中一个不能直接转换的CSS属性的就是float，相应的属性名是cssFloat，IE支持的是styleFloat
+var myDiv = document.getElementById('myDiv');
+
+//  设置背景颜色
+myDiv.style.backgroundColor = "red";
+
+//  改变大小
+myDiv.style.width = "100px";
+myDiv.style.height = "200px";
+
+//  指定边框
+myDiv.style.border = "1px solid black";
+
+//  通过style对象同样可以取得在style特性中指定的样式
+console.log(myDiv.style.backgroundColor);
+console.log(myDiv.style.width);
+console.log(myDiv.style.height);
+
+//  通过cssText属性可以访问style特性中的CSS代码
+//  设置cssText是为元素应用多项变化最快捷的方式，因此可以一次性地应用所有变化
+myDiv.style.cssText = "width: 25px; height: 100px; background-color: green";
+console.log(myDiv.style.cssText);
+
+//  设计length属性的目的，就是将其与item()方法配套使用
+//  getPropertyValue()中使用取得的属性名进一步取得属性的值
+var prop, value, i, len;
+for (var i = myDiv.style.length - 1; i >= 0; i--) {
+	prop = myDiv.style[i];  //  或者myDiv.style.item(i)
+	value = myDiv.style.getPropertyValue(prop);
+	console.log(prop + ":" + value);
+}
+
+//  要从元素的样式中移除某个CSS属性，需要使用removeProperty()方法。
+//  使用这个方法移除一个属性，意味着将会为该属性应用默认的样式（从其他样式表经层叠而来）；
+//  在不确定某个给定的CSS属性拥有什么默认值的情况下，就可以使用这个方法。
+//  只要移除相应的属性，就可以为元素应用默认值
+myDiv.style.removeProperty('width');
+
+
+</script>
+</body>
+</html>

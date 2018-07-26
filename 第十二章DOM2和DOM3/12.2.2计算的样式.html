@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style type="text/css">
+	#myDiv {
+		background-color: blue;
+		width: 100px;
+		height: 200px;
+	}
+</style>
+<body id="test1">
+	<div id="myDiv" style="background-color: red;border: 1px solid black">哈哈哈</div>
+
+<script type="text/javascript">
+//  getComputedStyle()方法。这个方法接受两个参数：要取得计算样式的元素和一个伪元素字符串
+var myDiv = document.getElementById("myDiv");
+var computedStyle = document.defaultView.getComputedStyle(myDiv, null);
+
+console.log(computedStyle.backgroundColor);
+console.log(computedStyle.width);
+console.log(computedStyle.height);
+console.log(computedStyle.border);
+
+
+
+</script>
+</body>
+</html>
