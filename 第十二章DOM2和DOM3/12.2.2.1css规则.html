@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="a.css">
+<body id="test1">
+	<div id="myDiv" style="background-color: red;border: 1px solid black">哈哈哈</div>
+
+<script type="text/javascript">
+//  大多数情况下，仅使用style属性就可以满足所有操作样式规则的需求了。
+//  这个对象就像每个元素上的style属性一样，可以通过它读取和修改规则中的样式信息
+//  以这种方式修改规则会影响页面中适用于该规则的所有元素
+
+var sheet = document.styleSheets[0];
+var rules = sheet.cssRules || sheet.rules;  //  取得规则列表
+var rule = rules[0];  //  取得第一条规则
+//  selectorText:返回当前规则的选择符文本
+console.log(rule.selectorText);
+
+
+//  创建规则
+//  要向现有样式表中添加新规则，需要使用insertRule()方法
+//  这个方法接受两个参数：规则文本和表示在哪里插入规则的索引
+sheet.insertRule("body{background-color: silver}", 0);  //DOM方法
+
+//  要以跨浏览器的方式向样式表中插入规则，可以使用下面的函数。这个函数接受4个参数：要向其中添加规则的样式表以及与addRule()相同的3个参数
+//  如果要添加的规则非常多，我们建议还是采用动态加载样式表的技术
+function insertRule(sheet, selectorText, cssText, position) {
+	if (sheet.insertRule) {
+		sheet.insertRule(selectorText + "{" + cssText + "}", position);
+	} else if (sheet.addRule) {
+		sheet.addRule(selectorText, cssText, position);
+	}
+}
+
+//  调用这个函数的示例代码
+insertRule(document.styleSheets[0], "body", "background-color: silver", 0);
+
+
+//  3、删除规则
+//  从样式表中删除规则的方法是deleteRule(),这个方法接受一个参数：要删除的规则的位置
+
+//  删除样式表中的第一条规则
+sheet.deleteRule(0);  //  DOM方法
+//  IE支持的类似方法叫removeRule(),使用方法相同
+//  跨浏览器删除规则的函数。第一个参数是要操作的样式表，第二个参数是要删除的规则的索引
+function deleteRule(sheet, index) {
+	if (sheet.deleteRule) {
+		sheet.deleteRule(index);
+	} else if (sheet.removeRule) {
+		sheet.removeRule(index);
+	}
+}
+
+//  调用这个函数如下
+deleteRule(document.styleSheets[0], 0);
+
+</script>
+</body>
+</html>

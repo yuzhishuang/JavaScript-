@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<button id="myButton">测试按钮</button>
+	<div id="myDiv">Hello world!</div>
+
+<script type="text/javascript">
+//  要确定浏览器是否支持DOM2级定义的CSS能力
+var supportsDOM2CSS = document.implementation.hasFeature("CSS", "2.0");
+var supportsDOM2CSS2 = document.implementation.hasFeature("CSS2", "2.0");
+
+console.log(supportsDOM2CSS, supportsDOM2CSS2);
+
+
+//  对于使用短划线（分割不同的词汇，例如background-image）的CSS属性名，必须将其转换成驼峰大小写形式
+//  其中一个不能直接转换的css属性就是float，相应的属性名应该是cssFloat；IE则支持styleFloat
+
+
+</script>
+</body>
+</html>

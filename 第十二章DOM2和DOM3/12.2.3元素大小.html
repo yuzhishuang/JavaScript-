@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<div id="myDiv" style="border: 1px solid black">
+		<div class="demo" style="width: 100px;height: 100px; padding: 20px;border: 1px solid #f00;margin-top: 700px;overflow: scroll;">
+			
+		</div>
+	</div>
+
+<script type="text/javascript">
+//  1、偏移量，包括元素在屏幕上占用的所有可见的空间
+//  元素的可见大小由其高度、宽度决定，包括所有内边距、滚动条和边框大小（注意，不包括外边距）
+//  offsetHeight: 元素在垂直方向上占用的空间大小
+//  offsetWidth: 元素在水平方向上占用的空间大小
+//  offsetLeft: 元素的左外边框至包含元素的左内边框之间的像素距离
+//  offsetTop: 元素的上外边框至包含元素的上内边框之间的像素距离。
+//  offsetLeft和offsetTop属性与包含元素有关，包含元素的引用保存在offsetParent属性中
+var div = document.querySelector('.demo');
+console.log(div.offsetHeight);
+console.log(div.offsetWidth);
+console.log(div.offsetLeft);
+console.log(div.offsetTop);
+
+//  以下两个函数就可以用于分别取得元素的左和上偏移量
+//  对于使用表格和内嵌框架布局的页面，由于不同浏览器实现这些元素的方式不同，因此得到的值就不太精确了
+function getElementLeft(element) {
+	var actualLeft = element.offsetLeft;
+	var current = element.offsetParent;
+	while (current !== null) {
+		actualLeft += current.offsetLeft;
+		current = current.offsetParent;
+	}
+	return actualLeft;
+}
+
+function getElementTop(element) {
+	var actualTop = element.offsetTop;
+	var current = element.offsetParent;
+	while (current !== null) {
+		actualTop += current.offsetTop;
+		current = current.offsetParent;
+	}
+	return actualTop;
+}
+
+
+//  客户区大小：指的是元素内容及其内边距所占据的空间大小。
+//  clientWidth属性是元素内容区宽度加上左右内边距宽度
+//  clientHeight属性是元素内容区高度加上上下内边距高度
+console.log(div.clientWidth, div.clientHeight);
+
+//  要确定浏览器视口大小，可以使用document.documentElement或document.body的clientWidth和clientHeight
+//  这个函数首先检查document.compatMode属性，以确定浏览器是否运行在混杂模式
+function getViewport() {
+	if (document.compatMode == "BackCompat") {
+		return {
+			width: document.body.clientWidth,
+			height: document.body.clientHeight
+		};
+	} else {
+		return {
+			width: document.documentElement.clientWidth,
+			height: document.documentElement.clientHeight
+		};
+	}
+}
+
+
+
+//  滚动大小:指的是包含滚动内容的元素的大小
+
+</script>
+</body>
+</html>

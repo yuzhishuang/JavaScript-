@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="a.css">
+<link rel="stylesheet" type="text/css" href="b.css">
+<link rel="stylesheet" type="text/css" href="c.css">
+<style type="text/css">
+	#myDiv {
+		background-color: blue;
+		width: 100px;
+		height: 200px;
+	}
+</style>
+<body id="test1">
+	<div id="myDiv" style="background-color: red;border: 1px solid black">哈哈哈</div>
+
+<script type="text/javascript">
+//  应用于文档的所有样式表是通过document.styleSheets集合来表示的。通过这个集合的length属性可以获知文档中样式表的数量，而通过方括号语法
+//  或item()方法可以访问每一个样式表
+var sheet = null;
+for (var i = 0; len = document.styleSheets.length, i < len; i++) {
+	sheet = document.styleSheets[i];
+	console.log(sheet.href);
+}
+
+//  要想在不同浏览器中都能取得样式表对象，可以使用下列代码
+function getStyleSheet(element) {
+	return element.sheet || element.styleSheet;
+}
+
+//  取得第一个<link/>元素引入的样式表
+var link = document.getElementsByTagName("link")[0];
+var sheet = getStyleSheet(link);
+console.log(sheet.href);
+
+
+
+</script>
+</body>
+</html>
