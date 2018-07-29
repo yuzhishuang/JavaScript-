@@ -72,6 +72,84 @@ function getViewport() {
 
 
 //  滚动大小:指的是包含滚动内容的元素的大小
+//  scrollHeight: 在没有滚动条的情况下，元素内容的总高度
+//  scrollWidth: 在没有滚动条的情况下，元素内容的总宽度
+//  scrollLeft: 被隐藏在内容区域左侧的像素数。通过这个设置可以改变元素的滚动位置
+//  scrollTop： 被隐藏在内容区域上方的像素数。通过这个设置可以改变元素的滚动位置
+//  scrollWidth和scrollHeight主要用于确定元素内容的实际大小
+//  带有垂直滚动条的页面总高度就是document.documentElement.scrollHeight
+
+//  在确定文档的总高度时（包括基于视口的最小高度时），必须取得scrollWidth/clientWidth和scrollHeight/clientHeight
+//  中的最大值，才能保证在跨浏览器的环境下得到精确地结果
+var docHeight = Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight);
+var docWidth = Math.max(document.documentElement.scrollWidth, document.documentElement.clientWidth);
+console.log(docHeight, docWidth);
+
+//  这个函数会检测元素是否位于顶部，如果不是就将其回滚到顶部
+function scrollToTop(element) {
+	if (element.scrollTop != 0) {
+		element.scrollTop = 0;
+	}
+}
+
+
+//  确定元素的大小
+//  getBoundingClientRect()方法。这个方法返回一个矩形对象，包含4个属性：left、top、right和bottom
+//  IE8及更早版本认为文档的左上角坐标是（2,2），而其他浏览器包括IE9则将传统的（0， 0）作为起点坐标
+function getBoundingClientRect(element) {
+	if (typeof arguments.callee.offset != "number") {
+		var scrollTop = document.documentElement.scrollTop;
+		var temp = document.createElement("div");
+		temp.style.cssText = "position:absolute;left: 0;top: 0;";
+		document.body.appendChild(temp);
+		arguments.callee.offset = -temp.getBoundingClientRect().top - scrollTop;
+		document.body.removeChild(temp);
+		temp = null;
+	}
+	var rect = element.getBoundingClientRect();
+	var offset = arguments.callee.offset;
+
+	return {
+		left: rect.left + offset,
+		right: rect.right + offset,
+		top: rect.top + offset,
+		bottom: rect.bottom + offset
+	}
+}
+
+//  对于不支持getBoundingClientRect()的浏览器，可以通过其他手段取得相同的信息
+function getBoundingClientRect(element) {
+	var scrollTop = document.documentElement.scrollTop;
+	var scrollLeft = document.documentElement.scrollLeft;
+	if (element.getBoundingClientRect) {
+		if (typeof arguments.callee.offset != "number") {
+			var temp = document.createElement('div');
+			temp.style.cssText = "position: absolute;left: 0;top: 0;";
+			document.body.appendChild('temp');
+			arguments.callee.offset = -temp.getBoundingClientRect().top - scrollTop;
+			document.body.removeChild(temp);
+			temp = null;
+		}
+		var rect = element.getBoundingClientRect();
+		vara offset = arguments.callee.offset;
+		return {
+			left: rect.left + offset,
+			right: rect.right + offset,
+			top: rect.top + offset,
+			bottom: rect.bottom + offset
+		};
+	} else {
+		var actualLeft = getElementLeft(element);
+		var actualTop = getElementLeft(element);
+
+		return {
+			left: actualLeft - scrollLeft;
+			right: actualLeft + element.offsetWidth - scrollLeft,
+			top: actualTop - scrollTop,
+			bottom: actualTop + element.offsetHeight - scrollTop
+		}
+	}
+}
 
 </script>
 </body>

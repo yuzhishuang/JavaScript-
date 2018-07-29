@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<div id="div1" style="border: 1px solid black">
+		<p><b>Hello</b> world!</p>
+		<ul>
+			<li>List item 1</li>
+			<li>List item 2</li>
+			<li>List item 3</li>
+			<li>List item 4</li>
+		</ul>
+	</div>
+
+<script type="text/javascript">
+//  DOM2级遍历和范围
+//  NodeIterator和TreeWalker。这两个类型能够基于给定的起点对DOM结构执行深度优先的遍历操作
+//  IE不支持DOM遍历
+var filter = {
+	acceptNode: function(node) {
+		return node.tagName.toLowerCase() == "p" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+	}
+};
+var iterator = document.createNodeIterator(document, NodeFilter.SHOW_ELEMENT, filter, false);
+console.log(iterator);
+
+//  如果不指定过滤器，那么应该在第三个参数的位置上传入null
+//  能够访问所有类型节点的简单地NodeIterator
+var iterator = document.createNodeIterator(document, NodeFilter.SHOW_ALL, null, false);
+
+//  在刚刚创建的NodeIterator对象中，有一个内部指针指向根节点，因此第一次调用nextNode()会返回根节点。
+//  当遍历到DOM子树的最后一个节点时，nextNode()返回null
+
+//  遍历div元素中的所有元素
+var div = document.getElementById('div1');
+var iterator = document.createNodeIterator(div, NodeFilter.SHOW_ELEMENT, null, false);
+var node = iterator.nextNode();
+while (node !== null) {
+	console.log(node.tagName);
+	node = iterator.nextNode();
+}
+
+//  只想返回遍历中遇到的<li>元素，只要使用一个过滤器即可
+var filter = function (node) {
+	return node.tagName.toLowerCase() == "li" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+};
+var iterator = document.createNodeIterator(div, NodeFilter.SHOW_ELEMENT, filter, false);
+var node = iterator.nextNode();
+while (node !== null) {
+	console.log(node.tagName);
+	node = iterator.nextNode();
+}
+
+
+//  TreeWalker是NodeIterator的一个更高级的版本。
+//  除了包括nextNode()和previousNode()在内的相同的功能外
+//  创建TreeWalker对象要使用document.createTreeWalker()方法
+//  TreeWalker真正强大的地方在于能够在DOM结构中沿任何方向移动。
+//  使用TreeWalker遍历DOM树，即使不定义过滤器，也可以取得所有<li>元素
+var walker = document.createTreeWalker(div, NodeFilter.SHOW_ELEMENT, null, false);
+walker.firstChild();  //  转到<p>
+walker.nextSibling();  //  转到<ul>
+
+var node = walker.firstChild();  //  转到第一个<li>
+while (node !== null) {
+	console.log(node.tagName);
+	node = walker.nextSibling();
+}
+</script>
+</body>
+</html>

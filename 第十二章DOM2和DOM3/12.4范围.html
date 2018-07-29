@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<div id="div1" style="border: 1px solid black">
+		<p id="p1"><b>Hello</b> world!</p>
+		<ul>
+			<li>List item 1</li>
+			<li>List item 2</li>
+			<li>List item 3</li>
+			<li>List item 4</li>
+		</ul>
+	</div>
+
+<script type="text/javascript">
+//  DOM2级在Document类型中定义了createRange()方法。
+//  在兼容DOM的浏览器中，这个方法属于document对象。
+//  使用hasFeature()或者直接检测该方法，都可以确定浏览器是否支持范围
+var supportsRange = document.implementation.hasFeature("Range", "2.0");
+var alsoSupportsRange = (typeof document.createRange == "function");
+console.log(supportsRange, alsoSupportsRange);
+
+//  1、用DOM范围实现简单选择
+//  要使用范围来选择文档中的一部分，最简单的方式就是使用selectNode()或selectNodeContents().
+//  selectNode()方法选择整个节点，包括子节点；
+//  selectNodeContents()方法则只选择节点的子节点
+
+//  创建范围
+var range1 = document.createRange(),
+	range2 = document.createRange(),
+	p1 = document.getElementById('p1');
+range1.selectNode(p1);
+range2.selectNodeContents(p1);
+
+//  2、用DOM范围实现复杂选择
+//  要创建复杂的范围就得使用setStart()和setEnd()方法。
+//  这两个方法都接受两个参数：一个参照节点和一个偏移量值
+
+//  选择从Hello的llo到world！的o
+var p1 = document.getElementById('p1'),
+	helloNode = p1.firstChild.firstChild,
+	worldNode = p1.lastChild;
+var range = document.createRange();
+// range.setStart(helloNode, 2);
+// range.setEnd(worldNode, 3);
+
+//  第一个方法，就是deleteContents()。这个方法能够从文档中删除范围所包含的内容
+// range.deleteContents();
+
+//  extractContents()也会从文档中移除范围选区。
+//  extractContents()会返回范围的文档片段。利用这个返回的值，可以将范围的内容插入到文档中的其他地方。
+// var fragment = range.extractContents();
+// document.body.appendChild(fragment);
+
+//  cloneContents()创建范围对象的一个副本，然后在文档的其他地方插入该副本
+//  与extractContents()主要区别在于，cloneContents()返回的文档片段包含的是范围中节点的副本，而不是实际的节点
+
+
+//  4、插入DOM范围中的内容
+//  使用insertNode()方法可以向范围选区的开始处插入一个节点
+
+// var span = document.createElement("span");
+// span.style.color = "red";
+// span.appendChild(document.createTextNode("Inserted text"));
+// range.insertNode(span);
+
+
+//  环绕范围插入内容，可以使用surroundContents()方法。
+//  这个方法接受一个参数，即环绕范围内容的节点
+
+var p1 = document.getElementById('p1'),
+	helloNode = p1.firstChild.firstChild,
+	worldNode = p1.lastChild,
+	range = document.createRange();
+range.selectNode(helloNode);
+var span = document.createElement("span");
+span.style.backgroundColor = "yellow";
+range.surroundContents(span);
+
+
+//  5、折叠DOM范围
+//  使用collapse()方法来折叠范围，这个方法接受一个参数，一个布尔值，表示要折叠到范围的哪一端。
+//  参数true表示折叠到范围的起点，参数false表示折叠到范围的终点
+range.collapse(true);
+alert(range.collapse);
+
+//  清理DOM范围
+//  detach()方法，以便从创建范围的文档中分离出该范围
+range.detach();  //  从文档中分离
+range = null;  //  解除引用
+
+</script>
+</body>
+</html>
