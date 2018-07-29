@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<div id="myDiv" style="border: 1px solid black">按钮</div>
+
+<script type="text/javascript">
+//  在触发DOM上的某个事件时，会产生一个事件对象event，这个对象中包含着所有与事件有关的信息
+//  所有浏览器都支持event对象，但支持方式不同
+
+
+//  1、DOM中的事件对象
+var btn = document.getElementById('myDiv');
+btn.addEventListener('click', function(event) {
+	console.log(event.bubbles);
+}, false);
+
+//  
+
+</script>
+</body>
+</html>
