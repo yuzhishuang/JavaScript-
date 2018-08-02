@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="test1">
+	<div id="myDiv" style="border: 1px solid black;width: 500px;height: 300px;">按钮</div>
+
+<script type="text/javascript">
+//  click: 在用户单机主鼠标按钮（一般是左边的按钮）或者按下回车键时触发
+//  dblclick: 在用户双击主鼠标按钮时触发
+//  mousedown: 在用户按下了任意鼠标按钮时触发
+//  mouseenter: 在鼠标光标从元素外部首次移动到元素范围之内触发
+//  mouseleave: 在位于元素上方的鼠标光标移动到元素范围之外时触发
+//  mousemove：当鼠标指针在元素内部移动时重复触发
+//  mouseout: 鼠标指针位于一个元素上方，然后用户将其移入另一个元素时触发
+//  mouseover: 在鼠标指针位于一个元素外部，然后用户将其首次移入另一个元素边界之内时触发
+//  mouseup： 在用户释放鼠标按钮时触发
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		if (event.wheelDelta) {
+			return (client.engine.opera && client.engine.opera < 9.5 ?
+					-event.wheelDelta : event.wheelDelta);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//  1、客户区坐标位置
+//  位置信息保存在事件对象的clientX和clientY属性中
+//  它们的值表示事件发生时鼠标指针在视口中的水平和垂直坐标
+//  这些值中不包括页面滚动的距离，因此这个位置并不表示鼠标在页面上的位置
+
+//  可以使用类似下面代码取得鼠标事件的客户端坐标信息
+var div = document.getElementById('myDiv');
+EventUtil.addHandler(div, 'click', function(event) {
+	event = EventUtil.getEvent(event);
+	console.log("Client coordinates:" + event.clientX + "," + event.clientY);
+
+	console.log("Page coordinates:" + event.pageX + "," + event.pageY);
+
+	console.log("Screen coordinates" + event.screenX + "," + event.screenY);
+
+	var relatedTarget = EventUtil.getRelatedTarget(event);
+	var target = EventUtil.getTarget(event);
+	console.log("Moused out of" + target.tagName + "to" + relatedTarget.tagName);
+})
+
+
+//  2页面坐标位置
+//  页面坐标通过事件对象的pageX和pageY属性，能告诉你事件是在页面中的什么位置发生的
+
+
+//  3、屏幕坐标位置
+//  相对于整个电脑屏幕的位置，通过screenX和screenY属性就可以确定鼠标事件发生时鼠标指针相对于整个屏幕的坐标信息
+
+//  4、修改键
+//  DOM为此规定了4个属性，表示这些修改键的状态：shiftKey、ctrlKey、altKey和metaKey
+//  这些属性中包含的都是布尔值，如果相应的键被按下了，则值为true，否则为false。
+//  当某个鼠标事件发生时，通过检测这几个属性就可以确定用户是否同时按下了其中的键
+EventUtil.addHandler(div, "click", function(event) {
+	element = EventUtil.getEvent(event);
+	var keys = new Array();
+	if (event.shiftKey) {
+		console.log('按下shift');
+	}
+	if (event.ctrlKey) {
+		console.log('按下ctrl');
+	}
+	if (event.altKey) {
+		console.log('按下alt');
+	}
+	if (event.metaKey) {
+		console.log('按下meta');
+	}
+})
+
+
+//  5、相关元素
+//  对mouseover事件而言，事件的主目标是获得光标的元素，而相关元素就是那个失去光标的元素
+//  对mouseout事件而言，事件的主目标是失去光标的元素，而相关元素则是获得光标的元素
+//  DOM通过event对象的relatedTarget属性提供了相关元素的信息。
+//  这个属性只对于mouseover和mouseout事件才包含值；对于其他事件，这个属性的值是null
+EventUtil.addHandler(div, 'mouseout', function(event) {
+	event = EventUtil.getEvent(event);
+	var target = EventUtil.getTarget(event);
+	var relatedTarget = EventUtil.getRelatedTarget(event);
+	console.log("Moused out of" + target.tagName + "to" + relatedTarget.tagName);
+})
+
+
+//  6、鼠标按钮
+//  DOM的button属性可能有如下3个值：0表示主鼠标按钮，1表示中间的鼠标按钮（鼠标滚轮按钮）、2表示次鼠标按钮
+//  支持DOM版鼠标事件的浏览器可以通过hasFeature()方法来检测
+EventUtil.addHandler(div, "mousedown", function (event) {
+	event = EventUtil.getEvent(event);
+	console.log(EventUtil.getButton(event));
+})
+
+
+//  7、更多的事件信息
+//  当用户通过鼠标滚轮与页面交互、在垂直方向上滚动页面时（无论向上还是向下），就会触发mousewheel事件。
+//  这个事件可以在任何元素上面触发，最终会冒泡到document（IE8）或window对象
+
+	function handleMouseWheel(event) {
+		event = EventUtil.getEvent(event);
+		var delta = EventUtil.getWheelDelta(event);
+		console.log('delta=' + detail);
+	}
+	EventUtil.addHandler(document, "mousewheel", handleMouseWheel);
+
+
+</script>
+</body>
+</html>

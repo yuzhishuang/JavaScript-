@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!-- <body id="test1" onload="alert('Loaded!')"> -->
+	<body id="test1">
+	<div id="myDiv" style="border: 1px solid black">按钮</div>
+	<a href="www.baidu.com" id="aLink">取消默认行为</a>
+	<div id="myBtn">取消冒泡</div>
+	<!-- <img id="myImage" src="smile.gif" onload="alert('Image Loaded')"> -->
+
+<script type="text/javascript">
+	var EventUtil = {
+		addHandler: function (element, type, handler) {
+			//  省略的代码
+		},
+		getEvent: function (event) {
+			return event ? event : window.event;
+		},
+		getTarget: function(event) {
+			return event.target || event.srcElement;
+		},
+		preventDefault: function (event) {
+			if (event.preventDefault) {
+				event.preventDefault();
+			} else {
+				event.returnValue = false;
+			}
+		},
+		removeHandler: function(element, type, handler) {
+			//  省略的代码
+		},
+		stopPropagation: function(event) {
+			if (event.stopPropagation) {
+				event.stopPropagation();
+			} else {
+				event.cancelBubble = true;
+			}
+		}
+	};
+//  1、load事件
+//  当页面完全加载后（包括所有图像、JavaScript文件、CSS文件等外部资源），就会触发window上面的load事件
+//  建议尽可能使用JavaScript方式
+//  第一种方式是使用JavaScript代码
+// EventUtil.addHandler(window, "load", function(event) {
+// 	alert('Loaded');
+// })
+
+//  第二种方式指定onload事件处理程序的方式是为<body>元素添加一个onload特性
+
+//  图像上面也可以触发load事件
+//  同样的功能也可以使用JavaScript来实现
+// var image = document.getElementById('myImage');
+// EventUtil.addHandler(image, "load", function (event) {
+// 	event = EventUtil.getEvent(event);
+// 	alert(EventUtil.getTarget(event).src);
+// })
+
+//  在创建新的<img>元素时，可以为其指定一个事件处理程序，以便图像加载完毕后给出提示
+//  新图像元素不一定要从添加到文档后才开始下载，只要设置了src属性就会开始下载
+// EventUtil.addHandler(window, "load", function() {
+// 	var image = document.createElement("img");
+// 	EventUtil.addHandler(image, "load", function(event) {
+// 		event = EventUtil.getEvent(event);
+// 		console.log(EventUtil.getTarget(event).src);
+// 	});
+// 	document.body.appendChild(image);
+// 	image.src = "smile.gif";
+// })
+
+
+//  <script>元素也会触发load事件，以便开发人员确定动态加载的JavaScript文件是否加载完毕
+//  与图像不同，只有在设置了<script>元素的src属性并将该元素添加到文档后，才会开始下载JavaScript文件
+// EventUtil.addHandler(window, "load", function() {
+// 	var script = document.createElement('script');
+// 	EventUtil.addHandler(script, "load", function(event) {
+// 		console.log("Loaded");
+// 	});
+// 	script.src = "example.js";
+// 	document.body.appendChild(script);
+// })
+
+
+
+//  2、unload事件
+//  这个事件在文档被完全卸载后触发
+//  只要用户从一个页面切换到另一个页面，就会发生unload事件
+//  而利用这个事件最多的情况是消除引用，以避免内存泄漏
+//  第一种方式是使用JavaScript
+// EventUtil.addHandler('window', 'unload', function(event) {
+// 	console.log('unload');
+// })
+
+//  第二种方式，为<body>元素添加一个特性
+//  <body onunload="console.log('Unloaded')">
+
+
+//  3、resize事件
+//  当浏览器窗口被调整到一个新的高度或宽度时，就会触发resize事件
+//  这个事件在window上面触发，因此可以通过JavaScript或者<body>元素中的onresize特性来指定事件处理程序
+EventUtil.addHandler(window, 'resize', function(event) {
+	console.log('Resize');
+})
+// window.addEventListener('resize', function(event) {
+// 	console.log('resize');
+// })
+
+//  4、scroll事件
+//  在混杂模式下，可以通过<body>元素的scrollLeft和scrollTop来监控到这一变化；
+//  而在标准模式下，除Safari之外的所有浏览器都会通过<html>元素来反映这一变化
+//  与resize事件类似，scroll事件也会在文档被滚动期间重复被触发，所以有必要尽量保持事件处理程序的代码简单
+EventUtil.addHandler(window, 'scroll', function(event) {
+	if (document.compatMode == "CSS1Compat") {
+		console.log(document.documentElement.scrollTop);
+	} else {
+		console.log(document.body.scrollTop);
+	}
+})
+
+
+</script>
+</body>
+</html>
