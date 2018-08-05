@@ -64,12 +64,12 @@ var EventUtil = {
 		}
 	},
 	getWheelDelta: function (event) {
-		if (event.wheelDelta) {
-			return (client.engine.opera && client.engine.opera < 9.5 ?
-					-event.wheelDelta : event.wheelDelta);
-		} else {
-			return -event.detail * 40;
-		}
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
 	},
 	preventDefault: function (event) {
 		if (event.preventDefault) {
@@ -174,11 +174,19 @@ EventUtil.addHandler(div, "mousedown", function (event) {
 
 	function handleMouseWheel(event) {
 		event = EventUtil.getEvent(event);
-		var delta = EventUtil.getWheelDelta(event);
-		console.log('delta=' + detail);
+		// var delta = EventUtil.getWheelDelta(event);
+		// console.log('delta=' + detail);
+		console.log(event.wheelDelta);
 	}
 	EventUtil.addHandler(document, "mousewheel", handleMouseWheel);
 
+
+//  9、触摸设备
+//  不支持dblclick事件
+//  轻击可单击元素就会触发mousemove事件。如果此操作会导致内容变化，将不再有其他事件发生；
+//  如果屏幕没有因此变化，那么会依次发生mousedown、mouseup和click事件
+//  mousemove事件也会触发mouseover和mouseout事件
+//  两个手指放在屏幕上且页面随手指移动而滚动时会触发mousewheel和scroll事件
 
 </script>
 </body>
