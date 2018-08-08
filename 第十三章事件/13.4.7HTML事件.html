@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body id="test1">
-	<ul id="myList">
-		<li>Item 1</li>
-		<li>Item 2</li>
-		<li>Item 3</li>
+<body>
+	<div id="myDiv">
+		Right click or Ctrl+click me to get a custom context menu.
+		Click anywhere else to get the default context menu.
+	</div>
+	<ul id="myMenu" style="position: absolute;visibility: hidden;background-color: silver">
+		<li><a href="">Nicholas' site</a></li>
+		<li><a href="">Wrox site</a></li>
+		<li><a href="">Yahho!</a></li>
 	</ul>
 
 <script type="text/javascript">
@@ -100,48 +104,41 @@ var EventUtil = {
 	}
 };
 
-//  删除节点
-//  在使用removeChild()或replaceChild()从DOM中删除节点时，首先会触发DOMNodeRemoved事件。这个事件会冒泡
-//  如果被移除的节点包含子节点，那么在其所有子节点以及这个被移除的节点上会相继触发DOMNodeRemovedFromDocument事件。不冒泡
-//  紧随其后触发的是DOMSubtreeModified事件。这个事件的目标是被移除节点的父节点。
+//  1、contextmenu事件
+//  contextmenu事件是冒泡的，因此可以为document指定一个事件处理程序，用以处理页面中发生的所有此类事件。
+//  在兼容DOM的浏览器中，使用event.preventDefault();在IE中，将event.returnValue的值设置为false。
+//  因为contextmenu事件属于鼠标事件，所以其事件对象中包含与光标位置有关的所有属性。
 EventUtil.addHandler(window, "load", function(event) {
-	var list = document.getElementById("myList");
-	EventUtil.addHandler(document, "DOMSubtreeModified", function(event) {
-		console.log(event.type, event.target);
+	var div = document.getElementById("myDiv");
+	EventUtil.addHandler(div, "contextmenu", function(event) {
+		event = EventUtil.getEvent(event);
+		EventUtil.preventDefault(event);
+
+		var menu = document.getElementById('myMenu');
+		menu.style.left = event.clientX + "px";
+		menu.style.top = event.clientY + "px";
+		menu.style.visibility = "visible";
+	});
+
+	EventUtil.addHandler(document, "click", function(event) {
+		document.getElementById("myMenu").style.visibility = "hidden";
 	})
-	EventUtil.addHandler(document, "DOMNodeRemoved", function(event) {
-		console.log(event.type, event.target, event.relatedNode);
-	});
-	EventUtil.addHandler(list.firstChild, "DOMNodeRemovedFromDocument", function(event) {
-		console.log(event.type, event.target);
-	});
-	list.parentNode.removeChild(list);
 })
 
-
-//  插入节点
-//  在使用appendChild()、replaceChild()或insertBefore()向DOM中插入节点时，首先会触发DOMNodeInserted事件（这个事件是冒泡的）
-//  紧接着，会在新插入的节点上面触发DOMNodeInsertedIntoDocument事件。这个事件不冒泡
-//  最后一个触发的事件是DOMSubtreeModified，触发于新插入节点的父节点
-EventUtil.addHandler(window, "load", function() {
-	var list = document.getElementById("myList");
-	var item = document.createElement("li");
-	item.appendChild(document.createTextNode("Item4"));
-	EventUtil.addHandler(document, "DOMSubtreeModified", function(event) {
-		alert(event.type);
-		alert(event.target);
-	})
-	EventUtil.addHandler(document, "DOMNodeInserted", function(event) {
-		alert(event.type);
-		alert(event.target);
-		alert(event.relatedNode);
-	})
-	EventUtil.addHandler(item, "DOMNodeInsertedIntoDocument", function(event) {
-		alert(event.type);
-		alert(event,target);
-	});
-	list.appendChild(item);
+//  2、beforeunload事件
+//  window对象上的beforeunload事件是为了让开发人员有可能在页面卸载前阻止这一操作。
+//  这个事件会在浏览器卸载页面之前触发，可以通过它来取消卸载并继续使用原有页面。这个事件的意图是将控制权交给用户
+//  为了显示这个弹出对话框，必须将event.returnValue的值设置为要显示给用户的字符串（对IE及Fiefox而言）
+//  同时作为函数的值返回
+EventUtil.addHandler(window, "beforeunload", function(event) {
+	event = EventUtil.getEvent(event);
+	var message = "I'm really going to miss you if you go.";
+	event.returnValue = message;
+	return message;
 })
+
+//  3、DOMContentLoaded事件
+
 
 
 
