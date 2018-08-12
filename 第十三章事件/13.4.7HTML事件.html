@@ -138,9 +138,64 @@ EventUtil.addHandler(window, "beforeunload", function(event) {
 })
 
 //  3、DOMContentLoaded事件
+//  DOMContentLoaded事件则在形成完整的DOM树之后就会触发
+//  不理会图像、javascript文件、css文件或其他资源是否已经下载完毕
+// EventUtil.addHandler(document, "DOMContentLoaded", function (event) {
+// 	alert('Content loaded');
+// })
+
+//  4、readystatechange事件
+//  这个事件的目的是提供与文档或元素加载转台有关的信息
+//  <script>(在IE和Opera中)和<link>(仅IE中)元素也会触发readystatechange事件，可以用来确定外部的JavaScript和CSS文件是否已经加载完成。
+//  与在其他浏览器中一样，除非把动态创建的元素添加到页面中，否则浏览器不会开始下载外部资源
+
+//  加载外部JavaScript文件的代码
+EventUtil.addHandler(window, "load", function () {
+	var script = document.createElement('script');
+	EventUtil.addHandler(script, "readystatechange", function(event) {
+		event = EventUtil.getEvent(event);
+		var target = EventUtil.getTarget(event);
+		if (target.readyState == "loaded" || target.readyState == "complete") {
+			EventUtil.removeHandler(target, "readystatechange", arguments.callee);
+			alert('script loaded');
+		}
+	});
+	script.src = 'example.js';
+	document.body.appendChild(script);
+});
+
+//  同样的编码方式也适用于通过<link>元素加载CSS文件的情况
+EventUtil.addHandler(window, "load", function () {
+	var link = document.createElement('link');
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	EventUtil.addHandler(link, "readystatechange", function (event) {
+		event = EventUtil.getEvent(event);
+		var target = EventUtil.getTarget(event);
+		if (target.readyStage = "loaded" || target.readyStage == "complete") {
+			EventUtil.removeHandler(target, "readystatechange", arguments.callee);
+			alert('CSS Loaded');
+		}
+	});
+	link.href = "example.css";
+	document.getElementsByTagName('head')[0].appendChild(link);
+});
 
 
-
+//  5、pageshow和pagehide事件
+//  往返缓存，可以在用户使用浏览器的后退和前进按钮时加快页面的转换速度。实际上是将整个页面都保存在了内存里
+//  第一个事件就是pageshow，这个事件在页面显示时触发，无论该页面是否来自bfcache。
+//  在重新加载的页面中，pageshow会在load事件触发后触发
+(function(){
+	var showCount = 0;
+	EventUtil.addHandler(window, "load", function() {
+		alert("Load fired");
+	});
+	EventUtil.addHandler(window, "pageshow", function() {
+		showCount++;
+		alert("Show has been fired " + showCount + "times.");
+	})
+})()
 
 
 </script>
