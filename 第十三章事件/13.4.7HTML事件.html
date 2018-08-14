@@ -196,6 +196,19 @@ EventUtil.addHandler(window, "load", function () {
 		alert("Show has been fired " + showCount + "times.");
 	})
 })()
+//  除了通常的属性外，pageshow事件的event对象还包含一个名为persisted的布尔值属性
+//  页面被保存在了bfcache中，则这个属性的值为true；否则，这个属性的值为false。
+//  在事件处理程序中检测这个属性
+(function(){
+	var showCount = 0;
+	EventUtil.addHandler(window, 'load', function() {
+		alert('Load fired');
+	});
+	EventUtil.addHandler(window, "pageshow", function(event) {
+		showCount++;
+		alert("Show has been fired" + showCount + "times.Persisted?" + event.Persisted);
+	})
+})()
 
 
 </script>
