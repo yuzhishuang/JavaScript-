@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="output">测试</div>
+
+<script type="text/javascript">
+//  click: 在用户单机主鼠标按钮（一般是左边的按钮）或者按下回车键时触发
+//  dblclick: 在用户双击主鼠标按钮时触发
+//  mousedown: 在用户按下了任意鼠标按钮时触发
+//  mouseenter: 在鼠标光标从元素外部首次移动到元素范围之内触发
+//  mouseleave: 在位于元素上方的鼠标光标移动到元素范围之外时触发
+//  mousemove：当鼠标指针在元素内部移动时重复触发
+//  mouseout: 鼠标指针位于一个元素上方，然后用户将其移入另一个元素时触发
+//  mouseover: 在鼠标指针位于一个元素外部，然后用户将其首次移入另一个元素边界之内时触发
+//  mouseup： 在用户释放鼠标按钮时触发
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//  1、触摸事件
+//  tarchstart：当手指触摸屏幕时触发；即使已经有一个手指放在屏幕上也会触发
+//  touchmove：当手机在屏幕上滑动时连续地触发。在这个事件发生期间，调用preventDefault()可以阻止滚动
+//  touchend：当手指从屏幕上移开时触发
+//  touchcancel：当系统停止跟踪触摸时触发
+function handleTouchEvent(event) {
+	//  只跟踪一次触摸
+	if (event.touches.length == 1) {
+		var output = document.getElementById('output');
+		switch(event.type) {
+			case "touchstart":
+				output.innerHTML = "Touch started(" + event.touches[0].clientX + "," + event.touches[0].clientY + ")";
+				break;
+			case "touchend":
+				output.innerHTML = "<br>Touch ended(" + event.changedTouches[0].clientX + ',' + event.changedTouches[0].clientY + ")";
+				break;
+			case "touchmove": 
+				event.preventDefault();  //  阻止滚动
+				output.innerHTML += "<br>Touch moved (" + event.changedTouches[0].clientX + "," + event.changedTouches[0].clientY + ")";
+				break;
+		}
+	}
+}
+EventUtil.addHandler(document, "touchstart", handleTouchEvent);
+EventUtil.addHandler(document, "touchend", handleTouchEvent);
+EventUtil.addHandler(document, "touchmove", handleTouchEvent);
+
+
+
+</script>
+</body>
+</html>

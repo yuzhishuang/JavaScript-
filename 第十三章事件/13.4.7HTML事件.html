@@ -210,6 +210,17 @@ EventUtil.addHandler(window, "load", function () {
 	})
 })()
 
+//  hasChange事件
+//  在URL的参数列表（及URL中#后面的所有字符串）发生变化时通知开发人员
+//  必须把haschange事件处理程序添加给window对象，然后URL参数列表只要变化就会调用它
+//  event对象应该额外包含两个属性：oldURL和newURL
+EventUtil.addHandler(window, "hashchange", function(event) {
+	console.log("Old URL:" + event.oldURL + "\nNew:" + event.newURL);
+})
+//  检测浏览器是否hashchange事件
+var isSupported = ("onhashchange" in window) && (document.documentMode === undefined || document.documentMode > 7);
+
+
 
 </script>
 </body>
