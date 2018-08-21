@@ -103,41 +103,8 @@ var EventUtil = {
 	}
 };
 
-//  在JavaScript中，添加到页上的事件处理程序数量将直接关系到页面的整体运行性能
-//  每个函数都是对象，都会占用内存；内存中的对象越多，性能就越差
-
-//  13.5.1事件委托
-//  事件委托：事件委托利用了事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件。
-//  使用事件委托，只需在DOM树中尽量最高的层次上添加一个事件处理程序
-//  如果可行的话，也可以考虑为document对象添加一个事件处理程序，用以处理页面上发生的某种特定类型的事件。
-//  最适合采用事件委托技术的事件包括click、mousedown、mouseup、keydown、keyup和keypress
-var list = document.getElementById("myLinks");
-EventUtil.addHandler(list, "click", function(event) {
-	event = EventUtil.getEvent(event);
-	var target = EventUtil.getTarget(event);
-	switch (target.id) {
-		case "doSomething":
-			document.title = "I changed the document's title";
-			break;
-		case "goSomewhere":
-			location.href = "http://www.baidu.com";
-			break;
-		case "sayHi":
-			alert("hi");
-			break;
-	}
-})
-
-//  13.5.2移除事件处理程序
-//  在不需要的时候移除事件处理程序，也是解决这个问题的一种方案。内存中留有那些过时不用的空事件处理程序，
-//  也是造成Web应用程序内存与性能问题的主要原因
-var btn = document.getElementById("myBtn");
-btn.onclick = function() {
-	//  先执行某些操作
-	alert('执行操作');
-	btn.onclick = null;  //  移除事件处理程序
-	document.getElementById("myDiv").innerHTML = "Processing...";
-}
+//  1、模拟鼠标事件
+//  创建鼠标事件对象的方法是为createEvent()传入字符串“MouseEvents”
 
 
 
