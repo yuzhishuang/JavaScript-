@@ -13,6 +13,7 @@
 	<div id="myDiv">
 		<input type="button" value="Click Me" id="myBtn" onclick="alert(1)" name="">
 	</div>
+	<input type="text" id="myTextbox" name=""/>
 
 <script type="text/javascript">
 //  click: 在用户单机主鼠标按钮（一般是左边的按钮）或者按下回车键时触发
@@ -118,6 +119,16 @@ btn.dispatchEvent(event);
 //  2、模拟键盘事件
 //  DOM3级规定，调用createEvent()并传入“keyboardEvent”就可以创建一个键盘事件。返回的事件对象会包含一个initKeyEvent()
 //  方法。
+var textbox = document.getElementById('myTextbox'),
+	event;
+//  以DOM3级方式创建事件对象
+if (document.implementation.hasFeature("KeyboardEvents", "3.0")) {
+	event = document.createEvent("KeyboardEvents");
+	//  初始化事件对象
+	event.initKeyboardEvent("keydown", true, true, document.defaultView, "a", 0, "Shift", 0);
+}
+//  触发事件
+textbox.dispatchEvent(event);
 
 
 
