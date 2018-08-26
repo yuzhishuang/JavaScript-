@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<form action="" id="myForm">
+		<!-- <input type="text" name="name" value="yzs">
+		<input type="text" name="age" value="18" autofocus="true">
+		<ul>
+			<li><input type="radio" name="color" value="red">Red</li>
+			<li><input type="radio" name="color" value="green">Green</li>
+			<li><input type="radio" name="color" value="blue">Blue</li>
+		</ul>
+		<select name="select-btn" id=""></select>
+		<input type="text" size="25" maxlength="50" value="initial values"> -->
+		<textarea name="textbox1" id="" cols="30" rows="10"></textarea>
+		<input name="submit-btn" type="submit" value="Submit">
+	</form>
+
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//  input元素的type特性设置为text。而通过设置size特性，可以指定文本框中能显示的字符数。通过value特性，
+//  可以设置文本框的初始值，而maxlength特性则用于指定文本框可以接受的最大字符数
+//  创建一个文本框，让它能够显示25个字符，但输入不能超过50个字符
+
+//  <textarea>元素则始终会呈现为一个多行文本框。要指定文本框的大小，可以使用rows和cols特性
+//  rows特性指的是文本框的字符行数，而cols特性指定的是文本框的字符列数
+//  无论这两种文本框在标记中有什么区别，但它们都会将用户输入的内容保存在value属性中
+//  使用value属性读取或设置文本框的值，不建议使用标准的DOM方法
+var textbox = document.forms[0].elements["textbox1"];
+console.log(textbox.value);
+textbox.value = "Some new value";
+
+
+//  选择文本
+//  select()方法，用于选择文本框中的所有文本。
+//  在调用select()方法时，大多数浏览器（Opera除外）都会将焦点设置到文本框中
+//  在文本框获得焦点时选择其所有文本
+// EventUtil.addHandler(textbox, "focus", function(event) {
+// 	event = EventUtil.getEvent(event);
+// 	var target = EventUtil.getTarget(event);
+// 	target.select();
+// })
+
+//  选择事件
+//  与select()方法对应的，是一个select事件
+//  在选择了文本框中的文本时，就会触发select事件
+EventUtil.addHandler(textbox, "select", function(event) {
+	// alert("Text selected" + textbox.value);
+})
+
+//  取得选择的文本
+//  selectionStart和selectionEnd所选择文本的范围（即文本选区开头和结尾的偏移量）
+function getSelectedText(textbox) {
+	return textbox.value.substring(textbox.selectionStart, textbox.selectionEnd);
+}
+//  IE8及更早版本有一个document.selection对象，其中保存着用户在整个文档范围内选择的文本信息
+//  也就是说无法确定用户选择的是页面中的哪个部位的文本
+function getSelectedText(textbox) {
+	if (typeof textbox.selectionStart == "number") {
+		return textbox.value.substring(textbox.selectionStart, textbox.selectionEnd);
+	} else if (document.selection) {
+		return document.selection.createRange().text;
+	}
+}
+
+
+//  选择部分文本
+//  现在除select()方法之外，所有文本框都有一个setSelectionRange()方法
+//  这个方法接收两个参数：要选择的第一个字符的索引和要选择的最后一个字符之后的字符的索引
+textbox.value = "Hello world!";
+//  选择所有文本
+textbox.setSelectionRange(0, textbox.value.length);
+
+
+
+</script>
+</body>
+</html>

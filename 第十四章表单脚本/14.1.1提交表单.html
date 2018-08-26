@@ -16,6 +16,12 @@
 		<!-- 图像按钮 -->
 		<input type="image" src="graphic.gif">
 
+		<!-- 通用重置按钮 -->
+		<input type="reset" value="Reset Form">
+
+		<!-- 自定义重置按钮 -->
+		<button type="reset">Reset Form</button>
+
 	</form>
 
 <script type="text/javascript">
@@ -98,7 +104,35 @@ var EventUtil = {
 	}
 };
 
-// 
+// 提交表单
+//  如果表单里没有提交按钮，按回车键不会提交表单
+//  阻止这个事件的默认行为就可以取消表单提交
+var form = document.getElementById("myForm");
+EventUtil.addHandler(form, 'submit', function(event) {
+	//  取得事件对象
+	event = EventUtil.getEvent(event);
+	//  阻止默认事件
+	EventUtil.preventDefault(event);
+});
+
+//  在JavaScript中，以编程方式调用submit()方法也可以提交表单。
+//  这种方式无需表单包含提交按钮，任何时候都可以正常提交表单
+//  在以调用submit()方法的形式提交表单时，不会触发submit事件，因此要记得在调用此方法之前先验证表单数据
+var form = document.getElementById("myForm");
+//  提交表单
+form.submit();
+
+
+//  这两个按钮都可以用来重置表单。在重置表单时，所有表单字段都会恢复到页面刚加载完毕时的初始值
+//  阻止重置表单
+//  与调用submit()方法不同，调用reset()方法会像单击重置按钮一样触发reset事件
+var form = document.getElementById("myForm");
+EventUtil.addHandler(form, "reset", function(event) {
+	//  取得事件对象
+	event = EventUtil.getEvent(event);
+	//  阻止表单重置
+	EventUtil.preventDefault(event);
+})
 
 
 

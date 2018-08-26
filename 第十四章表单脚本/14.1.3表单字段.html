@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<form action="" id="myForm">
+		<input type="text" name="name" value="yzs">
+		<input type="text" name="age" value="18" autofocus="true">
+		<ul>
+			<li><input type="radio" name="color" value="red">Red</li>
+			<li><input type="radio" name="color" value="green">Green</li>
+			<li><input type="radio" name="color" value="blue">Blue</li>
+		</ul>
+		<select name="select-btn" id=""></select>
+		<input name="submit-btn" type="submit" value="Submit">
+	</form>
+
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//  每个表单都有elements属性，该属性是表单中所有表单元素（字段）集合。
+//  这个elements集合是一个有序列表，其中包含着表单中的所有字段
+var form = document.getElementById("myForm");
+//  取得表单中的第一个字段
+var field1 = form.elements[0];
+//  取得名为“textbox1”的字段
+var field2 = form.elements["textbox1"];
+//  取得表单中包含的字段的数量
+var fieldCount = form.elements.length;
+//  如果有多个表单控件都在使用一个name（如单选按钮），那么就会返回以该name命名的一个NodeList
+var colorFields = form.elements["color"];
+// alert(colorFields.length);
+
+var firstColorField = colorFields[0];
+var firstFormField = form.elements[0];
+// alert(firstColorField === firstFormField);
+
+//  共有的表单字段属性
+//  修改value属性
+field1.value = "Another value";
+//  检查form属性的值
+// alert(field1.form === form);
+//  把焦点设置为当前字段
+field1.focus();
+//  禁用当前字段
+field1.disabled = true;
+//  修改type属性（不推荐，但对<input>来说是可行的）
+// field1.type = "checkbox";
+
+//  解决信用卡重复提交问题
+//  第一次单击后禁用提交按钮
+//  避免多次提交表单
+EventUtil.addHandler(form, 'submit', function(event) {
+	event = EventUtil.getEvent(event);
+	var target = EventUtil.getTarget(event);
+	//  取得提交按钮
+	var btn = target.elements["submit-btn"];
+	//  禁用它
+	btn.disabled = true;
+})
+
+
+//  共有的表单字段方法
+//  每个表单都有两个方法： focus()和blur()
+//  在页面加载完毕后，将焦点转移到表单中的第一个字段。为此可以侦听页面的load事件，并在该事件发生时
+//  在表单的第一个字段上调用focus()方法
+EventUtil.addHandler(window, "load", function(event) {
+	var element = document.form[0].elements[0];
+	if (element.autofocus !== true) {
+		element.focus();
+	}
+})
+
+
+//  3、共有的表单字段事件
+//  blur:当前字段失去焦点使触发
+//  change：对于<input>和<textarea>元素，在它们失去焦点且value值改变时触发；对于<select>元素，在其选项改变时触发
+//  focus：当前字段获得焦点时触发
+var textbox = document.forms[0].elements[1];
+EventUtil.addHandler(textbox, "focus", function(event) {
+	event = EventUtil.getEvent(event);
+	var target = EventUtil.getTarget(event);
+	if (target.style.backgroundColor != "red") {
+		target.style.backgroundColor = "yellow";
+	}
+});
+EventUtil.addHandler(textbox, "blur", function(event) {
+	event = EventUtil.getEvent(event);
+	var target = EventUtil.getTarget(event);
+	if (/[^\d]/.test(target.value)) {
+		target.style.backgroundColor = "red";
+	} else {
+		target.style.backgroundColor = "";
+	}
+});
+EventUtil.addHandler(textbox, "change", function(event) {
+	event = EventUtil.getEvent(event);
+	var target = EventUtil.getTarget(event);
+	if (/[^\d]/.test(target.value)) {
+		target.style.backgroundColor = "red";
+	} else {
+		target.style.backgroundColor = "";
+	}
+});
+
+
+
+</script>
+</body>
+</html>
