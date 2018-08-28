@@ -6,7 +6,7 @@
 </head>
 <body>
 	<form action="" id="myForm">
-		<!-- <input type="text" name="name" value="yzs">
+		<input type="text" name="name" value="yzs" required="true">
 		<input type="text" name="age" value="18" autofocus="true">
 		<ul>
 			<li><input type="radio" name="color" value="red">Red</li>
@@ -14,7 +14,7 @@
 			<li><input type="radio" name="color" value="blue">Blue</li>
 		</ul>
 		<select name="select-btn" id=""></select>
-		<input type="text" size="25" maxlength="50" value="initial values"> -->
+		<input type="text" size="25" maxlength="50" value="initial values">
 		<textarea name="textbox1" id="" cols="30" rows="10"></textarea>
 		<input name="submit-btn" type="submit" value="Submit">
 	</form>
@@ -73,6 +73,24 @@ var EventUtil = {
 		// } else {
 		// 	return -event.detail * 40;
 		// }
+	},
+	getCharCode: function(event) {
+		if (typeof event.charCode == "number") {
+			return event.charCode;
+		} else {
+			return event.keyCode;
+		}
+	},
+	getClipboardText: function(event) {
+		var clipboardData = (event.clipboardData || window.clipboardData);
+		return clipboardData.getData("text");
+	},
+	setClipboardText: function(event) {
+		if (event.clipboardData) {
+			return event.clipboardData.setData("text/plain", value);
+		} else if (window.clipboardData) {
+			return window.clipboardData.setData("text", value);
+		}
 	},
 	preventDefault: function (event) {
 		if (event.preventDefault) {
@@ -150,8 +168,50 @@ function getSelectedText(textbox) {
 //  这个方法接收两个参数：要选择的第一个字符的索引和要选择的最后一个字符之后的字符的索引
 textbox.value = "Hello world!";
 //  选择所有文本
+textbox.focus();
 textbox.setSelectionRange(0, textbox.value.length);
 
+//  兼容IE
+//  跨浏览器编程
+function selectText(textbox, startIndex, stopIndex) {
+	if (textbox.setSelectionRange) {
+		textbox.setSelectionRange(startIndex, stopIndex);
+	} else if (textbox.createTextRange) {
+		var range = textbox.createTextRange();
+		range.collapse(true);
+		range.moveStart("character", startIndex);
+		range.moveEnd("character", stopIndex - startIndex);
+		range.select();
+	}
+	textbox.focus();
+}
+
+
+//  过滤输入
+//  1、屏蔽字符
+EventUtil.addHandler(textbox, "keypress", function(event) {
+	event = EventUtil.getEvent(event);
+
+	//  在极端的情况下，可以通过下列代码屏蔽所有按键操作
+	// EventUtil.preventDefault(event);
+
+	//  如果只想屏蔽特定的字符，则需要检测keypress
+	var target = EventUtil.getTarget(event);
+	var charCode = EventUtil.getCharCode(event);
+	if (!/\d/.test(String.fromCharCode(charCode)) && charCode > 9 && !event.ctrlKey) {
+		EventUtil.preventDefault(event);
+	}
+})
+
+//  2、操作剪切板
+//  在需要确保粘贴到文本框中的文本中包含周谢字符，或者符合某种格式要求时，能够访问剪贴板是非常有用的
+EventUtil.addHandler(textbox, "paste", function(event) {
+	event = EventUtil.getEvent(event);
+	var text = EventUtil.getClipboardText(event);
+	if (!/^\d*$/.test(text)) {
+		EventUtil.preventDefault(event);
+	}
+})
 
 
 </script>

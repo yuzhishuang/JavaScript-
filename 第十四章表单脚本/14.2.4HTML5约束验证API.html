@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<form action="" id="myForm">
+		<input type="text" name="name" value="" required="true">
+		<input type="email" name="email">
+		<input type="url" name="homepage">
+		<input type="number" min="0" max="100" step="5" name="count">
+		<input type="text" pattern="\d+" name="count1">
+		
+		<input name="submit-btn" type="submit" value="Submit">
+		<input type="submit" formnovalidate="true" name="btnNoValidate" value="Non-validating Submit">
+	</form>
+
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	getCharCode: function(event) {
+		if (typeof event.charCode == "number") {
+			return event.charCode;
+		} else {
+			return event.keyCode;
+		}
+	},
+	getClipboardText: function(event) {
+		var clipboardData = (event.clipboardData || window.clipboardData);
+		return clipboardData.getData("text");
+	},
+	setClipboardText: function(event) {
+		if (event.clipboardData) {
+			return event.clipboardData.setData("text/plain", value);
+		} else if (window.clipboardData) {
+			return window.clipboardData.setData("text", value);
+		}
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//  1、必填字段
+//  第一种情况是在表单字段中指定了required属性
+//  在JavaScript中，通过对应的required属性，可以检查某个表单字段是否为必填字段
+var isUsernameRequired = document.forms[0].elements["name"].required;
+console.log(isUsernameRequired);
+
+//  测试浏览器是否支持required属性
+var isRequiredSupported = "required" in document.createElement("input");
+console.log(isRequiredSupported);
+
+//  2、其他输入类型
+//  要检测浏览器是否支持这些新类型，可以在JavaScript创建一个<input>元素，然后将type属性设置为“email”或“url”，最后在检测这个属性的值。
+//  不支持它们的旧版本浏览器会自动将未知的值设置为“text”，而支持的浏览器则会返回正确的值
+var input = document.createElement("input");
+input.type = "email";
+var isEmailSupport = (input.type == "email");
+console.log(isEmailSupport);
+
+//  3、数值范围
+//  HTML5还定义了另外几个输入元素。这几个元素都要求填写某种基于数字的值：“number”、“range”、“datetime”、“datetime-local”、“date”、“month”、“week”，“time”
+
+//  4、输入模式
+//  HTML5为文本字段新增了pattern属性。这个属性的值是一个正则表达式，用于匹配文本框中的值
+
+//  5、检测有效性
+//  使用checkValidity()方法可以检测表单中的某个字段是否有效
+if (document.forms[0].elements[4].checkValidity()) {
+	alert("字段有效");
+} else {
+	alert("字段无效");
+}
+//  要检测整个表单是否有效，可以在表单自身调用checkValidity()方法。如果所有表单字段都有效，这个方法返回true；即使有一个字段无效，这个方法也会返回false
+if (document.forms[0].checkValidity()) {
+	alert("表单有效");
+} else {
+	alert("表单无效");
+}
+//  与checkValidity()方法简单的告诉你字段是否有效相比，validity属性则会告诉你为什么字段有效或无效
+var input = document.forms[0].elements[0];
+if (input.validity && !input.validity.valid) {
+	if (input.validity.valueMissing) {
+		alert("Please specify a value");
+	} else if (input.validity.typeMismatch) {
+		alert("Please enter an email address.");
+	} else {
+		alert("Value is invalid.");
+	}
+}
+
+//  6、禁用验证
+//  通过设置movalidate属性，可以告诉表单不进行验证
+//  在JavaScript中使用noValidate属性可以取得或设置这个值，如果这个属性存在，值为true，如果不存在，值为false
+// document.forms[0].noValidate = true;  //  禁用验证
+
+
+</script>
+</body>
+</html>
