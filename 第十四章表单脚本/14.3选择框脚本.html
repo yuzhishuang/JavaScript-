@@ -6,14 +6,16 @@
 </head>
 <body>
 	<form action="" id="myForm">
-		<input type="text" name="name" value="" required="true">
-		<input type="email" name="email">
-		<input type="url" name="homepage">
-		<input type="number" min="0" max="100" step="5" name="count">
-		<input type="text" pattern="\d+" name="count1">
+		
+		<select name="location" id="selLocation" multiple="true">
+			<option value="Sunnyvale, CA">Sunnyvalue</option>
+			<option value="Los Angeles, CA">Los Angeles</option>
+			<option selected="true" value="Mountain View, CA">Mountain View</option>
+			<option value="">China</option>
+			<option>Australia</option>
+		</select>
 		
 		<input name="submit-btn" type="submit" value="Submit">
-		<input type="submit" formnovalidate="true" name="btnNoValidate" value="Non-validating Submit">
 	</form>
 
 <script type="text/javascript">
@@ -114,7 +116,78 @@ var EventUtil = {
 	}
 };
 
-//  
+//  HTMLSelectElement类型还提供了下列属性和方法
+var selectbox = document.forms[0].elements["location"];
+//  获取选择框第二项的文本和值
+var text = selectbox.options[1].text;
+var value = selectbox.options[1].value;
+console.log(text, value);
+
+//  选择选项
+//  对于只允许选择一项的选择框，访问选中项的最简单方式，就是使用选择框的selectedIndex属性
+var selectedOption = selectbox.options[selectbox.selectedIndex];
+console.log(selectedOption);
+//  可以显示选中项的信息
+var selectedOptionValue = selectedOption.value;
+var selectedOptionText = selectedOption.text;
+console.log(selectedOptionText, selectedOptionValue);
+
+//  另一种选择选项的方式就是取得某一项的引用，然后将selected属性设置为true
+selectbox.options[0].selected = true;
+selectbox.options[1].selected = true;
+
+//  selected属性的作用主要是确定用户选择了选择框中的哪一项。要取得所有选中的项，可以循环遍历选项集合，然后测试每个选项的selected属性
+var optionSelect = getSelectedOptions(selectbox);
+console.log(optionSelect);
+
+function getSelectedOptions(selectbox) {
+	var result = new Array();
+	var option = null;
+	for (var i = selectbox.options.length - 1; i >= 0; i--) {
+		option = selectbox.options[i];
+		if (option.selected) {
+			result.push(option);
+		}
+	}
+	return result;
+}
+
+
+//  添加选项
+//  第一种方式使用DOM方式
+var newOption = document.createElement("option");
+newOption.appendChild(document.createTextNode("Option text"));
+newOption.setAttribute("value", "Option value");
+selectbox.appendChild(newOption);
+
+//  第二种方式是使用Option构造函数来创建新选项。这个构造函数是DOM出现之前就有的
+//  在IE8及之前版本中有问题
+var newOption1 = new Option("Option1 text", "Option1 value");
+selectbox.appendChild(newOption1);
+
+//  第三种添加新选项的方式是使用选择框的add()方法
+var newOption2 = new Option("Option2 text", "Option2 value");
+selectbox.add(newOption2, undefined);
+
+
+//  移除选项
+//  首先，可以使用DOM的removeChild()方法，为其传入要移除的选项
+selectbox.removeChild(selectbox.options[0]);  //  移除第一个选项
+
+//  可以使用选择框的remove()方法，这个方法接受一个参数，既要移除选项的索引
+selectbox.remove(0);
+
+//  最后一种方式，就是将相应选项设置为null。这种方式也是DOM出现之前浏览器的遗留机制
+selectbox.options[0] = null;
+
+
+//  移动和重排选项
+//  重排选项次序的过程也十分类似，最好的方式仍然是使用DOM方法
+//  最合适的DOM方法就是insertBefore()
+var optionToMove = selectbox.options[1];
+selectbox.insertBefore(optionToMove, selectbox.options[optionToMove.index - 1]);
+
+
 
 </script>
 </body>
