@@ -13,6 +13,12 @@ var drawing = document.getElementById("drawing");
 if (drawing.getContext) {
 	var context = drawing.getContext("2d");
 	//  更多代码
+	//  取得图像的数据URI
+	var imgURI = drawing.toDataURL("image/png");
+	//  显示图像
+	var image = document.createElement("img");
+	image.src = imgURI;
+	document.body.appendChild(image);
 }
 
 

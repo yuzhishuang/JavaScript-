@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<canvas id="drawing" width="200" height="200" style="border: 1px solid #f00;">A drawing of somethying.</canvas>
+<script type="text/javascript">
+//  2D上下文的坐标开始于<canval>元素的左上角
+
+//  15.2.1填充和描边
+//  2D上下文的两种基本绘图操作是填充和描边
+//  填充和描边两个操作结果取决于两个属性：fillStyle和strokeStyle
+var drawing = document.getElementById("drawing");
+//  确定浏览器是否支持<canvas>元素
+if (drawing.getContext) {
+	var context = drawing.getContext("2d");
+	context.strokeStyle = "red";
+	context.fillStyle = "#00f";
+}
+
+
+//  绘制矩形
+//  矩形是唯一一种可以直接在2D上下文中绘制的形状。
+//  与矩形有关的方法包括fillRect()、strokeRect()和clearRect()
+//  fillRect()方法在画布上绘制的矩形会填充指定的颜色
+if (drawing.getContext) {
+	var context = drawing.getContext('2d');
+	//  绘制红色矩形
+	context.fillStyle = "#f00";
+	context.fillRect(10, 10, 50, 50);
+	//  绘制半透明的蓝色矩形
+	context.fillStyle = "rgba(0, 0, 255, 0.5)";
+	context.fillRect(30, 30, 50, 50);
+}
+
+//  strokeRect()方法在画布上绘制的矩形会使用指定的颜色描边。描边的颜色通过strokeStyle属性指定
+if (drawing.getContext) {
+	var context = drawing.getContext("2d");
+	//  绘制红色描边矩形
+	// context.strokeStyle = "#f00";
+	// context.strokeRect(10, 10, 50, 50);
+	// //  绘制半透明的蓝色描边矩形
+	// context.strokeStyle = "rgba(0, 0, 255, 0.5)";
+	// context.strokeRect(30, 30, 50, 50);
+}
+
+
+//  clearRect()方法用于清除画布上的矩形区域
+if (drawing.getContext) {
+	var context = drawing.getContext("2d");
+	//  在两个矩形重叠的地方清除一个小矩形
+	context.clearRect(40, 40, 10, 10);
+}
+
+
+
+//  绘制路径
+//  要绘制路径，首先必须调用beginPath()方法，表示要开始绘制新路径
+
+</script>
+</body>
+</html>
