@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+    	.editable {
+    		width: 100px;
+    		height: 100px;
+    		border: 1px solid #f00;
+    	}
+    </style>
+</head>
+<body>
+<div id="wysiwyg" style="height: 100px;width: 300px;border:1px solid black;overflow:auto" contenteditable>测试内容</div>
+<button data-name="formatblock" data-value="div">插入div</button>
+<button data-name="inserthorizontalrule">插入hr</button>    
+<button data-name="insertorderedlist">插入ol</button>    
+<button data-name="insertunorderedlist">插入ul</button>
+<button data-name="insertparagraph">插入p</button>    
+<button data-name="insertimage" data-value="http://files.cnblogs.com/files/xiaohuochai/zan.gif">插入图像</button>    
+<button data-name="createlink" data-value="www.cnblogs.com/xiaohuochai">增加链接</button>
+<button data-name="unlink">删除链接</button>    
+<script>
+var btns = document.getElementsByTagName('button');
+for(var i = 0; i < btns.length; i++){
+    btns[i].onclick = function(){
+        document.execCommand(this.getAttribute('data-name'),false,this.getAttribute('data-value'));
+    }
+}
+</script>
+</body>
+</html>
