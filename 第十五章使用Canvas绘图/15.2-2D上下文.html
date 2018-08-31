@@ -58,6 +58,18 @@ if (drawing.getContext) {
 
 //  绘制路径
 //  要绘制路径，首先必须调用beginPath()方法，表示要开始绘制新路径
+//  如果想绘制一条链接到路径起点的线条，可以调用closePath()
+//  绘制一个不带数字的时钟表盘
+if (drawing.getContext) {
+	var context = drawing.getContext("2d");
+	//  开始路径
+	context.beginPath();
+	//  绘制外圆
+	context.arc(100, 100, 99, 0, 2 * Math.PI, false);
+
+
+}
+
 
 </script>
 </body>
