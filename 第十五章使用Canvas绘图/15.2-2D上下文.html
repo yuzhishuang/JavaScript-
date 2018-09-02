@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-	<canvas id="drawing" width="200" height="200" style="border: 1px solid #f00;">A drawing of somethying.</canvas>
+	<canvas id="drawing" width="2000" height="2000" style="border: 1px solid #f00;"></canvas>
 <script type="text/javascript">
 //  2D上下文的坐标开始于<canval>元素的左上角
 
@@ -25,34 +25,34 @@ if (drawing.getContext) {
 //  矩形是唯一一种可以直接在2D上下文中绘制的形状。
 //  与矩形有关的方法包括fillRect()、strokeRect()和clearRect()
 //  fillRect()方法在画布上绘制的矩形会填充指定的颜色
-if (drawing.getContext) {
-	var context = drawing.getContext('2d');
-	//  绘制红色矩形
-	context.fillStyle = "#f00";
-	context.fillRect(10, 10, 50, 50);
-	//  绘制半透明的蓝色矩形
-	context.fillStyle = "rgba(0, 0, 255, 0.5)";
-	context.fillRect(30, 30, 50, 50);
-}
+// if (drawing.getContext) {
+// 	var context = drawing.getContext('2d');
+// 	//  绘制红色矩形
+// 	context.fillStyle = "#f00";
+// 	context.fillRect(10, 10, 50, 50);
+// 	//  绘制半透明的蓝色矩形
+// 	context.fillStyle = "rgba(0, 0, 255, 0.5)";
+// 	context.fillRect(30, 30, 50, 50);
+// }
 
 //  strokeRect()方法在画布上绘制的矩形会使用指定的颜色描边。描边的颜色通过strokeStyle属性指定
 if (drawing.getContext) {
 	var context = drawing.getContext("2d");
-	//  绘制红色描边矩形
-	// context.strokeStyle = "#f00";
-	// context.strokeRect(10, 10, 50, 50);
-	// //  绘制半透明的蓝色描边矩形
-	// context.strokeStyle = "rgba(0, 0, 255, 0.5)";
-	// context.strokeRect(30, 30, 50, 50);
+	 // 绘制红色描边矩形
+	context.strokeStyle = "#f00";
+	context.strokeRect(10, 10, 50, 50);
+	//  绘制半透明的蓝色描边矩形
+	context.strokeStyle = "rgba(0, 0, 255, 0.5)";
+	context.strokeRect(30, 30, 50, 50);
 }
 
 
 //  clearRect()方法用于清除画布上的矩形区域
-if (drawing.getContext) {
-	var context = drawing.getContext("2d");
-	//  在两个矩形重叠的地方清除一个小矩形
-	context.clearRect(40, 40, 10, 10);
-}
+// if (drawing.getContext) {
+// 	var context = drawing.getContext("2d");
+// 	//  在两个矩形重叠的地方清除一个小矩形
+// 	context.clearRect(40, 40, 10, 10);
+// }
 
 
 
@@ -66,10 +66,31 @@ if (drawing.getContext) {
 	context.beginPath();
 	//  绘制外圆
 	context.arc(100, 100, 99, 0, 2 * Math.PI, false);
-
+	//  绘制内圆
+	context.moveTo(194, 100);
+	context.arc(100, 100, 94, 0, 2 * Math.PI, false);
+	//  绘制分针
+	context.moveTo(100, 100);
+	context.lineTo(100, 15);
+	//  绘制时针
+	context.moveTo(100, 100);
+	context.lineTo(35, 100);
+	// 描边路径
+	context.stroke();
 
 }
 
+//  由于路径的使用很频繁，所以就有了一个名为isPointInPath()的方法。
+//  这个方法接收x和y坐标作为参数，用于在路径被关闭之前确定画布上的某一点是否位于路径上
+// if (context.isPointInPath(100, 100)) {
+// 	alert("Point (100, 100) is in the path");
+// }
+
+
+//  绘制文本
+//  绘制文本主要有两个方法：fillText()和strokeText()
+//  这两个方法都可以接收4个参数：要绘制的文本字符串、x坐标、y坐标和可选的最大像素宽度
+//  绘制了数字12
 
 </script>
 </body>
