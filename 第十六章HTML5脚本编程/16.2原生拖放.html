@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="dropelement" style="width: 50px; height: 50px; background: #f00"></div>
+	<div id="droptarget" style="width: 200px; height: 200px; background: #00f;margin-left: 500px;"></div>
+
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+// 有些事件是在被拖动的元素上触发的，而有些事件是在放置目标上触发的
+//  拖动某元素时，将依次触发下列事件：（1）dragstart （2）drag （3）dragend
+//  当某个元素被拖动到一个有效的放置目标上时，下列事件会依次发生：（1）dragenter （2）dragover （3）dragleave或drop
+
+
+//  自定义放置目标
+//  如果拖动元素经过不允许放置的元素，无论用户如何操作，都不会发生drop事件。
+//  你可以把任何元素变成有效的放置目标，方法是重写dragenter和dragover事件的默认行为
+//  为了让Firefox支持正常的拖放，还要取消drop事件的默认行为，阻止它打开URL
+var droptarget = document.getElementById("droptarget");
+
+EventUtil.addHandler(droptarget, "dragover", function(event) {
+	EventUtil.preventDefault(event);
+});
+
+EventUtil.addHandler(droptarget, "dragenter", function(event) {
+	EventUtil.preventDefault(event);
+})
+
+EventUtil.addHandler(droptarget, "drop", function(event) {
+	event = EventUtil.getEvent(event);
+	EventUtil.preventDefault(event);
+	console.log("目标元素");
+	var dataTransfer = event.dataTransfer;
+	var text = dataTransfer.getData("Text");
+	var url = dataTransfer.getData("url") || dataTransfer.getData("text/uri-list");
+	console.log(text, url);
+})
+
+
+//  dataTransfer对象，它是事件对象的一个属性，用于从被拖动元素向放置目标传递字符串格式的数据
+//  dataTransfer对象有两个主要方法：getData()和setData()。getData()可以取得由setData()保存的值。
+//  保存在dataTransfer对象中的数据只能在drop事件处理程序中读取
+//  为了更好的在跨浏览器的情况下从dataTransfer对象取得数据，最好在取得URL数据时检测两个值，而在取得文本数据时使用“Text”
+var dropelement = document.getElementById("dropelement");
+EventUtil.addHandler(dropelement, "dragstart", function(event) {
+	event = EventUtil.getEvent(event);
+	event.dataTransfer.setData("text", "some text");
+	event.dataTransfer.setData("URL", "http://www.wrox.com");
+	console.log("拖动元素");
+})
+
+
+
+
+</script>
+</body>
+</html>

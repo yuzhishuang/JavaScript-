@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<iframe id="myframe" src="test.html"></iframe>
+<script type="text/javascript">
+//  跨文档消息传送核心是postMessage()方法，接收两个参数：一条信息和一个表示消息接收方来自哪个域的字符串
+//  如果传给postMessage()的第二个参数是“*”
+var iframeWindow = document.getElementById("myframe").contentWindow;
+iframeWindow.postMessage("A secret", "test.html");
+
+</script>
+</body>
+</html>
