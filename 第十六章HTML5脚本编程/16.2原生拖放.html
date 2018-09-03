@@ -5,8 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-	<div id="dropelement" style="width: 50px; height: 50px; background: #f00"></div>
-	<div id="droptarget" style="width: 200px; height: 200px; background: #00f;margin-left: 500px;"></div>
+	<div id="dropelement" style="width: 50px; height: 50px; background: #f00"><span>123</span></div>
+	<div id="droptarget" style="width: 200px; height: 200px; background: #00f;margin-left: 500px;">345</div>
+
+	<!-- 让这个图像不可以拖动 -->
+	<img src="smile.gif" draggable="false" alt="">
+
+	<!-- 让这个元素可以拖动 -->
+	<div draggable="true"></div>
 
 <script type="text/javascript">
 var EventUtil = {
@@ -105,6 +111,7 @@ EventUtil.addHandler(droptarget, "dragover", function(event) {
 
 EventUtil.addHandler(droptarget, "dragenter", function(event) {
 	EventUtil.preventDefault(event);
+	// event.dataTransfer.dropEffect = 'move';
 })
 
 EventUtil.addHandler(droptarget, "drop", function(event) {
@@ -115,6 +122,7 @@ EventUtil.addHandler(droptarget, "drop", function(event) {
 	var text = dataTransfer.getData("Text");
 	var url = dataTransfer.getData("url") || dataTransfer.getData("text/uri-list");
 	console.log(text, url);
+	event.dataTransfer.dropEffect = 'move';
 })
 
 
@@ -128,8 +136,20 @@ EventUtil.addHandler(dropelement, "dragstart", function(event) {
 	event.dataTransfer.setData("text", "some text");
 	event.dataTransfer.setData("URL", "http://www.wrox.com");
 	console.log("拖动元素");
+	event.dataTransfer.effectAllowed = 'move';
 })
 
+
+//  dropEffect与effectAllowed
+//  利用dataTransfer对象，能通过它来确定被拖动的元素以及作为放置目标的元素能够接收什么操作
+//  要使用dropEffect属性，必须在ondragenter事件处理程序中针对放置目标来设置它
+//  dropEffect属性只有搭配effectAllowed属性才有用。effectAllowed属性表示允许拖动元素的哪种dropEffect
+//  必须在ondragstart事件处理程序中设置effectAllowed属性
+
+
+
+//  默认情况下，图像、链接和文本时可以拖动的。文本只有在被选中的情况下才能拖动，而图像和链接在任何时候都可以拖动
+//  HTML5为所有HTML元素规定了一个draggable属性，表示元素是否可以拖动
 
 
 
