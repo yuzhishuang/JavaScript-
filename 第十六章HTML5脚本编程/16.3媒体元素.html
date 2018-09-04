@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<!-- 嵌入视频 -->
+	<video src="conference.mpg"></video>
+
+	<!-- 指定多个媒体来源 -->
+	<video id="myVideo">
+		<source src="conference.webm" type="video/webm; codecs='vp8, vorbis'" >
+		<source src="conference.ogv" type="video/ogg; codecs='theora, vorbis'" >
+		<source src="movie.avi">
+	</video>
+
+	<!-- 嵌入音频 -->
+	<audio src="song.mp3"></audio>
+
+	<!-- 指定多个音频 -->
+	<audio id="myAudio">
+		<source src="song.ogg" type="audio/ogg">
+		<source src="song.mp3" type="audio/mpeg">
+	</audio>
+
+	<!-- 自定义媒体播放器 -->
+	<div class="mediaplayer">
+		<div class="video">
+			<video src="movie.avi" id="player" poster="mymovie.jpg" width="300" height="200">
+				Video player not available
+			</video>
+		</div>
+		<div class="controls">
+			<input type="button" value="play" id="video-btn">
+			<span id="curtime">0</span><span id="duration">0</span>
+		</div>
+	</div>
+
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//   HTML5新增了两个与媒体相关的标签，<audio>和<video>
+//  为poster属性指定图像的URI可以在加载视频内容期间显示一副图像
+//  如果标签中有controls属性，意味着浏览器应该显示UI控件，以便用户直接操作媒体
+//  因为并非所有浏览器都支持所有媒体格式，所以可以指定多个不同的媒体来源
+
+
+
+//  16.3.3自定义媒体播放器
+//  使用<audio>和<video>元素的play()和pause()方法，可以手工控制媒体文件的播放
+//  取得元素的引用
+var player = document.getElementById("player"),
+	btn = document.getElementById("video-btn"),
+	curtime = document.getElementById("curtime"),
+	duration = document.getElementById("duration");
+
+//  更新播放时间
+duration.innerHTML = player.duration;
+
+//  为按钮添加事件处理程序
+EventUtil.addHandler(btn, "click", function(event) {
+	if (player.paused) {
+		player.play();
+		btn.value = "Pause";
+	} else {
+		player.pause();
+		btn.value = "Play";
+	}
+});
+
+//  定时更新当前时间
+setInterval(function() {
+	curtime.innerHTML = player.currentTime;
+}, 250);
+
+
+
+//  检测编解码器的支持情况
+//  canPlayType()方法，该方法接收一种格式/编解码器字符串，返回“probably”、maybe或“”（空字符串）
+//  probably和maybe都是真值，因此在if语句的条件测试中可以转换成true
+
+//  很可能“maybe”
+if (player.canPlayType("audio/mpeg")) {
+	//  进一步处理
+}
+
+//  可能是“probably”
+if (audio.canPlayType("audio/ogg; codecs=\"vorbis\"")) {
+	//  进一步处理
+}
+
+
+
+</script>
+</body>
+</html>
