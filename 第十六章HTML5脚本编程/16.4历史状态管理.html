@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<button id="next">下一页</button>
+	当前页数：<span id="cur">0</span>
+
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//  
+var next = document.getElementById("next");
+var cur = document.getElementById("cur");
+var page = 0;  //  表示当前页数
+// next.onclick = function() {
+// 	page++;
+// 	cur.innerHTML = page;
+// }
+
+//  使用history API来添加一些代码
+next.onclick = function() {
+	page++;
+	history.pushState({page: page}, '', '?page=' + page);
+	//  状态对象中存储当前页数
+	cur.innerHTML = page;
+}
+
+window.onpopstate = function(e) {
+	if (e.state) {
+		cur.innerHTML = e.state.page;
+	} else {
+		cur.innerHTML = 0;
+	}
+}
+
+</script>
+</body>
+</html>

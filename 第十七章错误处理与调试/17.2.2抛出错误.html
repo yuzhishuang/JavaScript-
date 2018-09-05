@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<iframe id="myframe" src="test.html"></iframe>
+<script type="text/javascript">
+//  利用原型链还可以通过继承Error来创建自定义错误类型，需要为新创建的错误类型指定name和message属性
+function CustomError(message) {
+	this.name = "CustomError";
+	this.message = message;
+}
+CustomError.prototype = new Error();
+throw new CustomError("My message");
+</script>
+</body>
+</html>
