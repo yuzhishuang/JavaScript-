@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+//  通过console对象向JavaScript控制台中写入消息，这个对象具有下列方法
+console.error('错误消息');
+console.info('将信息性消息记录到控制台');
+console.log('将一般消息记录到控制台');
+console.warn('将警告消息记录到控制台');
+
+// java.lang.System.out.println("Your message");
+
+//  不存在一种跨浏览器向JavaScript控制台写入消息的机制，但下面的函数倒可以作为统一的接口
+function log (message) {
+	if (typeof console == "object") {
+		console.log(message);
+	} else if (typeof opera == "object") {
+		opera.postError(message);
+	} else if (typeof java == "object" && typeof java.lang == "object") {
+		java.lang.System.out.println(message);
+	}
+}
+
+//  抛出错误
+//  抛出错误也是一种调试代码的好办法
+function divide(num1, num2) {
+	if (typeof num1 != "number" || typeof num2 != "number") {
+		throw new Error("divide(): Both arguments must be numbers.");
+	}
+	return num1 + num2;
+}
+</script>
+</body>
+</html>
