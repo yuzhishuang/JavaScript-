@@ -14,6 +14,11 @@ function CustomError(message) {
 }
 CustomError.prototype = new Error();
 throw new CustomError("My message");
+
+//  在任何Web浏览器中，onerror事件处理程序都不会创建event对象，但它可以接收三个参数：错误消息、消息所在的URL和行号
+window.onerror = function(message, url, line) {
+	
+}
 </script>
 </body>
 </html>
