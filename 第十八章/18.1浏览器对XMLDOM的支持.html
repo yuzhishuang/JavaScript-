@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+//  支持DOM2级的浏览器中使用以下语法来创建一个空白的XML文档
+// var xmldom = document.implementation.createDocument(namespaceUri, root, doctype);
+
+//  创建一个新的、文档元素为<root>的XML文档
+var xmldom = document.implementation.createDocument('', "root", null);
+console.log(xmldom.documentElement.tagName);  //  "root"
+var child = xmldom.createElement("child");
+xmldom.documentElement.appendChild(child);
+
+//  要检测浏览器是否支持DOM2级XML，可以使用下面这行代码
+var hasXmlDom = document.implementation.hasFeature('XML', "2.0");
+console.log('hasXmlDom' + hasXmlDom);
+
+ //  在解析XML之前，首先必须创建一个DOMParser的实例，然后再调用parseFromString()方法。
+ //  这个方法接受两个参数：要解析的XML字符串和内容类型（内容类型始终都应该是“text/xml”）。
+ //  返回值是一个Document的实例
+ 	var parser = new DOMParser();
+ 	var xmldom = parser.parseFromString("<root><child/></root>", "text/xml");
+ 	alert(xmldom.documentElement.tagName);  //  root
+ 	alert(xmldom.documentElement.firstChild.tagName);  //  child
+ 	
+ 	var anotherChild = xmldom.createElement("child");
+ 	xmldom.documentElement.appendChild(anotherChild);
+
+ 	var children = xmldom.getElementsByTagName("child");
+ 	alert(children.length);
+
+
+//  确认是否发生解析错误的最佳方式就是，使用一个try-catch语句块，如果没有错误，
+//  则通过getElementsByTagName()来查找文档中是否存在<parsererror>元素
+var parser = new DOMParser(),
+	xmldom,
+	errors;
+try {
+	xmldom = parser.parseFromString("<root>", "text/xml");
+	errors = xmldom.getElementsByTagName("parsererror");
+	if (errors.length > 0) {
+		throw new Error("Parsing error!");
+	}
+} catch (ex) {
+	alert("Parsing error!");
+}
+
+xmldom.load('xmldom.xml');
+
+//  XMLSerializer类型
+//  在引入DOMParser的同时，要序列化DOM文档，首先必须创建XMLSeriallizer的实例，然后将文档传入其serializeToString()方法
+var serializer = new XMLSerializer();
+var xml = serializer.serializeToString(xmldom);
+console.log(xml);
+
+//  通过创建每个版本的实例并观察是否有错误发生，可以确定哪个版本可用
+function createDocument() {
+	if (typeof arguments.callee.activeXString != "string") {
+		var versions = ["MSXML2.DOMDocument.6.0", "MSXML2.DOMDocument.3.0", "MSXML2.DOMDocument"],
+			i, len;
+		for (i = 0, len = versions.length; i < len; i++) {
+			try {
+				new ActiveXObject(versions[i]);
+				arguments.callee.activeXString = versions[i];
+				break;
+			} catch (ex) {
+				//  跳过
+			}
+		}
+	}
+	return new ActiveXObject(arguments.callee.activeXString);
+}
+
+// document.body.appendChild("<div></div>");
+
+//  要解析XML字符串，首先必须创建一个DOM文档，然后调用loadXML()方法
+var xmldom = createDocument();
+xmldom.loadXML("<root><child/></root>");
+
+alert(xmldom.documentElement.tagName);  //"root"
+alert(xmldom.documentElement.firstChild.tagName);  //  "child"
+
+var anotherChild = xmldom.createElement("child");
+xmldom.documentElement.appendChild(anotherChild);
+
+var children = xmldom.getElementsByTagName("child");
+console.log(children.length);  //2
+
+
+</script>
+</body>
+</html>
