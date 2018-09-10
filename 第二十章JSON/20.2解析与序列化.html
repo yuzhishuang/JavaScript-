@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+//  早期的JSON解析器基本上就是使用JavaScript的eval()函数
+//  在旧版本的浏览器中，使用eval()对JSON数据结构求职存在风险，因为可能会执行一些恶意代码
+//  对于不能原生支持JSON解析的浏览器，使用这个shim是最佳选择
+//  JSON对象有两个方法：stringify()和parse().
+//  stringify()是把JavaScript对象序列化为JSON字符串
+//  parse()是把JSON字符串解析为原生JavaScript值
+
+//  在序列化JavaScript对象时，所有函数及原型成员都会被有意忽略，不体现在结果中。
+//  此外，值为undefined的任何属性也都会被跳过
+//  结果中最终都是值为有效JSON数据类型的实例属性
+
+var book = [
+	{
+		"title": 123,
+		"authors": [
+			"Nicholas C. Zakkas"
+		],
+		"edition": 3,
+		"year": 2011
+	},
+	{
+		"title": "Proofessinal Javscs",
+		"authors": [
+			"Nicholas "
+		],
+		"edition": 2,
+		"year": 2008
+	}
+];
+
+var jsonText = JSON.stringify(book);
+console.log(jsonText);
+
+//  将JSON字符串直接传递给JSON.parse()就可以得到相应的JavaScript值
+var bookCopy = JSON.parse(jsonText);
+console.log(bookCopy);
+bookCopy[0].title = 456;
+console.log(book[0].title);
+
+
+//  序列化选项
+//  JSON.stringify()除了要序列化的JavaScript对象外，还可以接收两个参数，这两个参数用于指定以不同的方式序列化JavaScript对象
+//  第一个参数是个过滤器，可以是一个数组，也可以是一个函数
+//  第二个参数是一个选项，表示是否在JSON字符串中保留缩进
+
+//  1、过滤结果
+//  如果过滤器参数是数组，那么JSON.stringify()的结果中将只包含数组中列出的属性
+var jsonText = JSON.stringify(book, ["title", "edition"]);
+console.log(jsonText);
+
+//  如果第二个参数是函数，接收两个参数，属性（键）名和属性值。
+//  根据属性名可以知道应该如何处理要序列化的对象中的属性。属性名只能是字符串，而在值并非键值对儿结构的值时，键名可以是空字符串
+//  为了改变序列化对象的结果，函数返回的值就是相应键的值。如果函数返回了undefined，那么相应的属性会被忽略
+var jsonText = JSON.stringify(book, function (key, value) {
+	switch (key) {
+		case "authors":
+			return value.join(",");
+		case "year":
+			return 5000;
+		case "edition":
+			return undefined;
+		default:
+			return value;
+	}
+});
+console.log(jsonText);
+
+
+//  2、字符串缩进
+//  JSON.stringify()方法的第三个参数用于控制结果中的缩进和空白符
+//  如果这个参数是一个数值，那它表示的是么个级别缩进的空格数
+
+//  要在每个级别缩进4个空格
+var jsonText = JSON.stringify(book, null, 4);
+console.log(jsonText);
+
+//  如果缩进参数是一个字符串而非数值，则这个字符串将在JSON字符串中被用作缩进字符（不在使用空格）。
+//  在使用字符串的情况下，可以将缩进字符设置为制表符，或者两个短划线之类的任意字符
+var jsonText = JSON.stringify(book, null, "- -");
+console.log(jsonText);
+
+
+
+//  3、toJSON()方法
+//  可以给对象定义toJSON()方法，返回其自身的JSON数据格式。
+//  可以为认为对象添加toJSON()方法
+var book = [
+	{
+		"title": 123,
+		"authors": [
+			"Nicholas C. Zakkas"
+		],
+		"edition": 3,
+		"year": 2011,
+		toJSON: function () {
+			return this.title;
+		}
+	},
+	{
+		"title": "Proofessinal Javscs",
+		"authors": [
+			"Nicholas "
+		],
+		"edition": 2,
+		"year": 2008,
+		toJSON: function () {
+			return this.title;
+		}
+	}
+];
+var jsonText = JSON.stringify(book);
+console.log(jsonText);
+
+
+//  20.2.3解析选项
+//  JSON.parse()方法也可以接收另一个参数。该参数是一个函数，将在每个键值对儿上调用，被称为还原函数
+//  如果还原函数返回undefined，则表示要从结果中删除相应的键；如果返回其他值，则将该值插入到结果中
+var book = [
+	{
+		"title": 123,
+		"authors": [
+			"Nicholas C. Zakkas"
+		],
+		"edition": 3,
+		"year": 2011,
+		"releaseDate": new Date(2011, 11, 1)
+	},
+	{
+		"title": "Proofessinal Javscs",
+		"authors": [
+			"Nicholas "
+		],
+		"edition": 2,
+		"year": 2008,
+		"releaseDate": new Date(2011, 11, 1)
+	}
+];
+var jsonText = JSON.stringify(book);
+var bookCopy = JSON.parse(jsonText, function (key, value) {
+	if (key == "releaseDate") {
+		return new Date(value);
+	} else {
+		return value;
+	}
+});
+console.log(bookCopy[0].releaseDate);
+console.log(bookCopy[0].releaseDate.getFullYear());
+
+
+
+
+</script>
+</body>
+</html>
