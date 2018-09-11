@@ -102,8 +102,143 @@ xhr.send(null);
 
 
 //  21.1.2HTTP头部信息
-//  
+//  每个HTTP请求和响应都会带有相应的头部信息，XHR对象也提供了操作这两种头部（即请求头部和响应头部）信息的方法
+//  Accept: 浏览器能够处理的内容类型
+//  Accept-Charset: 浏览器能够显示的字符集
+//  Accept-Encoding: 浏览器能够处理的压缩编码
+//  Accept-Language: 浏览器当前设置的语言
+//  Connection： 浏览器与服务器之间连接的类型
+//  Cookie: 当前页面设置的任何Cookie
+//  Host：发出请求的页面的所在域
+//  Referer: 发出请求的页面的URI
+//  User-Agent：浏览器的用户代理字符串
 
+//  使用setRequestHeader()方法可以设置自定义的请求头部信息。这个方法接受两个参数：头部字段的名称和头部字段的值。
+//  要成功发送请求头部信息，必须在调用open()方法之后且调用send()方法之前调用setRequestHeader()
+//  不要使用浏览器正常发送的字段名称，否则有可能会影响服务器的响应
+var xhr = createXHR();
+xhr.onreadystatechange = function () {
+	if (xhr.readyState == 4) {
+		if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+			alert(xhr.responseText);
+		} else {
+			alert("Request was unsuccessful:" + xhr.status);
+		}
+	}
+};
+xhr.open("get", "example.php", true);
+xhr.setRequestHeader("MyHeader", "MyValue");
+xhr.send(null);
+
+
+//  调用XHR对象的getResponseHeader()方法并传入头部字段名称，可以取得响应的响应头部信息
+//  而调用getAllResponseHeaders()方法则可以取得一个包含所有头部信息的长字符串
+var myHeader = xhr.getResponseHeader("myHeader");
+var allHeaders = xhr.getAllResponseHeaders();
+console.log(myHeader, allHeaders);
+
+
+//  21.1.3GET请求
+//  对XHR而言，位于传入open()方法的URL末尾的查询字符串必须经过正确的编码才行
+//  使用GET请求经常会发生的一个错误，就是查询字符串的格式有问题。
+//  查询字符串中每个参数的名称和值都必须使用encodeURIComponent()进行编码，然后才能放到URL的末尾；而且所有名-值对儿必须由&分隔
+xhr.open("get", "example.php?name1=value1&name2=value2", true);
+
+//  辅助向现有URL的末尾添加查询字符串参数
+function addURLParam (url, name, value) {
+	url += (url.indexOf("?") == -1 ? "?" : "&");
+	url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+	return url;
+}
+
+//  使用
+var url = "example.php";
+//  添加参数
+url = addURLParam(url, "name", "Nicholas");
+url = addURLParam(url, "book", "Professional javascript");
+//  初始化请求
+xhr.open("get", url, false);
+
+
+//  POST请求
+//  用于向服务器发送应该被保存的数据
+//  POST请求应该把数据作为请求的主题提交。POST请求的主体可以包含非常多的数据，而且格式不限
+xhr.open("post", "example.php", true);
+//  发送POST请求的第二布就是向send()方法中传入某些数据，可以在此传入任何想发送到服务器的字符串
+//  可以使用XHR来模仿表单提交：首先将Content-Type头部信息设置为application/x-www-form-urlencoded，也就是表单提交时的内容类型
+//  POST数据的格式与查询字符串格式相同
+//  实现表单序列化
+
+//  如果不设置Content-Type头部信息，那么发送给服务器的数据就不会出现在$_POST超级全局变量中
+
+function submitData () {
+	var xhr = createXHR();
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4) {
+			if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+				alert(xhr.responseText);
+			} else {
+				alert("Request was unsuccessful:" + xhr.status);
+			}
+		}
+	};
+	xhr.open("post", "postexample.php", true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	var form = document.getElementById("user-info");
+	xhr.send(serialize(form));
+}
+
+
+function serialize(form) {
+	var parts = [],
+		field = null,
+		i,
+		len,
+		j,
+		optLen,
+		option,
+		optValue;
+	for (i = 0, len = form.elements.length; i < len; i++) {
+		field = form.elements[i];
+		switch(field.type) {
+			case "select-one":
+			case "select-multiple":
+				if (field.name.length) {
+					for (j = 0, optLen = field.options.length; j < optLen; j++) {
+						option = field.options[j];
+						if (option.selected) {
+							optValue = "";
+							if (option.hasAttribute) {
+								optValue = (option.hasAttribute("value") ? option.value : option.text);
+							} else {
+								optValue = (option.attributes["value"].specified ? option.value : option.text);
+							}
+							parts.push(encodeURIComponent(field.name) + "=" + encodeURIComponent(optValue));
+						}
+					}
+				}
+				break;
+				case undefined:  //  字段集
+				case "file":  //  文件输入
+				case "submit":  //  提交按钮
+				case "reset":  //  重置按钮
+				case "button":  //  自定义按钮
+					break;
+				case "radio":  //  单选按钮
+				case "checkbox":  //  复选框
+					if (!field.checked) {
+						break;
+					}
+					/*执行默认操作*/
+				default:
+					//  不包含没有名字的表单字段
+					if (field.name.length) {
+						parts.push(encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value));
+					}
+		}
+	}
+	return parts.join("&");
+}
 
 
 </script>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<form name="myForm"></form>
+<script type="text/javascript">
+//  21.2.1FormData
+//  FormData为序列化表单以及创建与表单格式相同的数据（用于通过XHR传输）提供了便利
+//  使用FormData的方便之处体现在不必明确地在XHR对象上设置请求头部。XHR对象能够识别传入的数据类型是FormData的实例，并配置适当的头部信息。
+var data = new FormData();
+data.append("name", "Nicholas");
+
+//  append()方法接收两个参数：键和值，分别对应表单字段的名字和字段中包含的值。可以像这样添加任意多个键值对儿
+//  而通过向FormData构造函数中传入表单元素，也可以用表单元素的数据预先向其中填入键值对儿
+var data = new FormData(document.forms[0]);
+
+//  创建了FormData的实例后，可以将它直接传给XHR的send()方法
+var xhr = createXHR();
+xhr.onreadystatechange = function () {
+	if (xhr.readyState == 4) {
+		if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+			alert(xhr.responseText);
+		} else {
+			alert("Request was unsuccessful: " + xhr.status);
+		}
+	}
+};
+xhr.open("post", "postexample.php", true);
+var form = document.getElementById("user-info");
+xhr.send(new FormData(form));
+
+
+
+
+function createXHR () {
+	if (typeof XMLHttpRequest != "undefined") {
+		return new XMLHttpRequest();
+	} else if (typeof ActiveXObject != "undefined") {
+		if (typeof arguments.callee.activeXString != "string") {
+			var versions = ["MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0", "MSXML2.XMLHttp"],
+				i, len;
+			for (i = 0, len = versions.length; i < len; i++) {
+				try {
+					new ActiveXObject(versions[i]);
+					arguments.callee.activeXString = versions[i];
+					break;
+				} catch (ex) {
+					//  跳过
+				}
+			}
+		}
+	} else {
+		throw new Error("No XHR object available.");
+	}
+}
+
+
+
+//  21.2.2超时设定
+//  为XHR对象添加一个timeout属性，表示请求在等待响应多少毫秒之后就终止
+var xhr = createXHR();
+xhr.onreadystatechange = function () {
+	if (xhr.readyState == 4) {
+		try {
+			if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+				alert(xhr.responseText);	
+			} else {
+				alert("Resquest was unsuccessful: " + xhr.status)
+			}
+		} catch (ex) {
+			//  假设有ontineout事件处理程序处理
+		}
+	}
+}
+xhr.open("get", "timeout.php", true);
+xhr.timeout = 1000;
+xhr.ontimeout = function () {
+	alert("Request did not retur in a second.");
+};
+xhr.send(null);
+
+
+
+</script>
+</body>
+</html>
