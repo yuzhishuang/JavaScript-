@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<form name="myForm"></form>
+<script type="text/javascript">
+//  跨域源资源共享
+//  CORS背后的基本思想，就是使用自定义的HTTP头部让浏览器与服务器进行沟通，从而决定请求或相应是应该成功还是应该失败
+//  此时请求和响应都不包含cookie信息
+
+//  IE对CORS的实现
+//  微软在IE8中引入了XDR类型
+//  coolie不会随请求发送，也不会随响应返回
+//  只能设置请求头部信息中的Content-Type字段
+//  不能访问响应头部信息。
+//  只支持GET和POST请求
+
+//  XDR对象的使用方法与XHR对象非常相似。也是创建一个XDomainRequest的实例，调用open()方法，在调用send()方法。
+//  但与XHR对象的open()方法不同，XDR对象的open()方法只接收两个参数：请求的类型和URL
+
+//  所有XDR请求都是异步执行的，不能用它来创建同步请求。请求返回后，会触发load事件，响应的
+//  数据也会保存在responseText属性中
+
+//  在接收到响应后，你只能访问响应的原始文本；没有办法确定响应的状态代码
+//  如果失败就会触发error事件
+var xdr = new XDomainRequest();
+xdr.onload = function () {
+	alert(xdr.responseText);
+};
+xdr.onerror = function () {
+	alert("An error occurred.");
+};
+
+//  与XHR一样，XDR对象也支持timeout属性以及ontimeout事件处理程
+xdr.timeout = 1000;
+xdr.ontimeout = function () {
+	alert("Request took too long.");
+}
+
+xdr.open("get", "http://www.somewhere-else.com/page/");
+
+//  为支持POST请求，XDR对象提供了contentType属性，用来表示发送数据的格式
+xdr.contentType = "application/x-www-form-urlencoded";
+
+xdr.send("name1=value1&name2=value2");
+
+//  在请求返回前调用abort()方法可以终止请求
+xdr.abort()
+
+
+
+//  其他浏览器对CORS的实现
+//  通过XMLHttpRequest对象实现了对CORS的原生支持。在尝试打开不同来源的资源时，无需额外编写代码就可以触发这个行为
+//  要请求位于另一个域中的资源，使用标准的XHR对象并在open()方法中传入绝对URL即可
+
+//  支持同步请求
+//  不能使用setRequestHeader()设置自定义头部
+//  不能发送和接收cookie
+//  调用getAllResponseHeaders()方法总会返回空字符串
+
+
+</script>
+</body>
+</html>

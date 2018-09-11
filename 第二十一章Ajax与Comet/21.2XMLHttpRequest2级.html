@@ -83,6 +83,14 @@ xhr.ontimeout = function () {
 xhr.send(null);
 
 
+//  overrideMimeType()方法
+//  用于重写XHR响应的MIME类型。能够重写服务器返回的MIME类型是很有用
+var xhr = createXHR();
+xhr.open("get", "text.php", true);
+xhr.overrideMimeType("text/xml");
+xhr.send(null);
+
+
 
 </script>
 </body>
