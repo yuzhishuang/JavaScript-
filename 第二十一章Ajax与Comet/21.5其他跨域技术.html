@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<form name="myForm"></form>
+<script type="text/javascript">
+//  21.5.1图像Ping
+//  第一种跨域请求技术是使用<img>标签
+//  也可以动态地创建图像，使用它们的onload和onerror事件处理程序来确定是否接收到了相应
+//  图像Ping是与服务器进行简单、单向的跨域通信的一种方式。
+//  请求的数据是通过查询字符串形式发送的，而响应可以是任意内容，但通常是像素或204响应。
+//  通过图像Ping，浏览器得不到任何具体的数据，但通过侦听load和error事件，它能知道响应是什么时候接收到的
+
+//  图像Ping最常用于跟踪用户点击页面或动态广告曝光次数。
+//  图像Ping有两个主要的缺点，一是只能发送GET请求，二是无法访问服务器的响应文本
+//  因此图像Ping只能用于浏览器与服务器间的单向通信
+var img = new Image();
+img.onload = img.onerror = function () {
+	alert("Done!");
+};
+img.src = "http://www.example.com/test?name=Nicholas";
+
+
+
+//  21.5.2JSONP
+//  JSONP看起来与JSON差不多，只不过是被包含在函数调用中的JSON
+// callback({"name": "Nicholas"})
+
+//  JSONP由两部分组成：回调函数和数据
+//  回调函数是当响应到来时应该在页面中调用的函数。回调函数的名字一般是在请求中指定的。而数据就是传入回调函数中的JSON数据
+
+//  典型的JSONP请求    指定的回调函数的名字叫handleResponse()
+//  http://freegeoip.net/json/?callback=handleResponse
+
+//  JSONP是通过动态<script>元素来使用的，使用时可以为src属性指定一个跨域URL
+//  JSONP是有效的JavaScript代码，所以在请求完成后，即在JSONP响应加载到页面中以后，就会立即执行
+function handleResponse (response) {
+	alert("You're at IP address" + response.ip + ",which is in" + response.city + ", " + response.region_name);
+}
+
+var script = document.createElement("script");
+script.src = "http://freegeoip.net/json/?callback=handleResponse";
+document.body.insertBefore(script, document.body.firstChild);
+
+
+
+//  21.5.3Comet
+//  Ajax是一种从页面向服务器请求数据的技术，而Comet则是一种服务器向页面推送数据的技术。
+//  Comet能够让信息近乎实时地被推送到页面上，非常适合处理体育比赛的分数和股票报价。
+//  有两种实现Comet的方式：长轮询和流
+
+//  在Firefox、Safari、Opera和Chrome中，
+//  通过侦听readystatechange事件及检测readyState的值是否为3，就可以利用XHR对象实现HTTP流
+function createStreamingClient (url, progress, finished) {
+	var xhr = new XMLHttpRequest(),
+		received = 0;
+	xhr.open("get", url, true);
+	xhr.onreadystatechange = function () {
+		var result;
+		if (xhr.readyState == 3) {
+			//  只取得最新数据并调整计数器
+			result = xhr.responseText.substring(received);
+			received += result.length;
+			//  调用progress函数
+			progress(result);
+		} else if (xhr.readyState == 4) {
+			finished(xhr.responseText);
+		}
+	};
+	xhr.send(null);
+	return xhr;
+}
+var client = createStreamingClient("streaming.php", function (data) {
+	alert("Received:" + data);
+}, function (data) {
+	alert("Done!");
+});
+
+
+
+
+</script>
+</body>
+</html>

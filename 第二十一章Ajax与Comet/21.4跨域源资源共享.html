@@ -70,6 +70,32 @@ xdr.abort()
 //  Origin: 与简单的请求相同
 
 
+//  跨浏览器的CORS
+//  实现跨浏览器的方案
+//  检测XHR是否支持CORS的最简单方式，就是检查是否存在withCredentials属性。
+//  再结合检测XDomainRequest对象是否存在，就可以兼顾所有浏览器了
+function createCORSRequest (method, url) {
+	var xhr = new XMLHttpRequest();
+	if ("widthCredentials" in xhr) {
+		xhr.open(method, url, true);
+	} else if (typeof XDomainRequest != "undefined") {
+		xhr = new XDomainRequest();
+		xhr.open(method, url);
+	} else {
+		xhr = null;
+	}
+	return xhr;
+}
+
+var request = createCORSRequest("get", "http://www.somewhere-else.com/page/");
+if (request) {
+	request.onload = function () {
+		//  对request.responseText进行处理
+	};
+	request.send();
+}
+
+
 
 </script>
 </body>
