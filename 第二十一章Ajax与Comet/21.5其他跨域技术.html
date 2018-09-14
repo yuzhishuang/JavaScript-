@@ -80,6 +80,74 @@ var client = createStreamingClient("streaming.php", function (data) {
 });
 
 
+//  21.5.4服务器发送事件
+//  SSE API用于创建到服务器的单向连接，服务器通过这个链接可以发送任意数量的数据
+//  服务器响应的MIME类型必须是text/event-stream,而且是浏览器中的JavaScriptAPI能解析格式输出。
+//  SSE支持短轮询、长轮询和HTTP流，而且能在断开连接时自动确定何时重新连接
+
+//  要预定新的事件流，首先要创建一个新的EventSource对象，并传进一个入口点
+var source = new EventSource("myevents.php");
+
+//  注意，传入的URL必须与创建对象的页面同源
+//  EventSource的实例有一个readyState属性，值为0表示正连接到服务器，值为1表示打开了连接，值为2表示关闭了连接
+//  三个事件： open：在建立连接时触发  message：在从服务器接收到新事件时触发  error：在无法建立连接时触发
+source.onmessage = function (event) {
+	var data = event.data;
+	//  处理数据
+}
+
+//  服务器发回的数据以字符串形式保存在event.data中
+//  如果想强制立即断开连接并且不再重新连接，可以调用close()方法
+source.close();
+
+
+//  21.5.5WebSockets
+//  Web Sockets的目标是在一个单独的持久连接上提供全双工、双向通信。
+//  使用标准的HTTP服务器无法实现WebSockets，只有支持这种协议的专门服务器才能正常工作
+//  优点： 能够在客户端和服务器之间发送少量的数据，而不必担心HTTP那样字节级的开销，非常适合移动应用。
+//  缺点： 存在一致性和安全性的问题
+
+//  创建Web Sockets
+var socket = new WebSocket("ws://www.example.com/server.php");
+
+//  关闭连接，可以在任何时候调用close()方法
+socket.close();
+
+//  发送和接收数据
+socket.send("Hello world!");
+//  复杂数据结构序列化
+var message = {
+	time: new Date(),
+	text: "Hello world!",
+	clientId: "asdfp"
+};
+socket.send(JSON.stringify(message));
+
+//  当服务器向客户端发来消息时，WebSocket对象会触发message事件，这个message事件与其他传递消息的协议类似，也是把返回的数据保存在event.data属性中
+socket.onmessage = function (event) {
+	var data = event.data;
+	//  处理数据
+}
+
+//  其他事件
+//  open：在成功建立时触发
+//  error:在发生错误时触发，链接不能持续
+//  close:在连接关闭时触发
+var socket = new WebSocket("ws://www.example.com/server.php");
+
+socket.onopen = function () {
+	alert("Connection established.");
+};
+
+socket.onerror = function () {
+	alert("Connection error.");
+}
+
+socket.onclose = function () {
+	alert("Connection closed.");
+}
+
+
 
 
 </script>
