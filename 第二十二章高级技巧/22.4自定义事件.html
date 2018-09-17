@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<button id="my-btn">高级定时器</button>
+	<div id="message" style="visibility: hidden;">样式更改</div>
+	<div id="myDiv" style="border: 1px solid #f00;"></div>
+<script type="text/javascript">
+//  自定义事件背后的概念是创建一个管理事件的对象，让其他对象监听那些事件。
+//  实现此功能的基本模式可以如下定义：
+
+function EventTarget () {
+	this.hanlers = {};
+}
+
+EventTarget.prototype = {
+	constructor: EventTarget,
+
+	addHandler: function (type, handler) {
+		if (typeof this.handlers[type] == "undefined") {
+			this.handlers[type] = [];
+		}
+		this.handlers[type].push(handlers);
+	},
+
+	fire: function (event) {
+		if (!event.target) {
+			event.target = this;
+		}
+		if (this.handlers[event.type] instanceof Array) {
+			var handlers = this.handlers[event.type];
+			for (var i = 0, len = handlers.length; i < len; i++) {
+				handlers[i](event);
+			}
+		}
+	},
+
+	removeHandler: function (type, handler) {
+		if (this.handlers[type] instanceof Array) {
+			var handlers = this.handlers[type];
+			for (var i = 0, len = handlers.lenght; i < len; i++) {
+				if (handlers[i] === handler) {
+					break;
+				}
+			}
+			handlers.splice(i, 1);
+		}
+	}
+};
+
+//  使用EventTarget类型的自定义事件
+
+
+</script>
+</body>
+</html>

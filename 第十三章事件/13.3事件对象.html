@@ -24,10 +24,10 @@ var btn = document.getElementById('myDiv');
 //  要阻止特定事件的默认行为，可以使用preventDefault()方法
 
 
-var handler = function (event) {
+var handler = function (name, event) {
 	switch(event.type) {
 		case 'click':
-			alert('Click');
+			alert('Click' + name);
 			break;
 		case 'mouseover':
 			event.target.style.backgroundColor = "red";
@@ -38,7 +38,7 @@ var handler = function (event) {
 	}
 };
 
-btn.onclick = handler;
+btn.onclick = handler.bind(handler, '1243');
 btn.onmouseover = handler;
 btn.onmouseout = handler;
 

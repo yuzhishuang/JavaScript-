@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<button id="my-btn">高级定时器</button>
+	<div id="message" style="visibility: hidden;">样式更改</div>
+	<div id="myDiv" style="border: 1px solid #f00;"></div>
+<script type="text/javascript">
+//  高级定时器
+//  定时器对队列的工作方式是，当特定时间过去后将代码插入。注意，给队列添加代码并不意味着对它立即执行，而只能表示它会尽快执行。
+//  设定一个150ms后执行的定时器不代表到了150ms代码就立刻执行，它表示代码会在150ms后被加入到队列中。如果在这个时间点上，
+//  队列中没有其他东西，那么这段代码就会被执行，表面上看上去好像代码就在精确指定的时间点上执行了
+var btn = document.getElementById("my-btn");
+btn.onclick = function () {
+	setTimeout(function() {
+		document.getElementById("message").style.visibility = "visible";
+	}, 250);
+	//  其他代码
+}
+
+
+//  22.3.1重复的定时器
+//  重复定时器的规则有两个问题：（1）某些间隔会被跳过（2）多个定时器的代码执行之间的间隔可能会比预期的小
+//  为了避免setInterval()的重复定时器的这2个缺点，你可以用链式setTimeout()调用
+
+// setTimeout(function () {
+// 	//  处理中
+// 	console.log('Hello world!');
+// 	setTimeout(arguments.callee, 1000)
+// }, 1000)
+
+
+//  22.3.2 Yielding Processes
+//  数组分块基数，小块小块地处理数组，通常每次一小块
+//  基本的思路是为要处理的项目创建一个队列，然后使用定时器取出下一个要处理的项目进行处理，接着再设置另一个定时器
+
+function chunk (array, process, context) {
+	setTimeout(function () {
+		var item = array.shift();
+		process.call(context, item);
+
+		if (array.length > 0) {
+			setTimeout(arguments.callee, 100);
+		}	
+
+	}, 100);
+}
+
+var data = [12, 123, 1234, 453, 436, 23, 23, 5, 4123, 45, 346, 5634, 2234, 345, 342];
+
+function printValue (item) {
+	var div = document.getElementById("myDiv");
+	div.innerHTML += item + "<br>";
+}
+
+chunk(data, printValue);
+
+
+//  22.3.3函数节流
+//  DOM操作比起非DOM交互需要更多的内存和CPU时间。连续尝试进行过多的DOM相关操作可能会导致浏览器挂起，有时候甚至会崩溃。
+//  函数节流背后的基本思想是指，某些代码不可以在没有间断的情况连续重复执行。第一次调用函数，创建一个定时器，在指定的时间间隔之后运行代码。
+//  当第二次调用该函数时，它会清除前一次的定时器并设置另一个。如果前一个定时器已经执行过了，这个操作就没有任何意义。
+
+var processor = {
+	timeoutId: null,
+	//  实际进行处理的方法
+	performProcessing: function () {
+		//  实际执行的代码
+	},
+	//  初始处理调用的方法
+	process: function () {
+		clearTimeout(this.timeoutId);
+		var that = this;
+		this.timeoutId = setTimeout(function () {that.performProcessing();}, 100);
+	}
+};
+
+//  尝试开始执行
+processor.process();
+
+//  这个模式可以使用throttle()函数来简化，这个函数可以自动进行定时器的设置和清除
+function throttle (method, context) {
+	clearTimeout(method.tId);
+	method.tId = setTimeout(function () {
+		method.call(context);
+	}, 100);
+}
+
+function resizeDiv() {
+	var div = document.getElementById("myDiv");
+	div.style.height = div.offsetWidth + "px";
+}
+
+window.onresize = function () {
+	throttle(resizeDiv);
+}
+
+
+</script>
+</body>
+</html>
