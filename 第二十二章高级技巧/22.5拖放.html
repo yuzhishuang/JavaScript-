@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="myDiv" class="draggable" style="border: 1px solid #f00;width: 100px;height: 100px;position: absolute;">拖动</div>
+<script type="text/javascript">
+//  拖放：创建一个绝对定位的元素，使其可以用鼠标移动。这个技术源自一种叫做“鼠标拖尾”的经典网页技巧
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+// EventUtil.addHandler(document, "mousemove", function (event) {
+// 	var myDiv = document.getElementById("myDiv");
+// 	myDiv.style.left = event.clientX + "px";
+// 	myDiv.style.top = event.clientY + "px";
+// })
+
+//  最简单的拖放界面可用下面
+var DragDrop = function () {
+	var dragging = null,
+		diffX = 0,
+		diffY = 0;
+	function handleEvent (event) {
+		//  获取事件和目标
+		event = EventUtil.getEvent(event);
+		var target = EventUtil.getTarget(event);
+		//  确定事件类型
+		switch (event.type) {
+			case "mousedown":
+				if (target.className.indexOf("draggable") > -1 ) {
+					dragging = target;
+					diffX = event.clientX - target.offsetLeft;
+					
+				}
+				break;
+			case "mousemove":
+				if (dragging !== null) {
+					//  指定位置
+					dragging.style.left = event.clientX + "px";
+					dragging.style.top = event.clientY + "px";
+				}
+				break;
+			case "mouseup":
+				dragging = null;
+				break;
+		}
+	};
+
+	//  公共接口
+	return {
+		enable: function () {
+			EventUtil.addHandler(document, "mousedown", handleEvent);
+			EventUtil.addHandler(document, "mousemove", handleEvent);
+			EventUtil.addHandler(document, "mouseup", handleEvent);
+		},
+		disable: function () {
+			EventUtil.removeHandler(document, "mousedown", handleEvent);
+			EventUtil.removeHandler(document, "mousemove", handleEvent);
+			EventUtil.removeHandler(document, "mouseup", handleEvent);
+		}
+	}
+
+}();
+
+
+DragDrop.enable();
+
+</script>
+</body>
+</html>
