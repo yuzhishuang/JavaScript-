@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//  开发离线Web应用需要几个步骤。首先确保应用知道设备是否能上网，以便下一步执行正确的操作。
+//  应用还必须能访问一定的资源（图像、JavaScript、css等），只有这样才能正常工作。
+//  最后，必须有一块本地空间用于保存数据，无论能否上网都不妨碍读写
+
+//  23.1离线检测
+//  HTML5定义了一个navigator.onLine属性，这个属性值为true表示设备能上网，值为false表示设备离线。
+//  这个属性的关键是浏览器必须知道设备能否访问网络，从而返回正确的值
+
+//  由于存在兼容性问题，单独使用navigator.onLine属性不能确定网络是否联通。
+
+if (navigator.onLine) {
+	//  正常工作
+	console.log('在线');
+} else {
+	//  执行离线状态时的任务
+	console.log('离线');
+}
+
+//  除navigator.onLine属性之外，为了更好地确定网络是否可用，HTML5还定义了两个事件：online和offline。
+//  当网络从离线变为在线或者从在线变为离线时，分别触发这两个事件。这两个事件在window对象上触发
+
+EventUtil.addHandler(window, "online", function () {
+	alert("Online");
+});
+
+EventUtil.addHandler(window, "offline", function () {
+	alert("Offline");
+});
+
+</script>
+</body>
+</html>

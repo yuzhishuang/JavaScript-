@@ -6,6 +6,7 @@
 </head>
 <body>
 	<div id="myDiv" class="draggable" style="border: 1px solid #f00;width: 100px;height: 100px;position: absolute;">拖动</div>
+	<div id="status">DragDrop拖动</div>
 <script type="text/javascript">
 //  拖放：创建一个绝对定位的元素，使其可以用鼠标移动。这个技术源自一种叫做“鼠标拖尾”的经典网页技巧
 var EventUtil = {
@@ -108,14 +109,14 @@ var DragDrop = function () {
 				if (target.className.indexOf("draggable") > -1 ) {
 					dragging = target;
 					diffX = event.clientX - target.offsetLeft;
-					
+					diffY = event.clientY = target.offsetTop;
 				}
 				break;
 			case "mousemove":
 				if (dragging !== null) {
 					//  指定位置
-					dragging.style.left = event.clientX + "px";
-					dragging.style.top = event.clientY + "px";
+					dragging.style.left = (event.clientX - diffX) + "px";
+					dragging.style.top = (event.clientY - diffY) + "px";
 				}
 				break;
 			case "mouseup":
@@ -139,6 +140,22 @@ var DragDrop = function () {
 	}
 
 }();
+
+//  为DragDrop对象的每个事件添加了事件处理程序
+DragDrop.addHandler("dragstart", function (event) {
+	var status = document.getElementById("status");
+	status.innerHTML = "Started dragging" + event.target.id;
+})
+
+DragDrop.addHandler("drag", function (event) {
+	var status = document.getElementById("status");
+	status.innerHTML += "<br/>Dragged" + event.target.id + "to (" + event.x + "," + event.y + ")";
+});
+
+DragDrop.addHandler("dragend", function (event) {
+	var status = document.getElementById("status");
+	status.innerHTML += "<br/>Dropped" + event.target.id + "at (" + event.x + "," + event.y + ")";
+})
 
 
 DragDrop.enable();

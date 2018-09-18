@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function (element, type, handler) {
+		if (element.addEventListener) {
+			element.addEventListener(type, handler, false);
+		} else if (element.attachEvent) {
+			element.attachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = handler;
+		}
+	},
+	getEvent: function (event) {
+		return event ? event : window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if(event.toElement) {
+			return event.toElement;
+		} else if(event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function (event) {
+		if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+			return event.button;
+		} else {
+			switch(event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+			}
+		}
+	},
+	getWheelDelta: function (event) {
+		// if (event.wheelDelta) {
+		// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+		// 			-event.wheelDelta : event.wheelDelta);
+		// } else {
+		// 	return -event.detail * 40;
+		// }
+	},
+	preventDefault: function (event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	removeHandler: function(element, type, handler) {
+		if (element.removeEventListener) {
+			element.removeEventListener(type, handler, false);
+		} else if (element.detachEvent) {
+			element.detachEvent("on" + type, handler);
+		} else {
+			element["on" + type] = null;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	}
+};
+
+//  23.3.1Cookie
+//  HTTP Cookie,通常直接叫做cookie，最初是在客户端用于存储会话信息的。
+//  该标准要求服务器对任意HTTP请求发送Set-Cookie HTTP头作为相应的一部分，其中包含会话信息
+
+//  1、限制
+//  每个域的coolie总数是有限的，当超过单个域名限制之后还要再设置cookie，浏览器就会清楚以前设置的cookie。
+//  浏览器中对于cookie的尺寸也有限制。大多数浏览器都有大约4096B的长度限制。尺寸限制影响到一个域下所有的cookie，而并非是单个cookie单独设置
+
+//  2、cookie的构成
+//  cookie由浏览器保存的以下几块信息构成
+//  名称： 一个唯一确定cookie的名称。cookie名称是不区分大小写的。cookie的名称必须是经过URL编码的
+//  值：  储存在cookie中的字符串值。值必须被URL编码
+//  域： cookie对于哪个域是有效的。所有向该域发送的请求中都会包含这个cookie信息
+//  路径： 对于指定域中的那个路径，应该向服务器发送cookie
+//  失效时间：表示cookie何时应该被删除的时间戳。默认情况下，浏览器会话结束时即将所有cookie删除；不过也可以自己设置删除时间
+//  安全标志：指定后，cookie只有在使用SSL连接的时候才发送到服务器
+
+//  JavaScript中的cookie
+//  document.cookie属性。这个属性的独特之处在于它会因为使用它的方式不同而表现出不同的行为。
+//  当用来获取属性值时，document.cookie返回当前页面可用的所有cookie的字符串，一系列由分号隔开的名值对儿
+//  所有名字和值都是经过URL编码的，所以必须使用decodeURIComponent()来解码
+
+//  设置document.cookie并不会覆盖cookie，除非设置的cookie的名称已经存在。设置cookie的格式如下
+
+// document.cookie = "name=Nicholas";
+
+//  当客户端每次向服务器端发送请求的时候，都会发送这个cookie；当浏览器关闭的时候，它就会被删除
+//  最好每次设置cookie时都像下面这个例子中一样使用encodeURIComponent();
+
+// document.cookie = encodeURIComponent("name") + "=" + encodeURIComponent("Nicholas");
+
+//  要给被创建的cookie指定额外的信息，只要将参数追加到该字符串，和Set-Cookie头中的格式一样
+// document.cookie = encodeURIComponent("name") + "=" + encodeURIComponent("Nicholas") + ";domain=.wrox.com;path=/";
+
+
+//  基本的cookie操作有三种：读取、写入和删除
+
+var CookieUtil = {
+
+	get: function (name) {
+		var cookieName = encodeURIComponent(name) + "=",
+			cookieStart = document.cookie.indexOf(cookieName),
+			cookieValue = null;
+
+		if (cookieStart > -1) {
+			var cookieEnd = document.cookie.indexOf(";", cookieStart);
+			if (cookieEnd == -1) {
+				cookieEnd = document.cookie.length;
+			}
+			cookieValue = decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length, cookieEnd));
+		}
+		return cookieValue;
+	},
+
+	set: function (name, value, expires, path, domain, secure) {
+		var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+		if (expires instanceof Date) {
+			cookieText += ";expires=" + expires.toGMTString();
+		}
+		if (path) {
+			cookieText += "; path=" + path;
+		}
+		if (domain) {
+			cookieText += "; domain=" + domain;
+		}
+		if (secure) {
+			cookieText += "; secure";
+		}
+		document.cookie = cookieText;
+	},
+
+	unset: function (name, path, domain, secure) {
+		this.set(name, "", new Date(0), path, domain, secure);
+	}
+};
+
+
+//  使用上述方法
+//  设置cookie
+CookieUtil.set("name", "Nicholas");
+CookieUtil.set("book", "Professional JavaScript");
+
+//  读取cookie的值
+console.log(CookieUtil.get("name"));  //  Nicholas
+console.log(CookieUtil.get("book"));  //  Professional JavaScript
+
+//  删除cookie
+CookieUtil.unset("name");
+CookieUtil.unset("book");
+
+//  设置cookie，包括它的路径、域、失效日期
+CookieUtil.set("name", "Nicholas", "/books/projs", "www.wrox.com", new Date("January 1, 2010"));
+
+//  删除刚刚设置的cookie
+CookieUtil.unset("name", "/books/projs/", "www.wrox.com");
+
+//  设置安全的cookie
+CookieUtil.set("name", "Nicholas", null, null, null, true);
+
+//  4、子cookie
+//  为了绕开浏览器的单域名下的cookie数限制，一些开发人员使用了一种称为子cookie
+//  子cookie是存放在单个cookie中的更小段的数据。也就是使用cookie值来存储多个名称值对儿
+
+var SubCookieUtil = {
+
+	get: function (name, subName) {
+		var subCookies = this.getAll(name);
+		if (subCookies) {
+			return subCookies[subName];
+		} else {
+			return null;
+		}
+	},
+
+	getAll: function (name) {
+		var cookieName = encodeURIComponent(name) + "=",
+			cookieStart = document.cookie.indexOf(cookieName),
+			cookieValue = null,
+			cookieEnd,
+			subCookies,
+			i,
+			parts,
+			result = {};
+		if (cookieStart > -1) {
+			cookieEnd = document.cookie.indexOf(";", cookieStart);
+			if (cookieEnd == -1) {
+				cookieEnd = document.cookie.length;
+			}
+			cookieValue = document.cookie.substring(cookieStart + cookieName.length, cookieEnd);
+		}
+		if (cookieValue.length > 0) {
+			subCookies = cookieValue.split("&");
+			for (i = 0, len = subCookies.length; i < len; i++) {
+				parts = subCookies[i].split("=");
+				result[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+			}
+			return result;
+		}
+		return null;
+	},
+	//  省略了更多代码
+};
+
+
+</script>
+</body>
+</html>
