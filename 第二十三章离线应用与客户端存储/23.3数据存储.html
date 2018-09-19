@@ -263,6 +263,18 @@ var SubCookieUtil = {
 		document.cookie = cookieText;
 	},
 
+	unset: function (name, subName, path, domain, secure) {
+		var subcookies = this.getAll(name);
+		if (subcookies) {
+			delete subcookies[subName];
+			this.setAll(name, subcookies, null, path, domain, secure);
+		}
+	},
+
+	unsetAll: function (name, path, domain, secure) {
+		this.setAll(name, null, new Date(0), path, domain, secure);
+	}
+
 };
 
 //  可以这样使用
@@ -276,6 +288,18 @@ SubCookieUtil.setAll("data", {name: "Nicholas", book: "Professional JavaScript"}
 
 //  修改名字的值，并修改cookie的失效日期
 SubCookieUtil.set("data", "name", "Michael", new Date("February 1, 2010"));
+
+//  仅删除名为name的子cookie
+SubCookieUtil.unset("data", "name");
+
+//  删除整个cookie
+SubCookieUtil.unsetAll("data");
+
+
+//  5、关于cookie的思考
+//  这一类cookie被称为“HTTP专有cookie”。HTTP专有cookie可以从浏览器或者服务器设置，但是只能从服务器端读取，因为JavaScript无法获取HTTP专有
+//  cookie的值。
+//  尽管浏览器对cookie进行了大小限制，不过最好还是尽可能在cookie中少存储信息，以避免性能
 
 </script>
 </body>
