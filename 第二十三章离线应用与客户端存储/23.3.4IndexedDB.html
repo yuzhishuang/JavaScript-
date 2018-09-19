@@ -84,7 +84,41 @@
 			}
 		}
 	};
-//  
+//  IndexedDB设计的操作完全是异步进行的
+//  浏览器也都使用提供商前缀
+var indexedDB = window.indexedDB || window.msIndexDB || window.mozIndexDB || window.webkitIndexDB;
+
+//  1、数据库
+//  IndexedDB就是一个数据库
+//  IndexDB最大的特色是使用对象保存数据，而不是使用表来保存数据
+
+//  indexDB.open()会返回一个IDBRequest对象，如果传入的数据库存在就打开，如果不存在就创建并打开
+//  在这个对象上可以添加onerror和onsuccess事件处理程序。
+
+var request, database;
+request = indexedDB.open("admin");
+request.onerror = function (event) {
+	console.log("Something bad happened while trying to open:" + event.target.errorCode);
+};
+request.onsuccess = function (event) {
+	database = event.target.result;
+
+	//  默认情况下，indexedDB数据库是没有版本号的，最好一开始就为数据库指定一个版本号。
+	//  可以调用setVersion()方法，传入以字符串形式表示的版本号。
+	//  同样调用这个方法也会返回一个请求对象，需要你再指定事件处理程序
+	if (database.version != "1.0") {
+		request = database.setVersion("1.0");
+		request.onerror = function (event) {
+			console.log("Something bad happend while trying to set version:" + event.target.errorCode);
+		}
+		request.onsuccess = function (event) {
+			console.log("Database initialization complete. Database name: " + database.name + ",Version: " + database.version);
+		};
+	} else {
+		console.log("Database already initialization complete. Database name: " + database.name + ",Version: " + database.version);
+	}
+};
+
 
 
 
