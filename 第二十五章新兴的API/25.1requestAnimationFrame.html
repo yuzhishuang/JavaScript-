@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="status" style="width: 100px;height: 100px;border: 1px solid #f00;"></div>
+<script type="text/javascript">
+//  25.1 requestAnimationFrame()
+//  Firefox4最早为JavaScript动画添加了一个新API，即mozRequestAnimationFrame()。
+//  这个方法会告诉浏览器：有一个动画开始了。进而浏览器就可以确定重绘的最佳方式
+
+//  mozRequestAnimationFrame()方法接收一个参数，即在重绘屏幕前调用的一个函数。这个函数负责改变下一次重绘时的DOM样式
+function updateProgress () {
+	var div = document.getElementById("status");
+	div.style.width = (parseInt(div.style.width, 10) + 5) + "%";
+	if (div.style.left != "100%") {
+		mozRequestAnimationFrame(updateProgress);
+	}
+}
+mozRequestAnimationFrame(updateProgress);
+
+
+
+
+</script>
+</body>
+</html>
