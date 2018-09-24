@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在页面上使用google地图示例</title>
+</head>
+<body>
+    <div id="droptarget" draggable="true" style="width: 100px;height: 100px;border: 1px solid #f00;"></div>
+    <div id="output"></div>
+    <script type="text/javascript">
+    	var EventUtil = {
+			addHandler: function (element, type, handler) {
+				if (element.addEventListener) {
+					element.addEventListener(type, handler, false);
+				} else if (element.attachEvent) {
+					element.attachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = handler;
+				}
+			},
+			getEvent: function (event) {
+				return event ? event : window.event;
+			},
+			getTarget: function(event) {
+				return event.target || event.srcElement;
+			},
+			getRelatedTarget: function(event) {
+				if (event.relatedTarget) {
+					return event.relatedTarget;
+				} else if(event.toElement) {
+					return event.toElement;
+				} else if(event.fromElement) {
+					return event.fromElement;
+				} else {
+					return null;
+				}
+			},
+			getWheelDelta: function (event) {
+				// if (event.wheelDelta) {
+				// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+				// 			-event.wheelDelta : event.wheelDelta);
+				// } else {
+				// 	return -event.detail * 40;
+				// }
+			},
+			preventDefault: function (event) {
+				if (event.preventDefault) {
+					event.preventDefault();
+				} else {
+					event.returnValue = false;
+				}
+			},
+			removeHandler: function(element, type, handler) {
+				if (element.removeEventListener) {
+					element.removeEventListener(type, handler, false);
+				} else if (element.detachEvent) {
+					element.detachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = null;
+				}
+			},
+			stopPropagation: function(event) {
+				if (event.stopPropagation) {
+					event.stopPropagation();
+				} else {
+					event.cancelBubble = true;
+				}
+			}
+		}
+        //  在页面上创建了自定义的放置目标之后，你可以从桌面上把文件拖放到该目标。
+        //  与拖放一张图片或者一个链接类似，从桌面上把文件拖放到浏览器中也会触发drop事件。
+        //  可以在event.dataTransfer.files中读取到被放置的文件，
+        //  当然此时它是一个File对象，与通过文件输入字段取得的File对象一样
+
+        var droptarget = document.getElementById("droptarget");
+
+        function handleEvent (event) {
+        	var info = "",
+        		output = document.getElementById("output"),
+        		files, i, len;
+
+    		EventUtil.preventDefault(event);
+
+    		if (event.type == "drop") {
+    			files = event.dataTransfer.files;
+    			i = 0;
+    			len = files.length;
+    			while (i < len) {
+    				info += files[i].name + "(" + files[i].type + "," + files[i].size + "bytes)<br/>";
+    				i++;
+    			}
+    			output.innerHTML = info;
+    		}
+        }
+
+        EventUtil.addHandler(droptarget, "dragenter", handleEvent);
+        EventUtil.addHandler(droptarget, "dragover", handleEvent);
+        EventUtil.addHandler(droptarget, "drop", handleEvent);
+
+    </script>
+</body>
+</html>

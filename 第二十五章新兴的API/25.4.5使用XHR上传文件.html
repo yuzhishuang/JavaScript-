@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用XHR上传文件</title>
+</head>
+<body>
+    <div id="droptarget" draggable="true" style="width: 100px;height: 100px;border: 1px solid #f00;"></div>
+    <div id="output"></div>
+    <script type="text/javascript">
+    	var EventUtil = {
+			addHandler: function (element, type, handler) {
+				if (element.addEventListener) {
+					element.addEventListener(type, handler, false);
+				} else if (element.attachEvent) {
+					element.attachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = handler;
+				}
+			},
+			getEvent: function (event) {
+				return event ? event : window.event;
+			},
+			getTarget: function(event) {
+				return event.target || event.srcElement;
+			},
+			getRelatedTarget: function(event) {
+				if (event.relatedTarget) {
+					return event.relatedTarget;
+				} else if(event.toElement) {
+					return event.toElement;
+				} else if(event.fromElement) {
+					return event.fromElement;
+				} else {
+					return null;
+				}
+			},
+			getWheelDelta: function (event) {
+				// if (event.wheelDelta) {
+				// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+				// 			-event.wheelDelta : event.wheelDelta);
+				// } else {
+				// 	return -event.detail * 40;
+				// }
+			},
+			preventDefault: function (event) {
+				if (event.preventDefault) {
+					event.preventDefault();
+				} else {
+					event.returnValue = false;
+				}
+			},
+			removeHandler: function(element, type, handler) {
+				if (element.removeEventListener) {
+					element.removeEventListener(type, handler, false);
+				} else if (element.detachEvent) {
+					element.detachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = null;
+				}
+			},
+			stopPropagation: function(event) {
+				if (event.stopPropagation) {
+					event.stopPropagation();
+				} else {
+					event.cancelBubble = true;
+				}
+			}
+		}
+        //  以表单提交的方式来上传文件
+        //  使用FormData类型，要创建一个FormData对象，通过它调用append()方法并传入相应的File对象作为参数。
+        //  然后，再把FormData对象传递给XHR的send()方法，结果与通过表单上传一模一样
+
+
+        //  这个例子创建了一个FormData对象，与每个文件对应的键分别是file0、file1、file2这样的格式。
+        //  注意，不用额外写任何代码，这些文件就可以作为表单的值提交
+        //  而且，也不必使用FileReader，只要传入File对象即可	
+
+
+
+        var droptarget = document.getElementById("droptarget");
+
+        function handleEvent (event) {
+        	var info = "",
+        		output = document.getElementById("output"),
+        		data, xhr,
+        		files, i, len;
+
+    		EventUtil.preventDefault(event);
+    		if (event.type == "drop") {
+    			data = new FormData();
+    			files = event.dataTransfer.files;
+    			i = 0;
+    			len = files.length;
+
+    			while (i < len) {
+    				data.append("file" + i, files[i]);
+    				i++;
+    			}
+
+    			xhr = new XMLHttpRequest();
+    			xhr.open("post", "FileAPIExample06Upload.php", true);
+    			xhr.onreadystatechange = function () {
+    				if (xhr.readyState == 4) {
+    					alert(xhr.responseText);
+    				}
+    			};
+    			xhr.send(data);
+
+    		}
+
+        }
+
+        EventUtil.addHandler(droptarget, "dragenter", handleEvent);
+        EventUtil.addHandler(droptarget, "dragover", handleEvent);
+        EventUtil.addHandler(droptarget, "drop", handleEvent);
+
+    </script>
+</body>
+</html>

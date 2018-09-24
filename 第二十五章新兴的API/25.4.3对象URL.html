@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在页面上使用google地图示例</title>
+</head>
+<body>
+    <input type="File" id="files-list">
+    <div id="output"></div>
+    <div id="progress"></div>
+    <!-- <script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false'></script> -->
+    <script type="text/javascript">
+    	var EventUtil = {
+			addHandler: function (element, type, handler) {
+				if (element.addEventListener) {
+					element.addEventListener(type, handler, false);
+				} else if (element.attachEvent) {
+					element.attachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = handler;
+				}
+			},
+			getEvent: function (event) {
+				return event ? event : window.event;
+			},
+			getTarget: function(event) {
+				return event.target || event.srcElement;
+			},
+			getRelatedTarget: function(event) {
+				if (event.relatedTarget) {
+					return event.relatedTarget;
+				} else if(event.toElement) {
+					return event.toElement;
+				} else if(event.fromElement) {
+					return event.fromElement;
+				} else {
+					return null;
+				}
+			},
+			getWheelDelta: function (event) {
+				// if (event.wheelDelta) {
+				// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+				// 			-event.wheelDelta : event.wheelDelta);
+				// } else {
+				// 	return -event.detail * 40;
+				// }
+			},
+			preventDefault: function (event) {
+				if (event.preventDefault) {
+					event.preventDefault();
+				} else {
+					event.returnValue = false;
+				}
+			},
+			removeHandler: function(element, type, handler) {
+				if (element.removeEventListener) {
+					element.removeEventListener(type, handler, false);
+				} else if (element.detachEvent) {
+					element.detachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = null;
+				}
+			},
+			stopPropagation: function(event) {
+				if (event.stopPropagation) {
+					event.stopPropagation();
+				} else {
+					event.cancelBubble = true;
+				}
+			}
+		}
+        // 对象URL指的是引用保存在File或Blob中数据deURL。
+        //  使用对象URL的好处是可以不必把文件内容读取到JavaScript中而直接使用文件内容
+        //  只要在需要文件内容的地方提供对象URL即可。
+        //  要创建对象URL，可以使用window.URL.createObjectURL()方法，并传入File或Blob对象
+
+        function createObjectURL (blob) {
+        	if (window.URL) {
+        		return window.URL.createObjectURL(blob);
+        	} else if (window.webkitURL) {
+        		return window.webkitURL.createObjectURL(blob);
+        	} else {
+        		return null;
+        	}
+        }
+
+
+        //  这个函数的返回值是一个字符串，指向一块内存的地址。因为这个字符串是URL，所以在DOM中也能使用
+
+        var filesList = document.getElementById("files-list");
+        EventUtil.addHandler(filesList, "change", function (event) {
+        	var info = "",
+        		output = document.getElementById("output")
+        		progress = document.getElementById("progress");
+        		files = EventUtil.getTarget(event).files,
+        		reader = new FileReader(),
+        		url = createObjectURL(files[0]);
+
+    		if (url) {
+    			if (/imag/.test(files[0].type)) {
+    				output.innerHTML = "<img src=\"" + url + "\">";
+    				// revokeObjectURL(url);
+    			} else {
+    				output.innerHTML = "Your broser doesn't support object URLs.";
+    			}
+    		}
+
+        });
+
+        //  如果不再需要相应的数据，最好释放它占用的内容。但只要有代码在引用对象URL，内存就不会释放。
+        //  要手工释放内存，可以把对象URL传给window.URL.revokeOjbectURL()
+        function revokeObjectURL (url) {
+        	if (window.URL) {
+        		window.URL.revokeObjectURL(url);
+        	} else if (window.webkitURL) {
+        		window.webkitURL.revokeObjectURL(url);
+        	}
+        }
+
+    </script>
+</body>
+</html>

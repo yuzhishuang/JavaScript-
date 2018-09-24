@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在页面上使用google地图示例</title>
+</head>
+<body>
+    <input type="File" id="files-list">
+    <div id="output"></div>
+    <div id="progress"></div>
+    <!-- <script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false'></script> -->
+    <script type="text/javascript">
+    	var EventUtil = {
+			addHandler: function (element, type, handler) {
+				if (element.addEventListener) {
+					element.addEventListener(type, handler, false);
+				} else if (element.attachEvent) {
+					element.attachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = handler;
+				}
+			},
+			getEvent: function (event) {
+				return event ? event : window.event;
+			},
+			getTarget: function(event) {
+				return event.target || event.srcElement;
+			},
+			getRelatedTarget: function(event) {
+				if (event.relatedTarget) {
+					return event.relatedTarget;
+				} else if(event.toElement) {
+					return event.toElement;
+				} else if(event.fromElement) {
+					return event.fromElement;
+				} else {
+					return null;
+				}
+			},
+			getWheelDelta: function (event) {
+				// if (event.wheelDelta) {
+				// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+				// 			-event.wheelDelta : event.wheelDelta);
+				// } else {
+				// 	return -event.detail * 40;
+				// }
+			},
+			preventDefault: function (event) {
+				if (event.preventDefault) {
+					event.preventDefault();
+				} else {
+					event.returnValue = false;
+				}
+			},
+			removeHandler: function(element, type, handler) {
+				if (element.removeEventListener) {
+					element.removeEventListener(type, handler, false);
+				} else if (element.detachEvent) {
+					element.detachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = null;
+				}
+			},
+			stopPropagation: function(event) {
+				if (event.stopPropagation) {
+					event.stopPropagation();
+				} else {
+					event.cancelBubble = true;
+				}
+			}
+		}
+        //  File API
+        //  File API在表单中的文件输入字段的基础上，又添加了一些直接访问文件信息的接口
+        //  每个File对象都有下列只读属性
+        //  name: 本地文件系统中的文件名
+        //  size: 文件的字节大小
+        //  type: 字符串，文件的MIME类型
+        //  lastModifiedDate: 字符串，文件上一次修改的时间（只有Chrome实现了这个属性）
+
+
+        //  FileReader类型实现的是一种异步文件读取机制。为了读取文件中的数据，提供如下方法
+        //  readAsText(file, encoding):以纯文本形式读取文件，将读取到的文本保存在result睡醒中。
+        //  readAsDataURL(file): 读取文件并将文件以数据URI的形式保存在result属性中。
+        //  readAsBinaryString(file):读取文件并将一个字符串保存在result属性中，字符串的每个字符表示一个字节
+        //  readAsArrayBuffer(file): 读取文件并将一个包含文件内容的ArrayBuffer保存在result属性中
+
+        //  由于读取过程是异步的，因此FileReader也提供了几个事件。其中最有用的三个事件是progress、error、和load
+        //  分别表示是否又读取了新数据、是否发生了错误以及是否已经读完了整个文件
+
+
+        var filesList = document.getElementById("files-list");
+        EventUtil.addHandler(filesList, "change", function (event) {
+        	var info = "",
+        		output = document.getElementById("output")
+        		output = document.getElementById("progress");
+        		files = EventUtil.getTarget(event).files,
+        		type = "default",
+        		reader = new FileReader(),
+        		i = 0,
+        		len = files.length;
+    		while (i < len) {
+    			console.log(files[i].name + "(" + files[i].type + "," + files[i].size + "bytes)");
+    			i++;
+    		}
+
+    		if (/imag/.test(files[0].type)) {
+    			reader.readAsDataURL(files[0]);
+    			type = "image";
+    		} else {
+    			reader.readAsText(files[0]);
+    			type = "text";
+    		}
+
+    		reader.onerror = function () {
+    			output.innerHTML = "Could not ready file, error code is" + reader.error.code;
+    		};
+
+    		reader.onprogress = function (event) {
+    			if (event.lengthComputable) {
+    				progress.innerHTML = event.loaded + "/" + event.total;
+    			}
+    		};
+
+    		reader.onload = function () {
+    			var html = "";
+    			switch (type) {
+    				case "image":
+    					html = "<img src=\"" + reader.result + "\">";
+    					break;
+					case "text":
+						html = reader.result;
+						break;
+    			}
+    			output.innerHTML = html;
+    		}
+
+        });
+
+    </script>
+</body>
+</html>

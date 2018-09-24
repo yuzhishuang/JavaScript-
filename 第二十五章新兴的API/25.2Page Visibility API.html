@@ -5,8 +5,67 @@
     <title>Title</title>
 </head>
 <body>
-	<div id="status" style="width: 100px;height: 100px;border: 1px solid #f00;"></div>
+	<div id="output" style="width: 100px;height: 100px;border: 1px solid #f00;"></div>
 <script type="text/javascript">
+	var EventUtil = {
+		addHandler: function (element, type, handler) {
+			if (element.addEventListener) {
+				element.addEventListener(type, handler, false);
+			} else if (element.attachEvent) {
+				element.attachEvent("on" + type, handler);
+			} else {
+				element["on" + type] = handler;
+			}
+		},
+		getEvent: function (event) {
+			return event ? event : window.event;
+		},
+		getTarget: function(event) {
+			return event.target || event.srcElement;
+		},
+		getRelatedTarget: function(event) {
+			if (event.relatedTarget) {
+				return event.relatedTarget;
+			} else if(event.toElement) {
+				return event.toElement;
+			} else if(event.fromElement) {
+				return event.fromElement;
+			} else {
+				return null;
+			}
+		},
+		getWheelDelta: function (event) {
+			// if (event.wheelDelta) {
+			// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+			// 			-event.wheelDelta : event.wheelDelta);
+			// } else {
+			// 	return -event.detail * 40;
+			// }
+		},
+		preventDefault: function (event) {
+			if (event.preventDefault) {
+				event.preventDefault();
+			} else {
+				event.returnValue = false;
+			}
+		},
+		removeHandler: function(element, type, handler) {
+			if (element.removeEventListener) {
+				element.removeEventListener(type, handler, false);
+			} else if (element.detachEvent) {
+				element.detachEvent("on" + type, handler);
+			} else {
+				element["on" + type] = null;
+			}
+		},
+		stopPropagation: function(event) {
+			if (event.stopPropagation) {
+				event.stopPropagation();
+			} else {
+				event.cancelBubble = true;
+			}
+		}
+	};
 //  Page Visibility API(页面可见性API)就是为了让开发人员知道页面是否对用户可见而推出的
 //  API由三部分组成
 //  document.hidden：表示页面是否隐藏的布尔值。页面隐藏包括页面在后台标签页中或者浏览器最小化
@@ -15,8 +74,35 @@
 
 //  检查浏览器是否支持这个API的最佳方式如下
 function isHiddenSupported () {
-	
+	return ("hidden" in document || "msHidden" in document || "webkitHidden" in document);
 }
+
+//  检测页面是否隐藏
+if (document.hidden || document.msHidden || document.webKitHidden) {
+	//  页面隐藏了
+	console.log("页面隐藏了");
+} else {
+	//  页面未隐藏
+	console.log("页面未隐藏");
+}
+
+
+//  为了在页面从可见变为不可见或从不可见变为可见时收到通知，可以侦听visibilitychange事件
+//  为了在IE和Chrome中都能侦听到该事件，可以像下面的例子
+function handleVisibilityChange () {
+	var output = document.getElementById("output"),
+		msg;
+	if (document.hidden || document.msHidden || document.webKitHidden) {
+		msg = "Page is now hidden." + (new Date()) + "<br/>";
+	} else {
+		msg = "Page is now visible." + (new Date()) + "<br/>";
+	}
+	output.innerHTML += msg;
+}
+
+//  要为两个事件都指定事件处理程序
+EventUtil.addHandler(document, "msvisibilitychange", handleVisibilityChange);
+EventUtil.addHandler(document, "webkitvisibilitychange", handleVisibilityChange);
 
 
 

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在页面上使用google地图示例</title>
+</head>
+<body>
+    <input type="File" id="files-list">
+    <div id="output"></div>
+    <div id="progress"></div>
+    <!-- <script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false'></script> -->
+    <script type="text/javascript">
+    	var EventUtil = {
+			addHandler: function (element, type, handler) {
+				if (element.addEventListener) {
+					element.addEventListener(type, handler, false);
+				} else if (element.attachEvent) {
+					element.attachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = handler;
+				}
+			},
+			getEvent: function (event) {
+				return event ? event : window.event;
+			},
+			getTarget: function(event) {
+				return event.target || event.srcElement;
+			},
+			getRelatedTarget: function(event) {
+				if (event.relatedTarget) {
+					return event.relatedTarget;
+				} else if(event.toElement) {
+					return event.toElement;
+				} else if(event.fromElement) {
+					return event.fromElement;
+				} else {
+					return null;
+				}
+			},
+			getWheelDelta: function (event) {
+				// if (event.wheelDelta) {
+				// 	return (client.engine.opera && client.engine.opera < 9.5 ?
+				// 			-event.wheelDelta : event.wheelDelta);
+				// } else {
+				// 	return -event.detail * 40;
+				// }
+			},
+			preventDefault: function (event) {
+				if (event.preventDefault) {
+					event.preventDefault();
+				} else {
+					event.returnValue = false;
+				}
+			},
+			removeHandler: function(element, type, handler) {
+				if (element.removeEventListener) {
+					element.removeEventListener(type, handler, false);
+				} else if (element.detachEvent) {
+					element.detachEvent("on" + type, handler);
+				} else {
+					element["on" + type] = null;
+				}
+			},
+			stopPropagation: function(event) {
+				if (event.stopPropagation) {
+					event.stopPropagation();
+				} else {
+					event.cancelBubble = true;
+				}
+			}
+		}
+        //  读取部分内容
+        // 我们只想读取文件的一部分而不是全部内容。为此，File对象支持一个slice()方法。
+        //  slice()方法接收两个参数：起始字节及要读取的字节数
+        //  下面是一个通用的函数，可以在不同实现中使用slice()方法
+
+        function blobSlice (blob, startByte, length) {
+        	if (blob.slice) {
+        		return blob.slice(startByte, length);
+        	} else if (blob.webkitSlice) { 
+        		return blob.webkitSlice(startByte, length);
+        	} else if (blob.mozSlice) {
+        		return blob.mozSlice(startByte, length);
+        	} else {
+        		return null;
+        	}
+        }
+
+
+        //  Blob类型有一个size属性和一个type属性，而且它也支持slice()方法，以便进一步切割数据。通过FileReader也可以从Blob中读取数据
+
+        var filesList = document.getElementById("files-list");
+        EventUtil.addHandler(filesList, "change", function (event) {
+        	var info = "",
+        		output = document.getElementById("output")
+        		progress = document.getElementById("progress");
+        		files = EventUtil.getTarget(event).files,
+        		reader = new FileReader(),
+        		blob = blobSlice(files[0], 0, 32);
+
+    		if (blob) {
+    			reader.readAsText(blob);
+    			
+    			reader.onerror = function () {
+    				output.innerHTML = "Could not read file, error code is" + reader.error.code;
+    			};
+
+    			reader.onload = function () {
+    				output.innerHTML = reader.result;
+    			};
+
+    		} else {
+    			alert("Your browser doesn't support slice().");
+    		}
+
+        });
+
+    </script>
+</body>
+</html>
